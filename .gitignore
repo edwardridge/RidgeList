@@ -1,0 +1,8 @@
+bin/
+obj/
+/packages/
+riderModule.iml
+/_ReSharper.Caches/
+RidgeList.sln.DotSettings.user
+.idea/**/*
+RidgeList.FrontEnd/ClientApp/.eslintcache

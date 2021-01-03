@@ -105,8 +105,10 @@ export class WishlistClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    create(): Promise<WishlistModel> {
-        let url_ = this.baseUrl + "/Wishlist/create";
+    create(name: string | null | undefined): Promise<WishlistModel> {
+        let url_ = this.baseUrl + "/Wishlist/create?";
+        if (name !== undefined && name !== null)
+            url_ += "name=" + encodeURIComponent("" + name) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ = <RequestInit>{
@@ -137,6 +139,39 @@ export class WishlistClient {
         }
         return Promise.resolve<WishlistModel>(<any>null);
     }
+
+    getSummaries(): Promise<WishlistSummaryModel[]> {
+        let url_ = this.baseUrl + "/Wishlist/summaries";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetSummaries(_response);
+        });
+    }
+
+    protected processGetSummaries(response: Response): Promise<WishlistSummaryModel[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : <WishlistSummaryModel[]>JSON.parse(_responseText, this.jsonParseReviver);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<WishlistSummaryModel[]>(<any>null);
+    }
 }
 
 export interface WeatherForecast {
@@ -149,6 +184,10 @@ export interface WeatherForecast {
 export interface WishlistModel {
     id: string;
     people?: string[] | undefined;
+}
+
+export interface WishlistSummaryModel {
+    name?: string | undefined;
 }
 
 export class ApiException extends Error {

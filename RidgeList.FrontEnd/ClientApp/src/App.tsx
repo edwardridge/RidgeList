@@ -5,7 +5,9 @@ import { HelloWorld } from './components/HelloWorld';
 import { FetchData } from './components/FetchData';
 import { Counter } from './components/Counter';
 
+import { WishlistHomepage } from './components/Wishlist/WishlistHomepage';
 import './custom.css'
+import {WishlistClient} from './nswag/api.generated'
 
 export default class App extends Component {
   static displayName = App.name;
@@ -13,8 +15,10 @@ export default class App extends Component {
   render () {
     return (
       <Layout>
-        <Route exact path='/' component={HelloWorld} />
-        <Route exact path='/original' component={HelloWorld} />
+          <Route exact path='/' >
+              <WishlistHomepage wishlistClient={new WishlistClient()}></WishlistHomepage>
+          </Route>
+        <Route path='/original' component={HelloWorld} />
         <Route path='/counter' component={Counter} />
         <Route path='/fetch-data' component={FetchData} />
       </Layout>

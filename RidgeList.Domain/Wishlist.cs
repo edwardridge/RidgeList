@@ -3,13 +3,19 @@ using System.Collections.Generic;
 
 namespace RidgeList.Domain
 {
+    public class WishlistSummary
+    {
+        public string Name { get; set; }
+    }
+    
     public class Wishlist
     {
-        public static Wishlist Create()
+        public static Wishlist Create(string name)
         {
             return new Wishlist()
             {
-                Id = Guid.NewGuid()
+                Id = Guid.NewGuid(),
+                Name =  name
             };
         }
 
@@ -21,6 +27,8 @@ namespace RidgeList.Domain
         public Guid Id { get; init; }
 
         private List<string> People { get; set; }
+        
+        public string Name { get; set; }
 
         public void AddPerson(string email)
         {

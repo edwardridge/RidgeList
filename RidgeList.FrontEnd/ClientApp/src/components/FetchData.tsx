@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { WeatherForecastClient, WeatherForecast } from '../api.generated';
+import { WeatherForecastClient, WeatherForecast } from '../nswag/api.generated';
 
 export class FetchData extends React.Component<any, any> {
   static displayName = FetchData.name;

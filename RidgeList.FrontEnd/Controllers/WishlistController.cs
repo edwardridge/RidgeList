@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using RidgeList.Domain;
 
@@ -15,19 +17,39 @@ namespace RidgeList.FrontEnd.Controllers
             _repository = repository;
         }
         
-        // GET
         [HttpPost]
         [Route("create")]
-        public WishlistModel Create()
+        public WishlistModel Create(string name)
         {
-            return CreateNewWishlist();
+            return CreateNewWishlist(name);
+        }
+        
+        [HttpGet]
+        [Route("summaries")]
+        public async Task<IEnumerable<WishlistSummaryModel>> GetSummaries()
+        {
+            var summaries = await this._repository.GetWishlistSummaries();
+            return summaries.Select(WishlistSummaryModel.Map);
         }
 
-        private WishlistModel CreateNewWishlist()
+        private WishlistModel CreateNewWishlist(string name)
         {
-            var wishlist = Wishlist.Create();
+            var wishlist = Wishlist.Create(name);
             this._repository.Save(wishlist);
             return new WishlistMapper().Map(wishlist);
+        }
+    }
+
+    public class WishlistSummaryModel
+    {
+        public string Name { get; set; }
+
+        public static WishlistSummaryModel Map(WishlistSummary summary)
+        {
+            return new WishlistSummaryModel()
+            {
+                Name = summary.Name
+            };
         }
     }
 

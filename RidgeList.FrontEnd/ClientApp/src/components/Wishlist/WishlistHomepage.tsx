@@ -1,5 +1,6 @@
 import React, {ChangeEvent} from "react";
 import {WishlistClient, WishlistModel, WishlistSummaryModel} from "../../nswag/api.generated";
+import {Link} from "react-router-dom";
 
 interface WishlishHomepageProps{
     wishlistClient: WishlistClient;
@@ -68,7 +69,15 @@ export class WishlistHomepage extends React.Component<WishlishHomepageProps, Wis
             createButtons = <div><input type="text" value={this.state.nameOfNewWishlist} onChange={this.handleInputChange} placeholder='Name of wishlist...'></input> <button onClick={this.onClickCreate}>Create</button></div>
         }
         
-        let summaries = <ul> {this.state.wishlistSummaries.map(s => <li key={s.name}>{s.name}</li>) } </ul>
+        let summaries = 
+            <ul> 
+                {
+                    this.state.wishlistSummaries.map(s => 
+                    <li key={s.name}>
+                        <Link to={`wishlist/${s.id}`}> {s.name}</Link>   
+                    </li>) 
+                }
+            </ul>
         
         return (
             <div>

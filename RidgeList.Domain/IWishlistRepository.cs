@@ -30,6 +30,7 @@ namespace RidgeList.Domain
         {
             var summaries = this._wishlists.Select(s => new WishlistSummary()
             {
+                Id = s.Value.Id,
                 Name = s.Value.Name
             });
             return Task.FromResult(summaries);

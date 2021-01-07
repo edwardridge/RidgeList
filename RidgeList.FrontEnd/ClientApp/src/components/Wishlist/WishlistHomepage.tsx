@@ -63,10 +63,10 @@ export class WishlistHomepage extends React.Component<WishlishHomepageProps, Wis
     render() {
         let createButtons;
         if(!this.state.creating){
-            createButtons = <button onClick={this.onClickNewWishlist}>Create New Wishlist</button>
+            createButtons = <button onClick={this.onClickNewWishlist} cypress-name='CreateNewWishlist'>Create New Wishlist</button>
         }
         else{
-            createButtons = <div><input type="text" value={this.state.nameOfNewWishlist} onChange={this.handleInputChange} placeholder='Name of wishlist...'></input> <button onClick={this.onClickCreate}>Create</button></div>
+            createButtons = <div><input type="text" value={this.state.nameOfNewWishlist} onChange={this.handleInputChange} placeholder='Name of wishlist...' cypress-name='NameOfWishlist'></input> <button onClick={this.onClickCreate} cypress-name='Create'>Create</button></div>
         }
         
         let summaries = 

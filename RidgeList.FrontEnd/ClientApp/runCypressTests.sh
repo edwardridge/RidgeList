@@ -1,0 +1,1 @@
+﻿npx cypress run --browser chrome --headless

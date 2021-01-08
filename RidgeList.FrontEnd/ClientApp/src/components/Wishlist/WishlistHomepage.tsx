@@ -1,89 +1,60 @@
-import React, {ChangeEvent} from "react";
+import React, {ChangeEvent, useState} from "react";
 import {WishlistClient, WishlistModel, WishlistSummaryModel} from "../../nswag/api.generated";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 interface WishlishHomepageProps{
     wishlistClient: WishlistClient;
 }
 
-interface WishlishHomepageState{
-    creating : boolean;
-    nameOfNewWishlist : string;
-    wishlistSummaries : WishlistSummaryModel[];
-}
+export const WishlistHomepage: React.FC<WishlishHomepageProps> = (props) => {
+    const [creating, setCreating] = useState(false);
+    const [nameOfNewWishlist, setNameOfNewWishlist] = useState("");
+    const [wishlistSummaries, setWishlistSummaries] = useState([] as WishlistSummaryModel[]);
 
-export class WishlistHomepage extends React.Component<WishlishHomepageProps, WishlishHomepageState>{
-    constructor(props : WishlishHomepageProps) {
-        super(props);
-        
-        this.state = {
-            creating: false,
-            nameOfNewWishlist: '',
-            wishlistSummaries: []
-        };
-
-        this.onClickNewWishlist = this.onClickNewWishlist.bind(this);
-        this.onClickCreate = this.onClickCreate.bind(this);        
-        this.handleInputChange = this.handleInputChange.bind(this);
-    }
-    
-    onClickNewWishlist = () => 
-    {
-        this.setState({
-           creating: true
-        });
-    }
-    
-    onClickCreate = async () => 
-    {
-        await this.props.wishlistClient.create(this.state.nameOfNewWishlist);
-        this.setState({
-            creating: false
-        });
-        this.loadWishListSummaries();
+    let onClickNewWishlist = () => {
+        setCreating(true);
     }
 
-    handleInputChange(event : ChangeEvent<HTMLInputElement>) {
-        this.setState({
-            nameOfNewWishlist: event.target.value
-        });
-    }
-    
-    loadWishListSummaries = async () => {
-        var summaries = await this.props.wishlistClient.getSummaries();
-        this.setState({
-            wishlistSummaries: summaries
-        });
-    }
-    
-    componentDidMount() {
-        this.loadWishListSummaries();
+    let onClickCreate = async () => {
+        await props.wishlistClient.create(nameOfNewWishlist);
+        setCreating(false);
+        await loadWishListSummaries();
+        setNameOfNewWishlist("");
     }
 
-    render() {
-        let createButtons;
-        if(!this.state.creating){
-            createButtons = <button onClick={this.onClickNewWishlist} cypress-name='CreateNewWishlist'>Create New Wishlist</button>
-        }
-        else{
-            createButtons = <div><input type="text" value={this.state.nameOfNewWishlist} onChange={this.handleInputChange} placeholder='Name of wishlist...' cypress-name='NameOfWishlist'></input> <button onClick={this.onClickCreate} cypress-name='Create'>Create</button></div>
-        }
-        
-        let summaries = 
-            <ul> 
-                {
-                    this.state.wishlistSummaries.map(s => 
+    let handleInputChange = (event : ChangeEvent<HTMLInputElement>) => {
+        setNameOfNewWishlist(event.target.value);
+    }
+    
+    let loadWishListSummaries = async () => {
+        var summaries = await props.wishlistClient.getSummaries();
+        setWishlistSummaries(summaries);
+    }
+
+    let createButtons;
+    if (!creating) {
+        createButtons = <button onClick={onClickNewWishlist} cypress-name='CreateNewWishlist'>Create New Wishlist</button>
+    }
+    else {
+        createButtons = <div><input type="text" value={nameOfNewWishlist} onChange={handleInputChange} placeholder='Name of wishlist...' cypress-name='NameOfWishlist'></input> <button onClick={onClickCreate} cypress-name='Create'>Create</button></div>
+    }
+
+    let summaries =
+        <ul>
+            {
+                wishlistSummaries.map(s =>
                     <li key={s.name}>
-                        <Link to={`wishlist/${s.id}`}> {s.name}</Link>   
-                    </li>) 
-                }
-            </ul>
-        
-        return (
-            <div>
-                { createButtons }
-                { summaries }
-            </div>
-        );
-    }
+                        <Link to={`wishlist/${s.id}`}> {s.name}</Link>
+                    </li>)
+            }
+        </ul>
+
+    loadWishListSummaries();
+
+    return (
+        <div>
+            { createButtons}
+            { summaries}
+        </div>
+    );
 }

@@ -11,8 +11,10 @@ describe('Homepage', () => {
         cy.getByCyName('Create').click();
         cy.url().should('include', '/wishlist');
         
-        cy.contains('Add Person').click();
-        cy.contains('New person');
+        cy.getByCyName('AddPerson').click();
+        cy.getByCyName('NewPersonName').type('Edward Ridge');
+        cy.getByCyName('CreateNewPerson').click();
+        cy.contains('Edward Ridge');
     });
     
     let createRandomName = () => {

@@ -41,7 +41,9 @@ export const WishlistHomepage: React.FC<WishlishHomepageProps> = (props) => {
         createButtons = <button onClick={onClickNewWishlist} cypress-name='CreateNewWishlist'>Create New Wishlist</button>
     }
     else {
-        createButtons = <div><input type="text" value={nameOfNewWishlist} onChange={handleInputChange} placeholder='Name of wishlist...' cypress-name='NameOfWishlist'></input> <button onClick={onClickCreate} cypress-name='Create'>Create</button></div>
+        createButtons = <div>
+            <input type="text" value={nameOfNewWishlist} onChange={handleInputChange} placeholder='Name of wishlist...' cypress-name='NameOfWishlist'></input> 
+            <button onClick={onClickCreate} cypress-name='Create'>Create</button></div>
     }
 
     let summaries =

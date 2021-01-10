@@ -1,20 +1,22 @@
 describe('Homepage', () => {
-    it('creates new wishlist"', () => {
+    beforeEach(() => {
         cy.visit('/');
-
-        getByCyName('CreateNewWishlist').click();
-        let rand = Math.floor((Math.random() * 10000) + 1);
-        let name = `From Cypress ${rand}`;
-        getByCyName("NameOfWishlist").type(name);
-        getByCyName('Create').click();
-        cy.contains(name).click();
+    })
+    
+    it('creates new wishlist"', () => {
+        cy.getByCyName('CreateNewWishlist').click();
+        let name = createRandomName();
+        
+        cy.getByCyName("NameOfWishlist").type(name);
+        cy.getByCyName('Create').click();
         cy.url().should('include', '/wishlist');
         
         cy.contains('Add Person').click();
         cy.contains('New person');
-    })
-})
-
-let getByCyName = (name : string) => {
-    return cy.get(`[cypress-name="${name}"]`);
-}
+    });
+    
+    let createRandomName = () => {
+        let rand = Math.floor((Math.random() * 10000) + 1);
+        return `From Cypress ${rand}`;
+    }
+});

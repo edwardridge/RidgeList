@@ -1,6 +1,7 @@
-import React, {ChangeEvent, useState} from "react";
+import React, {ChangeEvent, useState, useEffect} from "react";
+import { useHistory } from "react-router-dom";
 import {WishlistClient, WishlistModel, WishlistSummaryModel} from "../../nswag/api.generated";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 
 interface WishlishHomepageProps{
     wishlistClient: WishlistClient;
@@ -10,16 +11,20 @@ export const WishlistHomepage: React.FC<WishlishHomepageProps> = (props) => {
     const [creating, setCreating] = useState(false);
     const [nameOfNewWishlist, setNameOfNewWishlist] = useState("");
     const [wishlistSummaries, setWishlistSummaries] = useState([] as WishlistSummaryModel[]);
+    const history = useHistory();
+    
+    useEffect(() => {
+        loadWishListSummaries();
+    }, [wishlistSummaries.length]);
 
     let onClickNewWishlist = () => {
         setCreating(true);
     }
 
     let onClickCreate = async () => {
-        await props.wishlistClient.create(nameOfNewWishlist);
+        let newWishlist = await props.wishlistClient.create(nameOfNewWishlist);
         setCreating(false);
-        await loadWishListSummaries();
-        setNameOfNewWishlist("");
+        history.push("/wishlist/" + newWishlist.id);
     }
 
     let handleInputChange = (event : ChangeEvent<HTMLInputElement>) => {
@@ -30,7 +35,7 @@ export const WishlistHomepage: React.FC<WishlishHomepageProps> = (props) => {
         var summaries = await props.wishlistClient.getSummaries();
         setWishlistSummaries(summaries);
     }
-
+    
     let createButtons;
     if (!creating) {
         createButtons = <button onClick={onClickNewWishlist} cypress-name='CreateNewWishlist'>Create New Wishlist</button>
@@ -48,8 +53,6 @@ export const WishlistHomepage: React.FC<WishlishHomepageProps> = (props) => {
                     </li>)
             }
         </ul>
-
-    loadWishListSummaries();
 
     return (
         <div>

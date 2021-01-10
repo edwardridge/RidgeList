@@ -11,6 +11,20 @@
 //
 // -- This is a parent command --
 // Cypress.Commands.add("login", (email, password) => { ... })
+export {}
+declare global {
+    namespace Cypress {
+        interface Chainable {
+            getByCyName: typeof getByCyName
+        }
+    }
+}
+
+export function getByCyName(cyName : string) {
+    return cy.get(`[cypress-name="${cyName}"]`);
+}
+
+Cypress.Commands.add("getByCyName", getByCyName);
 //
 //
 // -- This is a child command --

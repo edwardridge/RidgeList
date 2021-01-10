@@ -15,7 +15,8 @@ export {}
 declare global {
     namespace Cypress {
         interface Chainable {
-            getByCyName: typeof getByCyName
+            getByCyName: typeof getByCyName;
+            createWishlist : typeof createWishList;
         }
     }
 }
@@ -24,7 +25,16 @@ export function getByCyName(cyName : string) {
     return cy.get(`[cypress-name="${cyName}"]`);
 }
 
+export function createWishList() {
+    cy.request('POST', '/WishlistTest/createTestWishlist').then(response =>
+    {
+        cy.visit(`/wishlist/${response.body}`);
+    });
+}
+
 Cypress.Commands.add("getByCyName", getByCyName);
+
+Cypress.Commands.add("createWishlist", createWishList);
 //
 //
 // -- This is a child command --

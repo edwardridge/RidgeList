@@ -33,7 +33,7 @@ interface Props extends RouteComponentProps<WishlistProps> {
     }
 
     if (wishlist) {
-        let listOfPeople = <ul> {wishlist.people?.map((s,i) => <li key={`${s}${i}`}>{s}</li>)}</ul>
+        let listOfPeople = <ul cypress-name="ListOfPeople"> {wishlist.people?.map((s,i) => <li key={`${s}${i}`}>{s}</li>)}</ul>
         
         let createNewPerson;
         if(!creatingNewPerson){

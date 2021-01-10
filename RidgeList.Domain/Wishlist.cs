@@ -34,7 +34,10 @@ namespace RidgeList.Domain
 
         public void AddPerson(string email)
         {
-            this.People.Add(email);
+            if (this.People.Contains(email) == false)
+            {
+                this.People.Add(email);
+            }
         }
 
         public List<string> GetPeople()

@@ -1,17 +1,38 @@
-// import {WishlistTestClient} from "../../src/nswag/api.generated"
+before(() => {
+    cy.deleteOldTestWishlists();
+});
 
-describe('Homepage', () => {
+describe('Login', () => {
     beforeEach(() => {
-        cy.visit('/');
+        cy.clearCookie('email').visit('/');
     })
-    
-    it('creates new wishlist"', () => {
+
+    it('allows you to login using your email address', () => {
+        cy.getByCyName('EmailLogin').type('edwardridge@gmail.com');
+        cy.getByCyName('LoginButton').click();
+        cy.url().should('include', '/wishlists');
+    });
+});
+
+describe('Wishlist summary page', () => {
+    beforeEach(() => {
+        cy.setCookie('email', 'edwardridge@gmail.com').visit('/wishlists');
+    });
+
+    it('can create new wishlist"', () => {
         cy.getByCyName('CreateNewWishlist').click();
+
         let name = createRandomName();
 
         cy.getByCyName("NameOfWishlist").type(name);
         cy.getByCyName('Create').click();
         cy.url().should('include', '/wishlist');
+    });
+});
+
+describe('Wishlist page', () => {
+    beforeEach(() => {
+        cy.setCookie('email', 'edwardridge@gmail.com');
     });
     
     it('allows names to be added', () => {
@@ -21,7 +42,7 @@ describe('Homepage', () => {
         
         cy.contains('Edward Ridge');
         cy.getByCyName('ListOfPeople').within((a) => {
-            cy.get('li').should('have.length', 1);
+            cy.get('.wishlistSummaryItem').should('have.length', 2);
         });
     });
 
@@ -39,9 +60,11 @@ describe('Homepage', () => {
         cy.getByCyName('NewPersonName').type(email);
         cy.getByCyName('CreateNewPerson').click();
     }
-    
-    let createRandomName = () => {
-        let rand = Math.floor((Math.random() * 10000) + 1);
-        return `From Cypress ${rand}`;
-    }
 });
+
+
+
+let createRandomName = () => {
+    let rand = Math.floor((Math.random() * 10000) + 1);
+    return `[Test] From Cypress ${rand}`;
+}

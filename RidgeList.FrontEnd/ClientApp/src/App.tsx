@@ -10,6 +10,7 @@ import { default as Wishlist } from './components/Wishlist/Wishlist';
 import './custom.css'
 import {WishlistClient} from './nswag/api.generated'
 import {WishlistRepository} from "./components/Wishlist/IWishlistRepository";
+import {Login} from "./components/Login/Login";
 
 export default class App extends Component {
   static displayName = App.name;
@@ -17,7 +18,8 @@ export default class App extends Component {
   render () {
     return (
       <Layout>
-          <Route exact path='/' >
+          <Route exact path='/' component={Login}></Route>
+          <Route path='/wishlists' >
               <WishlistHomepage wishlistClient={new WishlistClient()}></WishlistHomepage>
           </Route>
           <Route path='/wishlist/:id'>

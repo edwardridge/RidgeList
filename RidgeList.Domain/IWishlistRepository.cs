@@ -35,6 +35,12 @@ namespace RidgeList.Domain
             });
             return Task.FromResult(summaries);
         }
+
+        public Task Delete(Guid id)
+        {
+            this._wishlists.Remove(id);
+            return Task.CompletedTask;
+        }
     }
 
     public interface IWishlistRepository
@@ -44,6 +50,8 @@ namespace RidgeList.Domain
         Task<Wishlist> Load(Guid id);
 
         Task<IEnumerable<WishlistSummary>> GetWishlistSummaries();
+
+        Task Delete(Guid id);
 
         // Task<WishlistSummary> GetW
     }

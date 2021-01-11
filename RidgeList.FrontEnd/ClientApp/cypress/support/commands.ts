@@ -16,7 +16,8 @@ declare global {
     namespace Cypress {
         interface Chainable {
             getByCyName: typeof getByCyName;
-            createWishlist : typeof createWishList;
+            createWishlist : typeof createWishList;            
+            deleteOldTestWishlists : typeof deleteOldTestWishlists;
         }
     }
 }
@@ -32,9 +33,15 @@ export function createWishList() {
     });
 }
 
+export function deleteOldTestWishlists() {
+    cy.request('POST', '/WishlistTest/clearOldTestWishlists');
+}
+
 Cypress.Commands.add("getByCyName", getByCyName);
 
 Cypress.Commands.add("createWishlist", createWishList);
+
+Cypress.Commands.add("deleteOldTestWishlists", deleteOldTestWishlists);
 //
 //
 // -- This is a child command --

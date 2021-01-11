@@ -15,40 +15,35 @@ interface Props extends RouteComponentProps<WishlistProps> {
  const Wishlist : React.FC<Props> = (props) => {
     const [wishlist, setWishlist] = useState<WishlistModel|null>(null);
     const [newPersonName, setNewPersonName] = useState("");
-    const [creatingNewPerson, setCreatingNewPerson] = useState(false);
     
     useEffect(() => {
         let id = props.match.params.id;
         props.wishlistRepository.getWishlist(id).then(s => setWishlist(s));
     }, [wishlist?.id]);
     
-    let startAddNewPerson = () => {
-        setCreatingNewPerson(true);
-    }
-
      let createNewPersonClick = async () => {
         var newWishlist = await new WishlistClient().addPerson(wishlist?.id, newPersonName);
         setWishlist(newWishlist);
-        setCreatingNewPerson(false);
+        setNewPersonName("");
+    }
+    
+    let createButonIsDisabled = () => {
+        return (wishlist?.people?.indexOf(newPersonName) ?? 0) > -1;
     }
 
     if (wishlist) {
         let listOfPeople = <ul cypress-name="ListOfPeople"> {wishlist.people?.map((s,i) => <li key={`${s}${i}`}>{s}</li>)}</ul>
         
-        let createNewPerson;
-        if(!creatingNewPerson){
-            createNewPerson = <button onClick={startAddNewPerson} cypress-name='AddPerson'>Add Person</button>
-        }else{
-            createNewPerson = (
+        let createNewPerson = (
                 <div>
                 <input type="text" 
                        cypress-name="NewPersonName" 
                        onChange={(event) => setNewPersonName(event.target.value)}
-                        placeholder="Enter the new email address"></input>
-                <button cypress-name="CreateNewPerson" onClick={createNewPersonClick}>Create</button>
+                       value={newPersonName}
+                       placeholder="Enter the new email address"></input>
+                <button cypress-name="CreateNewPerson" onClick={createNewPersonClick} disabled={createButonIsDisabled()}>Create</button>
                 </div>
             )
-        }
         
         return (
             <div>

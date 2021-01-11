@@ -1,8 +1,8 @@
-import React, {ChangeEvent, useState, useEffect} from "react";
+import React, {ChangeEvent, useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import {WishlistClient, WishlistModel, WishlistSummaryModel} from "../../nswag/api.generated";
 import { Link, Redirect } from "react-router-dom";
-
+import './WishlistSummary.css';
 interface WishlishHomepageProps{
     wishlistClient: WishlistClient;
 }
@@ -17,10 +17,11 @@ export const WishlistHomepage: React.FC<WishlishHomepageProps> = (props) => {
         loadWishListSummaries();
     }, [wishlistSummaries.length]);
 
-    let onClickNewWishlist = () => {
-        setCreating(true);
+    let onClickCancel = () => {
+        setCreating(false);
+        setNameOfNewWishlist("");
     }
-
+    
     let onClickCreate = async () => {
         let newWishlist = await props.wishlistClient.create(nameOfNewWishlist);
         setCreating(false);
@@ -36,30 +37,37 @@ export const WishlistHomepage: React.FC<WishlishHomepageProps> = (props) => {
         setWishlistSummaries(summaries);
     }
     
+    let onClickAddWishlist = () => {
+        setCreating(true);
+    }
+    
     let createButtons;
     if (!creating) {
-        createButtons = <button onClick={onClickNewWishlist} cypress-name='CreateNewWishlist'>Create New Wishlist</button>
+        createButtons = <div onClick={onClickAddWishlist} className='newItem wishlistSummaryItem' cypress-name='CreateNewWishlist'>...create new wishlist...</div>
     }
     else {
-        createButtons = <div>
+        createButtons = <div className='newItem wishlistSummaryItem'>
             <input type="text" value={nameOfNewWishlist} onChange={handleInputChange} placeholder='Name of wishlist...' cypress-name='NameOfWishlist'></input> 
-            <button onClick={onClickCreate} cypress-name='Create'>Create</button></div>
+            <button onClick={onClickCreate} className='ml-2 btn btn-success' cypress-name='Create'>Create</button>
+            <button onClick={onClickCancel} className='ml-2 btn btn-dark' cypress-name='Cancel'>Cancel</button>
+        </div>
     }
 
     let summaries =
-        <ul>
+        <div className='wishlistSummaries'>
             {
                 wishlistSummaries.map(s =>
-                    <li key={s.name}>
-                        <Link to={`wishlist/${s.id}`}> {s.name}</Link>
-                    </li>)
+                        <Link to={`wishlist/${s.id}`}> <div key={s.name} className='wishlistSummaryItem'>{s.name}</div></Link>)
             }
-        </ul>
+            <a href='#'>
+                {createButtons}
+            </a>
+        </div>
 
     return (
         <div>
-            { createButtons}
-            { summaries}
+            <h1>Your Wishlists</h1>
+            { summaries }
         </div>
     );
 }

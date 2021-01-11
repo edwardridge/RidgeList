@@ -29,16 +29,13 @@ describe('Homepage', () => {
         cy.createWishlist();
 
         addNewPerson('Edward Ridge');
-        addNewPerson('Edward Ridge');
-        
-        cy.contains('Edward Ridge');
-        cy.getByCyName('ListOfPeople').within((a) => {
-            cy.get('li').should('have.length', 1);
-        });
+        cy.getByCyName('NewPersonName').type('Edward Ridge');
+        cy.getByCyName('CreateNewPerson').should('be.disabled');
+        cy.getByCyName('NewPersonName').type('2');
+        cy.getByCyName('CreateNewPerson').should('be.enabled');
     });
     
     let addNewPerson = (email : string) => {
-        cy.getByCyName('AddPerson').click();
         cy.getByCyName('NewPersonName').type(email);
         cy.getByCyName('CreateNewPerson').click();
     }

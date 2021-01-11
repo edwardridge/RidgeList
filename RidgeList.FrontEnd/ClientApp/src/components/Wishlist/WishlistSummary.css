@@ -1,0 +1,49 @@
+@import "../../styles/globalVars.css";
+.wishlistSummaries{
+    margin-top: 20px;
+    border: 1px solid var(--listBackgroundBorderColor);
+    background-color: var(--listBackgroundColor);
+    padding: 10px;
+    border-radius: 10px;
+}   
+
+.wishlistSummaryItem{
+    border: 1px solid var(--itemBorderColor);
+    border-radius: 5px;
+    padding: 5px 5px 5px 10px;
+    background-color: var(--itemBackgroundColor);
+    margin: 5px 0;
+}
+
+a .wishlistSummaryItem{
+    color: var(--itemColor);
+}
+
+a .newItem{
+    color: var(--newItemColor);
+    font-style: italic;
+    background-color: var(--listBackgroundColor);
+}
+
+.newItem input{
+    color: var(--newItemColor);
+    background-color: var(--listBackgroundColor);
+    border: none;
+}
+
+.newItem input:focus{
+    color: var(--newItemColor);
+    background-color: var(--listBackgroundColor);
+    border: none;
+}
+
+.newItem:hover{
+    color: var(--newItemColor);
+    background-color: var(--listBackgroundColor);
+}
+
+.wishlistSummaryItem:hover{
+    background-color: var(--listBackgroundColor);
+    font-style: italic;
+    text-decoration: none;
+}

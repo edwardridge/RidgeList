@@ -34,10 +34,10 @@ namespace RidgeList.FrontEnd.Controllers
         
         [HttpPost]
         [Route("addPerson")]
-        public async Task<WishlistModel> AddPerson(string wishlistId, string email)
+        public async Task<WishlistModel> AddPerson(string wishlistId, string email, string name)
         {
             var wishlist = await this._repository.Load(Guid.Parse(wishlistId));
-            wishlist.AddPerson(email);
+            wishlist.AddPerson(name, email);
             await this._repository.Save(wishlist);
             return new WishlistMapper().Map(wishlist);
         }
@@ -82,9 +82,16 @@ namespace RidgeList.FrontEnd.Controllers
             {
                 Id = wishlist.Id,
                 Name = wishlist.Name,
-                People = wishlist.GetPeople()
+                People = wishlist.GetPeople().Select(s => new WishlistPersonModel() { Name = s.Name, Email = s.Email}).ToList()
             };
         }
+    }
+
+    public class WishlistPersonModel
+    {
+        public string Email { get; set; }
+        
+        public string Name { get; set; }
     }
     
     public class WishlistModel
@@ -93,6 +100,6 @@ namespace RidgeList.FrontEnd.Controllers
 
         public string Name { get; set; }
 
-        public List<string> People { get; set; }
+        public List<WishlistPersonModel> People { get; set; }
     }
 }

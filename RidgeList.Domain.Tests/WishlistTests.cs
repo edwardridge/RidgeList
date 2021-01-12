@@ -26,23 +26,23 @@ namespace RidgeList.Domain.Tests
         {
             var repo = new InMemoryWishlistRepository();
             var wishlist1 = Wishlist.Create("Asd", "a@b.com");
-            wishlist1.AddPerson("c@d.com");
+            wishlist1.AddPerson("", "c@d.com");
             await repo.Save(wishlist1);
             
             var wishlist2 = Wishlist.Create("Wishlist 2", "a@b.com");
             await repo.Save(wishlist2);
 
             var wishlistSumaries = await repo.GetWishlistSummaries("a@b.com");
-            wishlistSumaries.Should().BeEquivalentTo(new []
+            wishlistSumaries.Select(s => s.Name).Should().BeEquivalentTo(new []
             {
-                new WishlistSummary() { Name = "Asd" },
-                new WishlistSummary() { Name = "Wishlist 2" }
+                "Asd" ,
+                "Wishlist 2" 
             });
             
             var wishlistSumaries2 = await repo.GetWishlistSummaries("c@d.com");
-            wishlistSumaries2.Should().BeEquivalentTo(new []
+            wishlistSumaries2.Select(s => s.Name).Should().BeEquivalentTo(new []
             {
-                new WishlistSummary() { Name = "Asd" }
+                "Asd" 
             });
         }
     }
@@ -57,18 +57,35 @@ namespace RidgeList.Domain.Tests
             var wishlist = Wishlist.Create("Eds test wishlist", "a@b.com");
             wishlist.Id.Should().NotBeEmpty();
             wishlist.Name.Should().Be("Eds test wishlist");            
-            wishlist.GetPeople().First().Should().Be("a@b.com");       
+            wishlist.GetPeople().First().Email.Should().Be("a@b.com");       
             wishlist.Creator.Should().Be("a@b.com");
 
         }
 
         [Test]
-        public void Can_Add_Person_With_Email_To_Wishlist()
+        public void Can_Add_Person_With_Email_And_Name_To_Wishlist()
         {
             var wishlist = Wishlist.Create("Eds test wishlist", "a@b.com");
-            wishlist.AddPerson("edwardridge@gmail.com");
+            wishlist.AddPerson("Ed", "edwardridge@gmail.com");
             
-            wishlist.GetPeople().Should().BeEquivalentTo(new [] { "edwardridge@gmail.com" });
+            wishlist.GetPeople().Should().BeEquivalentTo(new []
+            {
+                new WishlistPerson() { Email = "a@b.com", Name = null},
+                new WishlistPerson() { Email = "edwardridge@gmail.com", Name = "Ed"}
+            });
+        }
+        
+        [Test]
+        public void Can_Edit_Name()
+        {
+            var wishlist = Wishlist.Create("Eds test wishlist", "a@b.com");
+            wishlist.EditPerson("a@b.com", "Ed");
+            
+            wishlist.GetPeople().Should().BeEquivalentTo(new []
+            {
+                new WishlistPerson() { Email = "a@b.com", Name = "Ed"},
+                
+            });
         }
     }
 }

@@ -177,12 +177,14 @@ export class WishlistClient {
         return Promise.resolve<WishlistModel>(<any>null);
     }
 
-    addPerson(wishlistId: string | null | undefined, email: string | null | undefined): Promise<WishlistModel> {
+    addPerson(wishlistId: string | null | undefined, email: string | null | undefined, name: string | null | undefined): Promise<WishlistModel> {
         let url_ = this.baseUrl + "/Wishlist/addPerson?";
         if (wishlistId !== undefined && wishlistId !== null)
             url_ += "wishlistId=" + encodeURIComponent("" + wishlistId) + "&";
         if (email !== undefined && email !== null)
             url_ += "email=" + encodeURIComponent("" + email) + "&";
+        if (name !== undefined && name !== null)
+            url_ += "name=" + encodeURIComponent("" + name) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ = <RequestInit>{
@@ -334,7 +336,12 @@ export interface WeatherForecast {
 export interface WishlistModel {
     id: string;
     name?: string | undefined;
-    people?: string[] | undefined;
+    people?: WishlistPersonModel[] | undefined;
+}
+
+export interface WishlistPersonModel {
+    email?: string | undefined;
+    name?: string | undefined;
 }
 
 export interface WishlistSummaryModel {

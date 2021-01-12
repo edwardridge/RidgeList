@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import {WishlistClient, WishlistModel, WishlistSummaryModel} from "../../nswag/api.generated";
 import { Link, Redirect } from "react-router-dom";
 import './WishlistSummary.css';
-import Cookie from "js-cookie";
+import { useGetLogin } from "../useGetLogin";
 
 interface WishlishHomepageProps{
     wishlistClient: WishlistClient;
@@ -11,15 +11,13 @@ interface WishlishHomepageProps{
 
 export const WishlistHomepage: React.FC<WishlishHomepageProps> = (props) => {
     const [creating, setCreating] = useState(false);
-    const [userEmail, setUsersEmail] = useState("");
     const [nameOfNewWishlist, setNameOfNewWishlist] = useState("");
     const [wishlistSummaries, setWishlistSummaries] = useState([] as WishlistSummaryModel[]);
     const history = useHistory();
+    const login = useGetLogin();
     
     useEffect(() => {
-        let e = Cookie.get("email") ?? "__unknown__";
-        setUsersEmail(e);
-        loadWishListSummaries(e);
+        loadWishListSummaries(login);
     }, [wishlistSummaries.length]);
 
     let onClickCancel = () => {
@@ -28,7 +26,7 @@ export const WishlistHomepage: React.FC<WishlishHomepageProps> = (props) => {
     }
     
     let onClickCreate = async () => {
-        let newWishlist = await props.wishlistClient.create(nameOfNewWishlist, userEmail);
+        let newWishlist = await props.wishlistClient.create(nameOfNewWishlist, login);
         setCreating(false);
         history.push("/wishlist/" + newWishlist.id);
     }
@@ -71,7 +69,7 @@ export const WishlistHomepage: React.FC<WishlishHomepageProps> = (props) => {
 
     return (
         <div>
-            <h1>Your Wishlists - {userEmail}</h1>
+            <h1>Your Wishlists - {login}</h1>
             { summaries }
         </div>
     );

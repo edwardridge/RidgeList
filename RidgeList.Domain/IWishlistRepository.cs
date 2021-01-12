@@ -29,7 +29,7 @@ namespace RidgeList.Domain
         public Task<IEnumerable<WishlistSummary>> GetWishlistSummaries(string emailAddress)
         {
             var summaries = this._wishlists
-                .Where(s => s.Value.GetPeople().Contains(emailAddress))
+                .Where(s => s.Value.GetPeople().ContainsEmail(emailAddress))
                 .Select(s => new WishlistSummary()
             {
                 Id = s.Value.Id,

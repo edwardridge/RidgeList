@@ -37,29 +37,32 @@ describe('Wishlist page', () => {
         cy.setCookie('email', emailAddress);
     });
     
-    it('allows names to be added', () => {
+    it('allows new people to be added', () => {
         cy.createWishlist();
 
-        addNewPerson('Edward Ridge');
+        addNewPerson('ed@ed.com', 'Ed 2');
         
-        cy.contains('Edward Ridge');
+        cy.contains('Ed 2');
         cy.getByCyName('ListOfPeople').within((a) => {
-            cy.get('.wishlistSummaryItem').should('have.length', 2);
+            cy.get('.wishlistSummaryItem').should('have.length', 3);
         });
     });
 
     it('doesnt allow duplicate to be added', () => {
         cy.createWishlist();
 
-        addNewPerson('Edward Ridge');
-        cy.getByCyName('NewPersonName').type('Edward Ridge');
+        addNewPerson('ed@ed.com', 'Ed 2');
+        
+        cy.getByCyName('NewPersonEmail').type('ed@ed.com');
         cy.getByCyName('CreateNewPerson').should('be.disabled');
-        cy.getByCyName('NewPersonName').type('2');
+        cy.getByCyName('NewPersonEmail').type('ed_diff@ed.com');
         cy.getByCyName('CreateNewPerson').should('be.enabled');
     });
     
-    let addNewPerson = (email : string) => {
-        cy.getByCyName('NewPersonName').type(email);
+    let addNewPerson = (email : string, name : string) => {
+        cy.getByCyName("AddNewPerson").click();
+        cy.getByCyName('NewPersonEmail').type(email);
+        cy.getByCyName('NewPersonName').type(name);
         cy.getByCyName('CreateNewPerson').click();
     }
 });

@@ -2,13 +2,15 @@ before(() => {
     cy.deleteOldTestWishlists();
 });
 
+const emailAddress = "test@testwishlist.com";
+
 describe('Login', () => {
     beforeEach(() => {
         cy.clearCookie('email').visit('/');
     })
 
     it('allows you to login using your email address', () => {
-        cy.getByCyName('EmailLogin').type('edwardridge@gmail.com');
+        cy.getByCyName('EmailLogin').type(emailAddress);
         cy.getByCyName('LoginButton').click();
         cy.url().should('include', '/wishlists');
     });
@@ -16,7 +18,7 @@ describe('Login', () => {
 
 describe('Wishlist summary page', () => {
     beforeEach(() => {
-        cy.setCookie('email', 'edwardridge@gmail.com').visit('/wishlists');
+        cy.setCookie('email', emailAddress).visit('/wishlists');
     });
 
     it('can create new wishlist"', () => {
@@ -32,7 +34,7 @@ describe('Wishlist summary page', () => {
 
 describe('Wishlist page', () => {
     beforeEach(() => {
-        cy.setCookie('email', 'edwardridge@gmail.com');
+        cy.setCookie('email', emailAddress);
     });
     
     it('allows names to be added', () => {

@@ -9,6 +9,7 @@ namespace RidgeList.FrontEnd.Controllers
     public class WishlistTestController : Controller
     {
         private readonly IWishlistRepository _repository;
+        private string testEmailAccount = "test@testwishlistcom";
 
         public WishlistTestController(IWishlistRepository repository)
         {
@@ -19,7 +20,7 @@ namespace RidgeList.FrontEnd.Controllers
         [Route("createTestWishlist")]
         public Guid CreateTestWishlist()
         {
-           var wishlist = Wishlist.Create("[Test] Wishlist");
+           var wishlist = Wishlist.Create("[Test] Wishlist", testEmailAccount);
            _repository.Save(wishlist);
            return wishlist.Id;
         }
@@ -28,12 +29,12 @@ namespace RidgeList.FrontEnd.Controllers
         [Route("clearOldTestWishlists")]
         public async Task ClearOldTestWishlists()
         {
-            var summaries = await _repository.GetWishlistSummaries();
+            var summaries = await _repository.GetWishlistSummaries(testEmailAccount);
             foreach (var summary in summaries)
             {
                 if (summary.Name.Contains("[Test]"))
                 {
-                    _repository.Delete(summary.Id);
+                    await _repository.Delete(summary.Id);
                 }
             }
         }

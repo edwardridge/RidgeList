@@ -26,9 +26,11 @@ namespace RidgeList.Domain
             return Task.FromResult(this._wishlists[id]);
         }
 
-        public Task<IEnumerable<WishlistSummary>> GetWishlistSummaries()
+        public Task<IEnumerable<WishlistSummary>> GetWishlistSummaries(string emailAddress)
         {
-            var summaries = this._wishlists.Select(s => new WishlistSummary()
+            var summaries = this._wishlists
+                .Where(s => s.Value.GetPeople().Contains(emailAddress))
+                .Select(s => new WishlistSummary()
             {
                 Id = s.Value.Id,
                 Name = s.Value.Name
@@ -49,7 +51,7 @@ namespace RidgeList.Domain
 
         Task<Wishlist> Load(Guid id);
 
-        Task<IEnumerable<WishlistSummary>> GetWishlistSummaries();
+        Task<IEnumerable<WishlistSummary>> GetWishlistSummaries(string emailAddress);
 
         Task Delete(Guid id);
 

@@ -105,10 +105,12 @@ export class WishlistClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    create(name: string | null | undefined): Promise<WishlistModel> {
+    create(name: string | null | undefined, emailOfCreator: string | null | undefined): Promise<WishlistModel> {
         let url_ = this.baseUrl + "/Wishlist/create?";
         if (name !== undefined && name !== null)
             url_ += "name=" + encodeURIComponent("" + name) + "&";
+        if (emailOfCreator !== undefined && emailOfCreator !== null)
+            url_ += "emailOfCreator=" + encodeURIComponent("" + emailOfCreator) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ = <RequestInit>{
@@ -140,10 +142,10 @@ export class WishlistClient {
         return Promise.resolve<WishlistModel>(<any>null);
     }
 
-    getWishlist(id: string | null | undefined): Promise<WishlistModel> {
+    getWishlist(name: string | null | undefined): Promise<WishlistModel> {
         let url_ = this.baseUrl + "/Wishlist/wishlist?";
-        if (id !== undefined && id !== null)
-            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        if (name !== undefined && name !== null)
+            url_ += "name=" + encodeURIComponent("" + name) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ = <RequestInit>{
@@ -212,8 +214,10 @@ export class WishlistClient {
         return Promise.resolve<WishlistModel>(<any>null);
     }
 
-    getSummaries(): Promise<WishlistSummaryModel[]> {
-        let url_ = this.baseUrl + "/Wishlist/summaries";
+    getSummaries(emailAddress: string | null | undefined): Promise<WishlistSummaryModel[]> {
+        let url_ = this.baseUrl + "/Wishlist/summaries?";
+        if (emailAddress !== undefined && emailAddress !== null)
+            url_ += "emailAddress=" + encodeURIComponent("" + emailAddress) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ = <RequestInit>{

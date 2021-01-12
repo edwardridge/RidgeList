@@ -12,12 +12,14 @@ namespace RidgeList.Domain
     
     public class Wishlist
     {
-        public static Wishlist Create(string name)
+        public static Wishlist Create(string name, string emailOfCreator)
         {
             return new Wishlist()
             {
                 Id = Guid.NewGuid(),
-                Name =  name
+                Name =  name,
+                People = { emailOfCreator },
+                Creator = emailOfCreator
             };
         }
 
@@ -31,6 +33,8 @@ namespace RidgeList.Domain
         private List<string> People { get; set; }
         
         public string Name { get; set; }
+        
+        public string Creator { get; set; }
 
         public void AddPerson(string email)
         {

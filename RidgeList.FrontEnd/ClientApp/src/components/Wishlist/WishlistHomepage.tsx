@@ -17,12 +17,10 @@ export const WishlistHomepage: React.FC<WishlishHomepageProps> = (props) => {
     const history = useHistory();
     
     useEffect(() => {
-        loadWishListSummaries();
+        let e = Cookie.get("email") ?? "__unknown__";
+        setUsersEmail(e);
+        loadWishListSummaries(e);
     }, [wishlistSummaries.length]);
-    
-    useEffect(() => {
-        setUsersEmail(Cookie.get("email") ?? "");
-    }, []);
 
     let onClickCancel = () => {
         setCreating(false);
@@ -30,7 +28,7 @@ export const WishlistHomepage: React.FC<WishlishHomepageProps> = (props) => {
     }
     
     let onClickCreate = async () => {
-        let newWishlist = await props.wishlistClient.create(nameOfNewWishlist);
+        let newWishlist = await props.wishlistClient.create(nameOfNewWishlist, userEmail);
         setCreating(false);
         history.push("/wishlist/" + newWishlist.id);
     }
@@ -39,8 +37,8 @@ export const WishlistHomepage: React.FC<WishlishHomepageProps> = (props) => {
         setNameOfNewWishlist(event.target.value);
     }
     
-    let loadWishListSummaries = async () => {
-        var summaries = await props.wishlistClient.getSummaries();
+    let loadWishListSummaries = async (email : string) => {
+        var summaries = await props.wishlistClient.getSummaries(email);
         setWishlistSummaries(summaries);
     }
     

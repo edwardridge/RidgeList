@@ -19,16 +19,16 @@ namespace RidgeList.FrontEnd.Controllers
         
         [HttpPost]
         [Route("create")]
-        public WishlistModel Create(string name)
+        public WishlistModel Create(string name, string emailOfCreator)
         {
-            return CreateNewWishlist(name);
+            return CreateNewWishlist(name, emailOfCreator);
         }
         
         [HttpGet]
         [Route("wishlist")]
-        public async Task<WishlistModel> GetWishlist(string id)
+        public async Task<WishlistModel> GetWishlist(string name)
         {
-            var wishlist = await this._repository.Load(Guid.Parse(id));
+            var wishlist = await this._repository.Load(Guid.Parse(name));
             return new WishlistMapper().Map(wishlist);
         }
         
@@ -44,15 +44,15 @@ namespace RidgeList.FrontEnd.Controllers
         
         [HttpGet]
         [Route("summaries")]
-        public async Task<IEnumerable<WishlistSummaryModel>> GetSummaries()
+        public async Task<IEnumerable<WishlistSummaryModel>> GetSummaries(string emailAddress)
         {
-            var summaries = await this._repository.GetWishlistSummaries();
+            var summaries = await this._repository.GetWishlistSummaries(emailAddress);
             return summaries.Select(WishlistSummaryModel.Map);
         }
 
-        private WishlistModel CreateNewWishlist(string name)
+        private WishlistModel CreateNewWishlist(string name, string emailOfCreator)
         {
-            var wishlist = Wishlist.Create(name);
+            var wishlist = Wishlist.Create(name, emailOfCreator);
             this._repository.Save(wishlist);
             return new WishlistMapper().Map(wishlist);
         }

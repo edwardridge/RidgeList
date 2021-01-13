@@ -46,7 +46,7 @@ export const WishlistHomepage: React.FC<WishlishHomepageProps> = (props) => {
     
     let createButtons;
     if (!creating) {
-        createButtons = <div onClick={onClickAddWishlist} className='newItem wishlistSummaryItem' cypress-name='CreateNewWishlist'>...create new wishlist...</div>
+        createButtons = <a><div onClick={onClickAddWishlist} className='newItem wishlistSummaryItem' cypress-name='CreateNewWishlist'>...create new wishlist...</div></a>
     }
     else {
         createButtons = <div className='newItem wishlistSummaryItem'>

@@ -24,7 +24,7 @@ export const Login : React.FC<any> = (props) => {
     
     return (
         <div className='loginWrapper '>
-            <h5>Welcome to RidgeList! To login, please enter your name and email address - note that the wishlists are tied to your email address.</h5>
+            <h5>Welcome to RidgeList! To login, please enter your name and email address - note that the wishlists are linked to your email address.</h5>
             <div className='form-group mt-lg-4'>
                 <label htmlFor="NameLogin">Name</label>
                 <input type="text" className='form-control' id='NameLogin' cypress-name="NameLogin" placeholder="Your name..." onChange={(e) => setLoginName(e.target.value)}/>

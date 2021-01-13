@@ -4,6 +4,7 @@ import {WishlistClient, WishlistModel} from "../../nswag/api.generated";
 import {IWishlistRepository} from "./IWishlistRepository";
 import "./WishlistSummary.css";
 import { useGetLogin } from "../useLogin";
+import {WishlistPersonRow} from "./WishlistPersonRow"
 
 interface WishlistProps {
     id: string;
@@ -79,10 +80,7 @@ interface Props extends RouteComponentProps<WishlistProps> {
             
             <div className='wishlistSummaries' cypress-name="ListOfPeople">
                 {
-                    wishlist.people?.map((s,i) => {
-                        let isLoggedInUser = s.email === login.Email ? " - you" : "";
-                        return <div className='wishlistSummaryItem' key={`${s.email}${s.name}${i}`}>{s.name} <span className='emailDetails'>({s.email}{isLoggedInUser})</span></div>
-                    })
+                    wishlist.people?.map((s) => <WishlistPersonRow loginDetails={login} wishlistPerson={s}></WishlistPersonRow> )
                 }
                 {createNewPerson}
             </div>)

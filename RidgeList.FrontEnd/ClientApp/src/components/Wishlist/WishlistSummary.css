@@ -25,6 +25,17 @@ a .newItem{
     background-color: var(--listBackgroundColor);
 }
 
+a .newItem:hover{
+    background-color: var(--listBackgroundColor);
+    font-style: italic;
+    text-decoration: underline;
+    color: black;
+}
+
+a .newItem input{
+    text-decoration: none !important;
+}
+
 .newItem input{
     color: var(--newItemColor);
     background-color: var(--listBackgroundColor);

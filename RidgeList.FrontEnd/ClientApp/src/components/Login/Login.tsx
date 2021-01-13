@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import Cookies from 'js-cookie';
 import {useSetLogin, useGetLogin} from "../useLogin";
+import "./Login.css"
 
 export const Login : React.FC<any> = (props) => {
     const [loginEmail, setLoginEmail] = useState("");    
@@ -21,9 +22,17 @@ export const Login : React.FC<any> = (props) => {
         history.push('/wishlists');
     }
     
-    return <div>
-        <input type="text" cypress-name="NameLogin" placeholder="Your name..." onChange={(e) => setLoginName(e.target.value)}/>
-        <input type="text" cypress-name="EmailLogin" placeholder="Your email address..." onChange={(e) => setLoginEmail(e.target.value)}/>
-        <button className="btn btn-success" onClick={loginClicked} cypress-name="LoginButton">Login</button>
-    </div>
+    return (
+        <div className='loginWrapper '>
+            <h5>Welcome to RidgeList! To login, please enter your name and email address - note that the wishlists are tied to your email address.</h5>
+            <div className='form-group mt-lg-4'>
+                <label htmlFor="NameLogin">Name</label>
+                <input type="text" className='form-control' id='NameLogin' cypress-name="NameLogin" placeholder="Your name..." onChange={(e) => setLoginName(e.target.value)}/>
+            </div>
+            <div className='form-group'>
+                <label htmlFor="EmailLogin">Email</label>
+                <input type="text" className='form-control' id='EmailLogin' cypress-name="EmailLogin" placeholder="Your email address..." onChange={(e) => setLoginEmail(e.target.value)}/>
+            </div>
+            <button className="btn btn-success" onClick={loginClicked} cypress-name="LoginButton">Login</button>
+        </div>)
 }

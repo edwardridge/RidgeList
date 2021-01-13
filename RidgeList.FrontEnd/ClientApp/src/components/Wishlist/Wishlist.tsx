@@ -53,13 +53,13 @@ interface Props extends RouteComponentProps<WishlistProps> {
                        onChange={(event) => setNewPersonName(event.target.value)}
                        value={newPersonName}
                        placeholder="Name..."
-                       className='form-control col-5'></input>
+                       className='form-control col-4'></input>
                 <input type="text"
                        cypress-name="NewPersonEmail"
                        onChange={(event) => setNewPersonEmail(event.target.value)}
                        value={newPersonEmail}
                        placeholder="Email Address..."
-                       className='form-control col-4'></input>
+                       className='form-control col-5'></input>
                 <span className='col-2'><button cypress-name="CreateNewPerson" onClick={createNewPersonClick} disabled={createButonIsDisabled()} className='btn btn-success'>Add New Person</button></span>
                 <span className='col-1'><button cypress-name="CancelNewPerson" onClick={() => { setAddingNewPerson(false); setNewPersonName("") }} className='btn btn-dark'>Cancel</button></span>
             </>

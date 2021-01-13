@@ -1,0 +1,10 @@
+@import "../../styles/globalVars.css";
+
+.loginWrapper{
+    background-color: var(--listBackgroundColor);
+    padding: 20px;
+    border-radius: 10px;
+    border-color: var(--listBackgroundBorderColor);
+    border-width: 1px;
+    border-style: solid;
+}

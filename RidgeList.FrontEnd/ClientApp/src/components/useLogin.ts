@@ -28,6 +28,10 @@ export const useSetLogin = () => {
     }
 }
 
+export const useLogout = () => {
+    return () => Cookie.remove('login');
+}
+
 export class LoginDetails{
     private static NotLoggedInEmail = "NOT_LOGGED_IN";
     

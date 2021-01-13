@@ -11,6 +11,7 @@ import './custom.css'
 import {WishlistClient} from './nswag/api.generated'
 import {WishlistRepository} from "./components/Wishlist/IWishlistRepository";
 import {Login} from "./components/Login/Login";
+import {Logout} from "./components/Login/Logout";
 
 export default class App extends Component {
   static displayName = App.name;
@@ -28,6 +29,7 @@ export default class App extends Component {
           <Route path='/original' component={HelloWorld} />
           <Route path='/counter' component={Counter} />
           <Route path='/fetch-data' component={FetchData} />
+          <Route path='/logout' component={Logout} />
       </Layout>
     );
   }

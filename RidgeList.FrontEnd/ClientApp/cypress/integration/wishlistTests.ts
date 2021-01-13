@@ -1,4 +1,4 @@
-import {LoginDetails} from "../../src/components/useGetLogin";
+import {LoginDetails} from "../../src/components/useLogin";
 
 
 before(() => {

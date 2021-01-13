@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import {WishlistClient, WishlistModel, WishlistSummaryModel} from "../../nswag/api.generated";
 import { Link, Redirect } from "react-router-dom";
 import './WishlistSummary.css';
-import { useGetLogin } from "../useGetLogin";
+import { useGetLogin } from "../useLogin";
 
 interface WishlishHomepageProps{
     wishlistClient: WishlistClient;

@@ -3,7 +3,7 @@ import {RouteComponentProps, withRouter} from "react-router-dom";
 import {WishlistClient, WishlistModel} from "../../nswag/api.generated";
 import {IWishlistRepository} from "./IWishlistRepository";
 import "./WishlistSummary.css";
-import { useGetLogin } from "../useGetLogin";
+import { useGetLogin } from "../useLogin";
 
 interface WishlistProps {
     id: string;

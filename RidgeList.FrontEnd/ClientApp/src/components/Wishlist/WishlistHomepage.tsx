@@ -14,10 +14,10 @@ export const WishlistHomepage: React.FC<WishlishHomepageProps> = (props) => {
     const [nameOfNewWishlist, setNameOfNewWishlist] = useState("");
     const [wishlistSummaries, setWishlistSummaries] = useState([] as WishlistSummaryModel[]);
     const history = useHistory();
-    const login = useGetLogin();
+    const login = useGetLogin(false);
     
     useEffect(() => {
-        loadWishListSummaries(login);
+        loadWishListSummaries(login.Email);
     }, [wishlistSummaries.length]);
 
     let onClickCancel = () => {
@@ -26,7 +26,7 @@ export const WishlistHomepage: React.FC<WishlishHomepageProps> = (props) => {
     }
     
     let onClickCreate = async () => {
-        let newWishlist = await props.wishlistClient.create(nameOfNewWishlist, login);
+        let newWishlist = await props.wishlistClient.create(nameOfNewWishlist, login.Email, login.Name);
         setCreating(false);
         history.push("/wishlist/" + newWishlist.id);
     }
@@ -69,7 +69,7 @@ export const WishlistHomepage: React.FC<WishlishHomepageProps> = (props) => {
 
     return (
         <div>
-            <h1>Your Wishlists - {login}</h1>
+            <h2>Your Wishlists - {login.Name} <span className='emailDetails'>({login.Email})</span></h2>
             { summaries }
         </div>
     );

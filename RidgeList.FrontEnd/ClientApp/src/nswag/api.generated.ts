@@ -105,12 +105,14 @@ export class WishlistClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    create(name: string | null | undefined, emailOfCreator: string | null | undefined): Promise<WishlistModel> {
+    create(nameOfWishlist: string | null | undefined, emailOfCreator: string | null | undefined, nameOfCreator: string | null | undefined): Promise<WishlistModel> {
         let url_ = this.baseUrl + "/Wishlist/create?";
-        if (name !== undefined && name !== null)
-            url_ += "name=" + encodeURIComponent("" + name) + "&";
+        if (nameOfWishlist !== undefined && nameOfWishlist !== null)
+            url_ += "nameOfWishlist=" + encodeURIComponent("" + nameOfWishlist) + "&";
         if (emailOfCreator !== undefined && emailOfCreator !== null)
             url_ += "emailOfCreator=" + encodeURIComponent("" + emailOfCreator) + "&";
+        if (nameOfCreator !== undefined && nameOfCreator !== null)
+            url_ += "nameOfCreator=" + encodeURIComponent("" + nameOfCreator) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ = <RequestInit>{

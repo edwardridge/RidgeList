@@ -19,14 +19,14 @@ interface Props extends RouteComponentProps<WishlistProps> {
      const [newPersonName, setNewPersonName] = useState("");
      const [newPersonEmail, setNewPersonEmail] = useState("");    
      const [addingNewPerson, setAddingNewPerson] = useState(false);
-     const login = useGetLogin();
+     const login = useGetLogin(false);
     
      useEffect(() => {
         let id = props.match.params.id;
         props.wishlistRepository.getWishlist(id).then(s => { 
             setWishlist(s);
             let numPeople = s?.people?.length ?? 0;
-            if(numPeople === 0)
+            if(numPeople === 1)
             {
                 setAddingNewPerson(true);
             }
@@ -42,7 +42,7 @@ interface Props extends RouteComponentProps<WishlistProps> {
     }
     
     let createButonIsDisabled = () => {
-        return (wishlist?.people?.map(s => s.name).indexOf(newPersonName) ?? 0) > -1;
+        return (wishlist?.people?.map(s => s.email).indexOf(newPersonEmail) ?? 0) > -1;
     }
 
     if (wishlist) {
@@ -50,16 +50,16 @@ interface Props extends RouteComponentProps<WishlistProps> {
             <>
                 <input type="text"
                        cypress-name="NewPersonName"
-                       onChange={(event) => setNewPersonEmail(event.target.value)}
-                       value={newPersonEmail}
-                       placeholder="Add a new name..."
-                       className='form-control col-4'></input>
-                <input type="text"
-                       cypress-name="NewPersonEmail"
                        onChange={(event) => setNewPersonName(event.target.value)}
                        value={newPersonName}
-                       placeholder="Add a new email address..."
+                       placeholder="Name..."
                        className='form-control col-5'></input>
+                <input type="text"
+                       cypress-name="NewPersonEmail"
+                       onChange={(event) => setNewPersonEmail(event.target.value)}
+                       value={newPersonEmail}
+                       placeholder="Email Address..."
+                       className='form-control col-4'></input>
                 <span className='col-2'><button cypress-name="CreateNewPerson" onClick={createNewPersonClick} disabled={createButonIsDisabled()} className='btn btn-success'>Add New Person</button></span>
                 <span className='col-1'><button cypress-name="CancelNewPerson" onClick={() => { setAddingNewPerson(false); setNewPersonName("") }} className='btn btn-dark'>Cancel</button></span>
             </>
@@ -76,11 +76,12 @@ interface Props extends RouteComponentProps<WishlistProps> {
         )
         
         let listOfPeople = (
-            <div className='wishlistSummaries' cypress-name="ListOfPeople"> 
+            
+            <div className='wishlistSummaries' cypress-name="ListOfPeople">
                 {
                     wishlist.people?.map((s,i) => {
-                        let isLoggedInUser = s === login ? " (you)" : "";
-                        return <div className='wishlistSummaryItem' key={`${s.email}${s.name}${i}`}>Name: {s.name}, Email: {s.email}{isLoggedInUser}</div>
+                        let isLoggedInUser = s.email === login.Email ? " - you" : "";
+                        return <div className='wishlistSummaryItem' key={`${s.email}${s.name}${i}`}>{s.name} <span className='emailDetails'>({s.email}{isLoggedInUser})</span></div>
                     })
                 }
                 {createNewPerson}

@@ -14,13 +14,13 @@ namespace RidgeList.Domain
     
     public class Wishlist
     {
-        public static Wishlist Create(string name, string emailOfCreator)
+        public static Wishlist Create(string name, string emailOfCreator, string nameOfCreator)
         {
             return new Wishlist()
             {
                 Id = Guid.NewGuid(),
                 Name =  name,
-                People = new WishlistPeople{ new WishlistPerson() { Email = emailOfCreator } },
+                People = new WishlistPeople{ new WishlistPerson() { Email = emailOfCreator, Name = nameOfCreator} },
                 Creator = emailOfCreator
             };
         }

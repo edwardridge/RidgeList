@@ -19,9 +19,9 @@ namespace RidgeList.FrontEnd.Controllers
         
         [HttpPost]
         [Route("create")]
-        public WishlistModel Create(string name, string emailOfCreator)
+        public WishlistModel Create(string nameOfWishlist, string emailOfCreator, string nameOfCreator)
         {
-            return CreateNewWishlist(name, emailOfCreator);
+            return CreateNewWishlist(nameOfWishlist, emailOfCreator, nameOfCreator);
         }
         
         [HttpGet]
@@ -50,9 +50,9 @@ namespace RidgeList.FrontEnd.Controllers
             return summaries.Select(WishlistSummaryModel.Map);
         }
 
-        private WishlistModel CreateNewWishlist(string name, string emailOfCreator)
+        private WishlistModel CreateNewWishlist(string nameOfWishlist, string emailOfCreator, string nameOfCreator)
         {
-            var wishlist = Wishlist.Create(name, emailOfCreator);
+            var wishlist = Wishlist.Create(nameOfWishlist, emailOfCreator, nameOfCreator);
             this._repository.Save(wishlist);
             return new WishlistMapper().Map(wishlist);
         }

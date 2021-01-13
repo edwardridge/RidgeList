@@ -9,7 +9,7 @@ namespace RidgeList.FrontEnd.Controllers
     public class WishlistTestController : Controller
     {
         private readonly IWishlistRepository _repository;
-        private string testEmailAccount = "test@testwishlistcom";
+        private string testEmailAccount = "test@testwishlist.com";
 
         public WishlistTestController(IWishlistRepository repository)
         {
@@ -20,7 +20,7 @@ namespace RidgeList.FrontEnd.Controllers
         [Route("createTestWishlist")]
         public Guid CreateTestWishlist()
         {
-           var wishlist = Wishlist.Create("[Test] Wishlist", testEmailAccount);
+           var wishlist = Wishlist.Create("[Test] Wishlist", testEmailAccount, "Test");
            _repository.Save(wishlist);
            return wishlist.Id;
         }

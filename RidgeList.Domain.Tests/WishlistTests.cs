@@ -14,7 +14,7 @@ namespace RidgeList.Domain.Tests
         public async Task Saves_WishList_And_Loads_Wishlist()
         {
             var repo = new InMemoryWishlistRepository();
-            var wishlist = Wishlist.Create("Asd", "a@b.com");
+            var wishlist = Wishlist.Create("Asd", "a@b.com", "Ed");
             await repo.Save(wishlist);
 
             var reloadedWishlist = await repo.Load(wishlist.Id);
@@ -25,11 +25,11 @@ namespace RidgeList.Domain.Tests
         public async Task Gets_All_Wishlists_Only_Returns_Wishlists_For_Email()
         {
             var repo = new InMemoryWishlistRepository();
-            var wishlist1 = Wishlist.Create("Asd", "a@b.com");
+            var wishlist1 = Wishlist.Create("Asd", "a@b.com", "Ed");
             wishlist1.AddPerson("", "c@d.com");
             await repo.Save(wishlist1);
             
-            var wishlist2 = Wishlist.Create("Wishlist 2", "a@b.com");
+            var wishlist2 = Wishlist.Create("Wishlist 2", "a@b.com", "Ed");
             await repo.Save(wishlist2);
 
             var wishlistSumaries = await repo.GetWishlistSummaries("a@b.com");
@@ -54,7 +54,7 @@ namespace RidgeList.Domain.Tests
         [Test]
         public void Creating_A_Wishlist_Adds_An_Id_And_Initial_User()
         {
-            var wishlist = Wishlist.Create("Eds test wishlist", "a@b.com");
+            var wishlist = Wishlist.Create("Eds test wishlist", "a@b.com", "Ed");
             wishlist.Id.Should().NotBeEmpty();
             wishlist.Name.Should().Be("Eds test wishlist");            
             wishlist.GetPeople().First().Email.Should().Be("a@b.com");       
@@ -65,7 +65,7 @@ namespace RidgeList.Domain.Tests
         [Test]
         public void Can_Add_Person_With_Email_And_Name_To_Wishlist()
         {
-            var wishlist = Wishlist.Create("Eds test wishlist", "a@b.com");
+            var wishlist = Wishlist.Create("Eds test wishlist", "a@b.com", "Ed");
             wishlist.AddPerson("Ed", "edwardridge@gmail.com");
             
             wishlist.GetPeople().Should().BeEquivalentTo(new []
@@ -78,7 +78,7 @@ namespace RidgeList.Domain.Tests
         [Test]
         public void Can_Edit_Name()
         {
-            var wishlist = Wishlist.Create("Eds test wishlist", "a@b.com");
+            var wishlist = Wishlist.Create("Eds test wishlist", "a@b.com", "Ed");
             wishlist.EditPerson("a@b.com", "Ed");
             
             wishlist.GetPeople().Should().BeEquivalentTo(new []

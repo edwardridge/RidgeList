@@ -1,3 +1,6 @@
+import {LoginDetails} from "../../src/components/useGetLogin";
+
+
 before(() => {
     cy.deleteOldTestWishlists();
 });
@@ -6,19 +9,39 @@ const emailAddress = "test@testwishlist.com";
 
 describe('Login', () => {
     beforeEach(() => {
-        cy.clearCookie('email').visit('/');
+        cy.clearCookie('login').visit('/');
     })
 
     it('allows you to login using your email address', () => {
-        cy.getByCyName('EmailLogin').type(emailAddress);
-        cy.getByCyName('LoginButton').click();
+        cy.getByCyName('EmailLogin')
+                .type(emailAddress)
+            .getByCyName('NameLogin')
+                .type('Test')
+            .getByCyName('LoginButton')
+                .click();
+        
         cy.url().should('include', '/wishlists');
+    });
+
+    it('returns you to login page if you dont have a cookie', () => {
+        cy.getByCyName('EmailLogin')
+            .type(emailAddress)
+            .getByCyName('NameLogin')
+            .type('Test')
+            .getByCyName('LoginButton')
+            .click();
+
+        cy.clearCookie('login')
+            .visit('/wishlists');
+        
+        cy.url().should('not.include', '/wishlists');
     });
 });
 
 describe('Wishlist summary page', () => {
     beforeEach(() => {
-        cy.setCookie('email', emailAddress).visit('/wishlists');
+        let loginDetails = new LoginDetails(emailAddress, "Test");
+        cy.setCookie('login', JSON.stringify(loginDetails)).visit('/wishlists');
     });
 
     it('can create new wishlist"', () => {
@@ -34,7 +57,8 @@ describe('Wishlist summary page', () => {
 
 describe('Wishlist page', () => {
     beforeEach(() => {
-        cy.setCookie('email', emailAddress);
+        let loginDetails = new LoginDetails(emailAddress, "Test");
+        cy.setCookie('login', JSON.stringify(loginDetails));
     });
     
     it('allows new people to be added', () => {
@@ -53,14 +77,14 @@ describe('Wishlist page', () => {
 
         addNewPerson('ed@ed.com', 'Ed 2');
         
-        cy.getByCyName('NewPersonEmail').type('ed@ed.com');
+        cy.getByCyName('NewPersonEmail').type('ed@ed.com').pause();
         cy.getByCyName('CreateNewPerson').should('be.disabled');
         cy.getByCyName('NewPersonEmail').type('ed_diff@ed.com');
         cy.getByCyName('CreateNewPerson').should('be.enabled');
     });
     
     let addNewPerson = (email : string, name : string) => {
-        cy.getByCyName("AddNewPerson").click();
+        // cy.getByCyName("AddNewPerson").click();
         cy.getByCyName('NewPersonEmail').type(email);
         cy.getByCyName('NewPersonName').type(name);
         cy.getByCyName('CreateNewPerson').click();

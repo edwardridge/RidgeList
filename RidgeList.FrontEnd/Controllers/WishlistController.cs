@@ -42,6 +42,16 @@ namespace RidgeList.FrontEnd.Controllers
             return new WishlistMapper().Map(wishlist);
         }
         
+        [HttpPost]
+        [Route("addPresentIdea")]
+        public async Task<WishlistModel> AddPresentIdea(string wishlistId, string email, string description)
+        {
+            var wishlist = await this._repository.Load(Guid.Parse(wishlistId));
+            wishlist.AddPresentIdea(email, description);
+            await this._repository.Save(wishlist);
+            return new WishlistMapper().Map(wishlist);
+        }
+        
         [HttpGet]
         [Route("summaries")]
         public async Task<IEnumerable<WishlistSummaryModel>> GetSummaries(string emailAddress)
@@ -82,7 +92,13 @@ namespace RidgeList.FrontEnd.Controllers
             {
                 Id = wishlist.Id,
                 Name = wishlist.Name,
-                People = wishlist.GetPeople().Select(s => new WishlistPersonModel() { Name = s.Name, Email = s.Email}).ToList()
+                People = wishlist.GetPeople().Select(s => 
+                    new WishlistPersonModel()
+                    {
+                        Name = s.Name, 
+                        Email = s.Email,
+                        PresentIdeas = s.PresentIdeas.Select(t => new PresentIdeaModel(){ Description = t.Description, Id = t.Id}).ToList()
+                    }).ToList()
             };
         }
     }
@@ -92,6 +108,15 @@ namespace RidgeList.FrontEnd.Controllers
         public string Email { get; set; }
         
         public string Name { get; set; }
+
+        public List<PresentIdeaModel> PresentIdeas { get; set; }
+    }
+
+    public class PresentIdeaModel
+    {
+        public Guid Id { get; set; }
+
+        public string Description { get; set; }
     }
     
     public class WishlistModel

@@ -1,7 +1,7 @@
 import React, {ChangeEvent, useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import {WishlistClient, WishlistModel, WishlistSummaryModel} from "../../nswag/api.generated";
-import { Link, Redirect } from "react-router-dom";
+import {WishlistClient, WishlistSummaryModel} from "../../nswag/api.generated";
+import { Link } from "react-router-dom";
 import './WishlistSummary.css';
 import { useGetLogin } from "../useLogin";
 

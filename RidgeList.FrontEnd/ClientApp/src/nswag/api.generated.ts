@@ -218,6 +218,45 @@ export class WishlistClient {
         return Promise.resolve<WishlistModel>(<any>null);
     }
 
+    addPresentIdea(wishlistId: string | null | undefined, email: string | null | undefined, description: string | null | undefined): Promise<WishlistModel> {
+        let url_ = this.baseUrl + "/Wishlist/addPresentIdea?";
+        if (wishlistId !== undefined && wishlistId !== null)
+            url_ += "wishlistId=" + encodeURIComponent("" + wishlistId) + "&";
+        if (email !== undefined && email !== null)
+            url_ += "email=" + encodeURIComponent("" + email) + "&";
+        if (description !== undefined && description !== null)
+            url_ += "description=" + encodeURIComponent("" + description) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "POST",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processAddPresentIdea(_response);
+        });
+    }
+
+    protected processAddPresentIdea(response: Response): Promise<WishlistModel> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : <WishlistModel>JSON.parse(_responseText, this.jsonParseReviver);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<WishlistModel>(<any>null);
+    }
+
     getSummaries(emailAddress: string | null | undefined): Promise<WishlistSummaryModel[]> {
         let url_ = this.baseUrl + "/Wishlist/summaries?";
         if (emailAddress !== undefined && emailAddress !== null)
@@ -344,6 +383,12 @@ export interface WishlistModel {
 export interface WishlistPersonModel {
     email?: string | undefined;
     name?: string | undefined;
+    presentIdeas?: PresentIdeaModel[] | undefined;
+}
+
+export interface PresentIdeaModel {
+    id: string;
+    description?: string | undefined;
 }
 
 export interface WishlistSummaryModel {

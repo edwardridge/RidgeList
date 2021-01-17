@@ -1,5 +1,4 @@
-import React, {useEffect, useState} from "react";
-import {useHistory} from "react-router-dom";
+import React, {useEffect} from "react";
 import {useLogout} from "../useLogin";
 
 export const Logout : React.FC<any> = (props) => {

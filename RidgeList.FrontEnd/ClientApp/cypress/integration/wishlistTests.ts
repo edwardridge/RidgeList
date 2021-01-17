@@ -72,15 +72,25 @@ describe('Wishlist page', () => {
         });
     });
 
-    it('doesnt allow duplicate to be added', () => {
+    it('doesnt allow duplicate person to be added', () => {
         cy.createWishlist();
 
         addNewPerson('ed@ed.com', 'Ed 2');
         
-        cy.getByCyName('NewPersonEmail').type('ed@ed.com').pause();
+        cy.getByCyName('NewPersonEmail').type('ed@ed.com');
         cy.getByCyName('CreateNewPerson').should('be.disabled');
         cy.getByCyName('NewPersonEmail').type('ed_diff@ed.com');
         cy.getByCyName('CreateNewPerson').should('be.enabled');
+    });
+
+    it('allows present idea to be added', () => {
+        cy.createWishlist();
+
+        addNewPerson('ed@ed.com', 'Ed 2');
+
+        cy.getByCyName('ToggleAddItemsButton').pause();
+        cy.getByCyName('AddItem').type('New present idea');
+        cy.getByCyName('AddItemButton').click();
     });
     
     let addNewPerson = (email : string, name : string) => {

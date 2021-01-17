@@ -14,7 +14,7 @@ export const useGetLogin = (fromLoginPage : boolean) => {
         login = json as LoginDetails;
     }
     
-    if(fromLoginPage === false && login.IsLoggedIn == false){
+    if(fromLoginPage === false && login.IsLoggedIn === false){
         history.push('/');
         return login;
     }

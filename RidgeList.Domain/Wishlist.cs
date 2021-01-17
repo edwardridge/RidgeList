@@ -55,6 +55,16 @@ namespace RidgeList.Domain
         {
             this.People.Single(s => s.Email == email).Name = newName;
         }
+
+        public void AddPresentIdea(string email, string present)
+        {
+            this.GetPerson(email).AddPresentIdea(present);
+        }
+
+        public WishlistPerson GetPerson(string email)
+        {
+            return this.People.Single(s => s.Email == email);
+        }
     }
 
     public class WishlistPeople : Collection<WishlistPerson>
@@ -67,8 +77,32 @@ namespace RidgeList.Domain
 
     public class WishlistPerson
     {
+        public WishlistPerson()
+        {
+            this.PresentIdeas = new List<PresentIdea>();
+        }
+        
         public string Name { get; set; }
 
         public string Email { get; set; }
+        
+        public List<PresentIdea> PresentIdeas { get; set; }
+
+        public void AddPresentIdea(string present)
+        {
+            this.PresentIdeas.Add(
+                new PresentIdea()
+                {
+                    Id = Guid.NewGuid(), 
+                    Description = present
+                });
+        }
+    }
+
+    public class PresentIdea
+    {
+        public Guid Id { get; set; }
+        
+        public string Description { get; set; }
     }
 }

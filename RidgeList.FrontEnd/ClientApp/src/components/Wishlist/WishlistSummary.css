@@ -48,18 +48,22 @@ a .newItem input{
     border: none;
 }
 
-.newItem:hover{
-    color: var(--newItemColor);
-    background-color: var(--listBackgroundColor);
-}
+/*.newItem:hover{*/
+/*    color: var(--newItemColor);*/
+/*    background-color: var(--listBackgroundColor);*/
+/*}*/
 
-.wishlistSummaryItem:hover{
-    background-color: var(--listBackgroundColor);
-    font-style: italic;
-    text-decoration: none;
-}
+/*.wishlistSummaryItem:hover{*/
+/*    background-color: var(--listBackgroundColor);*/
+/*    font-style: italic;*/
+/*    text-decoration: none;*/
+/*}*/
 
 .emailDetails{
     color: #ccc;
     
+}
+
+.personItems{
+    padding-left: 30px;
 }

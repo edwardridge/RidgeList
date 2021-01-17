@@ -15,7 +15,12 @@ export const WishlistPersonRow : React.FC<WishlistPersonRowProps> = (props) => {
         setIsEditing(!isEditing);
     }
 
-    let editing = <div>Hello</div>;
+    let editing = (<div className='personItems'>
+        <div className='mt-lg-4'>
+            <input cypress-name='addItem' className='col-10' type="text" placeholder='...add...'></input>
+            <button cypress-name='addItemButton' className='btn btn-primary col-2'>Add item</button>
+        </div>
+    </div>);
     
     return (
         
@@ -23,7 +28,7 @@ export const WishlistPersonRow : React.FC<WishlistPersonRowProps> = (props) => {
             <div>
                 <span className='d-inline-block col-10'>
                     {props.wishlistPerson.name} 
-                    <span className='emailDetails'>({props.wishlistPerson.email}{isLoggedInUser})</span>
+                    <span className='emailDetails'> ({props.wishlistPerson.email}{isLoggedInUser})</span>
                 </span>
                 <button onClick={toggleEditing} className='btn btn-dark col-2'>{isEditing ? "Close" : "Add items"}</button>
             </div>

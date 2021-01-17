@@ -87,5 +87,19 @@ namespace RidgeList.Domain.Tests
                 
             });
         }
+
+        [Test]
+        public void Can_Add_Item_To_Wishlist()
+        {
+            var emailOfCreator = "a@b.com";
+            var wishlist = Wishlist.Create("Eds test wishlist", emailOfCreator, "Ed");
+            wishlist.AddPresentIdea(emailOfCreator, "My first present");
+
+            var person = wishlist.GetPerson(emailOfCreator);
+
+            person.PresentIdeas.Count.Should().Be(1);
+            person.PresentIdeas.Single().Description.Should().Be("My first present");
+            person.PresentIdeas.Single().Id.Should().NotBeEmpty();s
+        }
     }
 }

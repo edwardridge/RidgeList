@@ -99,7 +99,6 @@ namespace RidgeList.Domain.Tests
 
             person.PresentIdeas.Count.Should().Be(1);
             person.PresentIdeas.Single().Description.Should().Be("My first present");
-            person.PresentIdeas.Single().Id.Should().NotBeEmpty();
         }
     }
 }

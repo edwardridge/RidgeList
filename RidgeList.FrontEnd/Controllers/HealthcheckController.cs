@@ -11,12 +11,12 @@ namespace RidgeList.FrontEnd.Controllers
     [Route("[controller]")]
     public class HealthcheckController : ControllerBase
     {
-        private readonly ILogger<WeatherForecastController> _logger;
-
-        public HealthcheckController(ILogger<WeatherForecastController> logger)
-        {
-            _logger = logger;
-        }
+        // private readonly ILogger<WeatherForecastController> _logger;
+        //
+        // public HealthcheckController(ILogger<WeatherForecastController> logger)
+        // {
+        //     _logger = logger;
+        // }
 
         [HttpGet]
         public string Get()

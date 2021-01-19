@@ -68,7 +68,7 @@ describe('Wishlist page', () => {
         
         cy.contains('Ed 2');
         cy.getByCyName('ListOfPeople').within((a) => {
-            cy.get('.wishlistSummaryItem').should('have.length', 3);
+            cy.get('.wishlistSummaryItem').should('have.length', 2);
         });
     });
 
@@ -88,7 +88,7 @@ describe('Wishlist page', () => {
 
         addNewPerson('ed@ed.com', 'Ed 2');
 
-        cy.getByCyName('ToggleAddItemsButton').pause();
+        // cy.getByCyName('ToggleAddItemsButton').click();
         cy.getByCyName('AddItem').type('New present idea');
         cy.getByCyName('AddItemButton').click();
     });

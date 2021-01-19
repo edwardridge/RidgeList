@@ -9,14 +9,32 @@ interface WishlistPersonRowProps{
     setWishlist: (wishlist : WishlistModel) => void;
 }
 
-export const WishlistPersonRow : React.FC<WishlistPersonRowProps> = (props) => {
-    let isLoggedInUser = props.wishlistPerson.email === props.loginDetails.Email ? " - you" : "";
-    const [isEditing, setIsEditing] = useState(false);
-    const [newItemDescription, setNewItemDescription] = useState("");
+interface OtherPersonWishlistRowProps{
+    wishlistPerson : WishlistPersonModel;
+    wishlistId: string;
+    setWishlist: (wishlist : WishlistModel) => void;
+}
 
-    let toggleEditing = () => {
-        setIsEditing(!isEditing);
-    }
+export const OtherPersonWishlistRow = (props : OtherPersonWishlistRowProps) => {
+    return (
+        <div className='wishlistSummaryItem' key={`${props.wishlistPerson.email}`}>
+            <div>
+                <span className='d-inline-block col-10'>
+                    {props.wishlistPerson.name}
+                    <span className='emailDetails'> ({props.wishlistPerson.email})</span>
+                </span>
+            </div>
+            <div className='personItems'>
+                {props.wishlistPerson.presentIdeas?.map(s => {
+                    return <div key={s.id}>{s.description}</div>
+                })}
+            </div>
+        </div>
+    )
+}
+
+export const WishlistPersonRow = (props : WishlistPersonRowProps) => {
+    const [newItemDescription, setNewItemDescription] = useState("");
 
     let clickAddItem = () => {
         new WishlistClient().addPresentIdea(props.wishlistId, props.loginDetails.Email, newItemDescription).then(s => { 
@@ -25,27 +43,28 @@ export const WishlistPersonRow : React.FC<WishlistPersonRowProps> = (props) => {
         });
     }
     
-    let editing = (<div className='personItems'>
+    let addItems = (<div className='personItems'>
+        <ul>
         {props.wishlistPerson.presentIdeas?.map(s => {
-            return <div key={s.id}>{s.description}</div>
+            return <li key={s.id}>{s.description}</li>
         })}
+        </ul>
         <div className='mt-lg-4'>
-            <input cypress-name='AddItem' value={newItemDescription} onChange={(event) => {setNewItemDescription(event.target.value)}} className='col-10' type="text" placeholder='...add...'></input>
-            <button cypress-name='AddItemButton' onClick={clickAddItem} className='btn btn-primary col-2'>Add item</button>
+            <input cypress-name='AddItem' value={newItemDescription} onChange={(event) => {setNewItemDescription(event.target.value)}} className='col-10' type="text" placeholder='What would you like?'></input>
+            <button cypress-name='AddItemButton' onClick={clickAddItem} className='btn btn-primary col-2'>Add gift idea</button>
         </div>
     </div>);
-    
+   
     return (
         
         <div className='wishlistSummaryItem' key={`${props.wishlistPerson.email}`}>
             <div>
                 <span className='d-inline-block col-10'>
                     {props.wishlistPerson.name} 
-                    <span className='emailDetails'> ({props.wishlistPerson.email}{isLoggedInUser})</span>
+                    <span className='emailDetails'> ({props.wishlistPerson.email})</span>
                 </span>
-                <button cypress-name='ToggleAddItemsButton' onClick={toggleEditing} className='btn btn-dark col-2'>{isEditing ? "Close" : "Add items"}</button>
             </div>
-            {isEditing ? editing : null}
+            {addItems}
         </div>
     )
 }

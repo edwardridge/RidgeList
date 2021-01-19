@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RidgeList.Domain;
+using RidgeList.Postgres;
 
 namespace RidgeList.FrontEnd
 {
@@ -26,7 +28,7 @@ namespace RidgeList.FrontEnd
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/build"; });
 
-            services.AddSingleton<IWishlistRepository>(new InMemoryWishlistRepository());
+            services.AddScoped<IWishlistRepository>(new Func<IServiceProvider, IWishlistRepository>(s => new MartenDbRepository()));
             
             // services.AddOpenApiDocument();
             services.AddSwaggerDocument();

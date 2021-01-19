@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using RidgeList.Domain;
@@ -30,7 +31,7 @@ namespace RidgeList.FrontEnd.Controllers
         public async Task ClearOldTestWishlists()
         {
             var summaries = await _repository.GetWishlistSummaries(testEmailAccount);
-            foreach (var summary in summaries)
+            foreach (var summary in summaries.ToList())
             {
                 if (summary.Name.Contains("[Test]"))
                 {

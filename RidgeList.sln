@@ -8,6 +8,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RidgeList.Domain.Tests", "R
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RidgeList.FrontEnd.Tests", "RidgeList.FrontEnd.Tests\RidgeList.FrontEnd.Tests.csproj", "{B121A336-BEC8-412D-97D5-5E9583F45DC6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RidgeList.Postgres", "RidgeList.Postgres\RidgeList.Postgres.csproj", "{E8BC260B-2B4B-418A-B8CF-FCF54C51306D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RidgeList.Postgres.Tests", "RidgeList.Postgres.Tests\RidgeList.Postgres.Tests.csproj", "{9145408A-3494-403B-B2CB-248FCF963D8B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +34,13 @@ Global
 		{B121A336-BEC8-412D-97D5-5E9583F45DC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B121A336-BEC8-412D-97D5-5E9583F45DC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B121A336-BEC8-412D-97D5-5E9583F45DC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8BC260B-2B4B-418A-B8CF-FCF54C51306D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8BC260B-2B4B-418A-B8CF-FCF54C51306D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8BC260B-2B4B-418A-B8CF-FCF54C51306D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8BC260B-2B4B-418A-B8CF-FCF54C51306D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9145408A-3494-403B-B2CB-248FCF963D8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9145408A-3494-403B-B2CB-248FCF963D8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9145408A-3494-403B-B2CB-248FCF963D8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9145408A-3494-403B-B2CB-248FCF963D8B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -21,6 +21,11 @@ namespace RidgeList.Domain
             return Task.CompletedTask;
         }
 
+        public Task Update(Wishlist wishlist)
+        {
+            return Task.CompletedTask;
+        }
+
         public Task<Wishlist> Load(Guid id)
         {
             return Task.FromResult(this._wishlists[id]);

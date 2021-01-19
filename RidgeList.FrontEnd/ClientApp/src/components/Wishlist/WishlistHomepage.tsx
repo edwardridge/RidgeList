@@ -9,7 +9,7 @@ interface WishlishHomepageProps{
     wishlistClient: WishlistClient;
 }
 
-export const WishlistHomepage: React.FC<WishlishHomepageProps> = (props) => {
+export const WishlistHomepage = (props : WishlishHomepageProps) => {
     const [creating, setCreating] = useState(false);
     const [nameOfNewWishlist, setNameOfNewWishlist] = useState("");
     const [wishlistSummaries, setWishlistSummaries] = useState([] as WishlistSummaryModel[]);

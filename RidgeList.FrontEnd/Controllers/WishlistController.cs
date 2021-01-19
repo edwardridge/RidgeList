@@ -97,7 +97,7 @@ namespace RidgeList.FrontEnd.Controllers
                     {
                         Name = s.Name, 
                         Email = s.Email,
-                        PresentIdeas = s.PresentIdeas.Select(t => new PresentIdeaModel(){ Description = t.Description, Id = t.Id}).ToList()
+                        PresentIdeas = s.PresentIdeas.Select(t => new PresentIdeaModel(){ Description = t.Description}).ToList()
                     }).ToList()
             };
         }

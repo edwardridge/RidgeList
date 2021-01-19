@@ -28,6 +28,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\RidgeList.Domain\RidgeList.Domain.csproj" />
+      <ProjectReference Include="..\RidgeList.Postgres\RidgeList.Postgres.csproj" />
     </ItemGroup>
 
     <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

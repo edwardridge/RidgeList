@@ -11,6 +11,18 @@ namespace RidgeList.Domain
         
         public string Name { get; set; }
     }
+
+    public class UserWishlists
+    {
+
+        public UserWishlists()
+        {
+            this.Wishlists = new List<Guid>();
+        }
+        public string Email { get; set; }
+
+        public List<Guid> Wishlists { get; set; }
+    }
     
     public class Wishlist
     {
@@ -18,7 +30,6 @@ namespace RidgeList.Domain
         {
             return new Wishlist()
             {
-                Id = Guid.NewGuid(),
                 Name =  name,
                 People = new WishlistPeople{ new WishlistPerson() { Email = emailOfCreator, Name = nameOfCreator} },
                 Creator = emailOfCreator
@@ -32,7 +43,7 @@ namespace RidgeList.Domain
 
         public Guid Id { get; init; }
 
-        private WishlistPeople People { get; set; }
+        public WishlistPeople People { get; set; }
         
         public string Name { get; set; }
         
@@ -42,7 +53,7 @@ namespace RidgeList.Domain
         {
             if (this.People.ContainsEmail(email) == false)
             {
-                this.People.Add(new WishlistPerson() { Email = email, Name = name});
+                this.People.Add(new WishlistPerson() { Email = email, Name = name });
             }
         }
 
@@ -58,12 +69,12 @@ namespace RidgeList.Domain
 
         public void AddPresentIdea(string email, string present)
         {
-            this.GetPerson(email).AddPresentIdea(present);
+            this.GetPerson(email)?.AddPresentIdea(present);
         }
 
         public WishlistPerson GetPerson(string email)
         {
-            return this.People.Single(s => s.Email == email);
+            return this.People.SingleOrDefault(s => s.Email == email);
         }
     }
 
@@ -93,7 +104,6 @@ namespace RidgeList.Domain
             this.PresentIdeas.Add(
                 new PresentIdea()
                 {
-                    Id = Guid.NewGuid(), 
                     Description = present
                 });
         }
@@ -101,8 +111,6 @@ namespace RidgeList.Domain
 
     public class PresentIdea
     {
-        public Guid Id { get; set; }
-        
         public string Description { get; set; }
     }
 }

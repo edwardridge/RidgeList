@@ -4,7 +4,7 @@ import {WishlistClient, WishlistModel} from "../../nswag/api.generated";
 import {IWishlistRepository} from "./IWishlistRepository";
 import "./WishlistSummary.css";
 import { useGetLogin } from "../useLogin";
-import {WishlistPersonRow} from "./WishlistPersonRow"
+import {WishlistPersonRow, OtherPersonWishlistRow} from "./WishlistPersonRow"
 
 interface WishlistProps {
     id: string;
@@ -15,7 +15,7 @@ interface Props extends RouteComponentProps<WishlistProps> {
     wishlistRepository : IWishlistRepository;
 }
 
- const Wishlist : React.FC<Props> = (props) => {
+ const Wishlist = (props : Props) => {
      const [wishlist, setWishlist] = useState<WishlistModel|null>(null);
      const [newPersonName, setNewPersonName] = useState("");
      const [newPersonEmail, setNewPersonEmail] = useState("");    
@@ -66,6 +66,9 @@ interface Props extends RouteComponentProps<WishlistProps> {
             </>
         )
         
+        let loggedInWishlist = wishlist.people?.find(s => s.email === login.Email);
+        let otherPeople = wishlist.people?.filter(s => s.email !== login.Email);
+        
         let addNewRow = <div className='w-100' cypress-name="AddNewPerson" onClick={()=> setAddingNewPerson(true)}>+</div>
         
         let createNewPerson = (
@@ -76,12 +79,12 @@ interface Props extends RouteComponentProps<WishlistProps> {
             </a>
         )
         
-        let listOfPeople = (
+        let listOfOtherPeoplesIdeas = (
             
             <div className='wishlistSummaries' cypress-name="ListOfPeople">
                 {
-                    wishlist.people?.map((s) => 
-                        <WishlistPersonRow key={s.email} loginDetails={login} wishlistPerson={s} wishlistId={wishlist?.id} setWishlist={setWishlist}></WishlistPersonRow> )
+                    otherPeople?.map((s) => 
+                        <OtherPersonWishlistRow key={s.email} wishlistPerson={s} wishlistId={wishlist?.id} setWishlist={setWishlist}></OtherPersonWishlistRow> )
                 }
                 {createNewPerson}
             </div>)
@@ -89,8 +92,14 @@ interface Props extends RouteComponentProps<WishlistProps> {
         return (
             <div>
                 <h1 id="wishlistTitle">Wishlist - {wishlist.name}</h1>
-                {/*{createNewPerson}*/}
-                {listOfPeople}
+                <div>
+                    <h4>Your items - {loggedInWishlist?.name}</h4>
+                    <WishlistPersonRow wishlistPerson={loggedInWishlist ?? {}} wishlistId={wishlist.id} setWishlist={setWishlist} loginDetails={login}></WishlistPersonRow>
+                </div>
+                <div className='mt-lg-5'>
+                    <h4>Everyone else</h4>
+                    {listOfOtherPeoplesIdeas}
+                </div>
             </div>
         )
     }

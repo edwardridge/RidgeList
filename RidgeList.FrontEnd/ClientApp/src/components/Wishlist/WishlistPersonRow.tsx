@@ -26,7 +26,12 @@ export const OtherPersonWishlistRow = (props : OtherPersonWishlistRowProps) => {
             </div>
             <div className='personItems'>
                 {props.wishlistPerson.presentIdeas?.map(s => {
-                    return <div key={s.id}>{s.description}</div>
+                    return (
+                        <div key={s.id}>
+                            <span>{s.description}</span>
+                            <button className='btn btn-success'>I'll get this!</button>
+                        </div>
+                    )
                 })}
             </div>
         </div>

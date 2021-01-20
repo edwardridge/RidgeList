@@ -88,16 +88,17 @@ describe('Wishlist page', () => {
 
         addNewPerson('ed@ed.com', 'Ed 2');
 
-        // cy.getByCyName('ToggleAddItemsButton').click();
         cy.getByCyName('AddItem').type('New present idea');
         cy.getByCyName('AddItemButton').click();
     });
     
     let addNewPerson = (email : string, name : string) => {
-        // cy.getByCyName("AddNewPerson").click();
-        cy.getByCyName('NewPersonEmail').type(email);
-        cy.getByCyName('NewPersonName').type(name);
-        cy.getByCyName('CreateNewPerson').click();
+        cy.getByCyName('NewPersonEmail')
+                .type(email)
+            .getByCyName('NewPersonName')
+                .type(name)
+            .getByCyName('CreateNewPerson')
+            .click();
     }
 });
 

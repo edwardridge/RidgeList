@@ -76,6 +76,11 @@ namespace RidgeList.Domain
         {
             return this.People.SingleOrDefault(s => s.Email == email);
         }
+
+        public void ClaimPresent(Guid presentId, string emailOfClaimer)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class WishlistPeople : Collection<WishlistPerson>
@@ -112,5 +117,9 @@ namespace RidgeList.Domain
     public class PresentIdea
     {
         public string Description { get; set; }
+        
+        public Guid Id { get; set; }
+        
+        public string Claimer { get; set; }
     }
 }

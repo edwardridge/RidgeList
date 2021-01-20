@@ -100,5 +100,20 @@ namespace RidgeList.Domain.Tests
             person.PresentIdeas.Count.Should().Be(1);
             person.PresentIdeas.Single().Description.Should().Be("My first present");
         }
+        
+        [Test]
+        public void Can_Claim_Present()
+        {
+            var emailOfCreator = "a@b.com";
+            var wishlist = Wishlist.Create("Eds test wishlist", emailOfCreator, "Ed");
+            wishlist.AddPerson("Second person", "second@email.com");
+            
+            wishlist.AddPresentIdea(emailOfCreator, "My first present");
+
+            var presentIdea = wishlist.GetPerson(emailOfCreator).PresentIdeas.Single();
+            wishlist.ClaimPresent(presentIdea.Id, emailOfCreator);
+
+            presentIdea.Claimer.Should().Be(emailOfCreator);
+        }
     }
 }

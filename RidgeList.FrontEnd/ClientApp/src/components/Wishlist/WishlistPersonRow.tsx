@@ -9,54 +9,6 @@ interface WishlistPersonRowProps{
     setWishlist: (wishlist : WishlistModel) => void;
 }
 
-interface OtherPersonWishlistRowProps{
-    wishlistPerson : WishlistPersonModel;
-    loggedInEmail : string;
-    wishlistId: string;
-    setWishlist: (wishlist : WishlistModel) => void;
-}
-
-export const OtherPersonWishlistRow = (props : OtherPersonWishlistRowProps) => {
-    let claimPresentClick = async (presentId : string) => {
-         let wishlist = await new WishlistClient()
-             .claimPresent(props.wishlistId, props.loggedInEmail, presentId);
-         props.setWishlist(wishlist);
-    }
-
-    let unclaimPresentClick = async (presentId : string) => {
-        let wishlist = await new WishlistClient()
-            .unclaimPresent(props.wishlistId, presentId);
-        props.setWishlist(wishlist);
-    }
-    
-    return (
-        <div className='wishlistSummaryItem' key={`${props.wishlistPerson.email}`}>
-            <div>
-                <span className='d-inline-block col-10'>
-                    {props.wishlistPerson.name}
-                    <span className='emailDetails'> ({props.wishlistPerson.email})</span>
-                </span>
-            </div>
-            <div className='personItems'>
-                {props.wishlistPerson.presentIdeas?.map(s => {
-                    let claimedByYou = s.claimerEmail === props.loggedInEmail;
-                    let unclaim = claimedByYou ? <button className='btn btn-success' onClick={() => unclaimPresentClick(s.id)}>Oops, I won't get this</button> : null;
-                    let claimSection = s.claimerName ? 
-                        <span> - claimed by {claimedByYou ? "you" : s.claimerName} {unclaim}</span> : 
-                        <button className='btn btn-success' onClick={() => claimPresentClick(s.id)}>I'll get this!</button>;
-                    
-                    return (
-                        <div key={s.id}>
-                            <span>{s.description}</span>
-                            {claimSection}
-                        </div>
-                    )
-                })}
-            </div>
-        </div>
-    )
-}
-
 export const WishlistPersonRow = (props : WishlistPersonRowProps) => {
     const [newItemDescription, setNewItemDescription] = useState("");
 
@@ -82,12 +34,6 @@ export const WishlistPersonRow = (props : WishlistPersonRowProps) => {
     return (
         
         <div className='wishlistSummaryItem' key={`${props.wishlistPerson.email}`}>
-            <div>
-                <span className='d-inline-block col-10'>
-                    {props.wishlistPerson.name} 
-                    <span className='emailDetails'> ({props.wishlistPerson.email})</span>
-                </span>
-            </div>
             {addItems}
         </div>
     )

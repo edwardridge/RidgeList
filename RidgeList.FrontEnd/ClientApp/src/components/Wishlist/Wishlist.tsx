@@ -4,14 +4,14 @@ import {WishlistClient, WishlistModel} from "../../nswag/api.generated";
 import {IWishlistRepository} from "./IWishlistRepository";
 import "./WishlistSummary.css";
 import { useGetLogin } from "../useLogin";
-import {WishlistPersonRow, OtherPersonWishlistRow} from "./WishlistPersonRow"
+import {WishlistPersonRow} from "./WishlistPersonRow";
+import {OtherPersonWishlistRow} from "./OtherPersonWishlistRow";
 
 interface WishlistProps {
     id: string;
 }
 
 interface Props extends RouteComponentProps<WishlistProps> {
-
     wishlistRepository : IWishlistRepository;
 }
 

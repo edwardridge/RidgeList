@@ -61,9 +61,12 @@ a .newItem input{
 
 .emailDetails{
     color: #ccc;
-    
 }
 
 .personItems{
     padding-left: 30px;
+}
+
+.claimed{
+    text-decoration: line-through;
 }

@@ -10,7 +10,7 @@
 .wishlistSummaryItem{
     border: 1px solid var(--itemBorderColor);
     border-radius: 5px;
-    padding: 5px 5px 5px 10px;
+    padding: 5px;
     background-color: var(--itemBackgroundColor);
     margin: 5px 0;
 }
@@ -48,23 +48,12 @@ a .newItem input{
     border: none;
 }
 
-/*.newItem:hover{*/
-/*    color: var(--newItemColor);*/
-/*    background-color: var(--listBackgroundColor);*/
-/*}*/
-
-/*.wishlistSummaryItem:hover{*/
-/*    background-color: var(--listBackgroundColor);*/
-/*    font-style: italic;*/
-/*    text-decoration: none;*/
-/*}*/
-
 .emailDetails{
     color: #ccc;
 }
 
 .personItems{
-    padding-left: 30px;
+    padding-left: 50px;
 }
 
 .claimed{

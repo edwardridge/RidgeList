@@ -87,6 +87,12 @@ namespace RidgeList.Domain
         {
             this.People.SelectMany(s => s.PresentIdeas).First(s => s.Id == presentId).Claimer = null;
         }
+
+        public void RemovePresentIdea(string emailOfCreator, Guid presentId)
+        {
+            var present = this.GetPerson(emailOfCreator).PresentIdeas.Single(s => s.Id == presentId);
+            this.GetPerson(emailOfCreator).PresentIdeas.Remove(present);
+        }
     }
 
     public class WishlistPeople : Collection<WishlistPerson>

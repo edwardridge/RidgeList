@@ -18,18 +18,27 @@ export const WishlistPersonRow = (props : WishlistPersonRowProps) => {
             setNewItemDescription("");
         });
     }
-    
-    let addItems = (<div className='personItems'>
-        <ul>
-        {props.wishlistPerson.presentIdeas?.map(s => {
-            return <li key={s.id}>{s.description}</li>
-        })}
-        </ul>
-        <div className='mt-lg-4'>
-            <input cypress-name='AddItem' value={newItemDescription} onChange={(event) => {setNewItemDescription(event.target.value)}} className='col-10' type="text" placeholder='What would you like?'></input>
-            <button cypress-name='AddItemButton' onClick={clickAddItem} className='btn btn-primary col-2'>Add gift idea</button>
-        </div>
-    </div>);
+
+    let removePresentIdea = async (id: string) => {
+        let wishlist = await new WishlistClient().removePresentIdea(props.wishlistId, props.loginDetails.Email, id);
+        props.setWishlist(wishlist);
+    }
+
+    let addItems = (
+        <>
+            <div>
+                <div>
+                    <input cypress-name='AddItem' value={newItemDescription} onChange={(event) => {setNewItemDescription(event.target.value)}} className='col-10' type="text" placeholder='What would you like?'></input>
+                    <button cypress-name='AddItemButton' onClick={clickAddItem} className='btn btn-primary col-2'>Add gift idea</button>
+                </div>
+            </div>
+            <div className='personItems'>
+                {props.wishlistPerson.presentIdeas?.map(s => {
+                    return <div key={s.id}>{s.description} <button className='btn btn-danger' onClick={() => removePresentIdea(s.id)}>Remove</button> </div>
+                })}
+            </div>
+    </>
+    );
    
     return (
         

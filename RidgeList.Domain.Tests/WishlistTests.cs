@@ -102,6 +102,21 @@ namespace RidgeList.Domain.Tests
             person.PresentIdeas.Count.Should().Be(1);
             person.PresentIdeas.Single().Description.Should().Be("My first present");
         }
+
+        [Test]
+        public void Can_Remove_Item_From_Wishlist()
+        {
+            var emailOfCreator = "a@b.com";
+            
+            var wishlist = Wishlist.Create("Eds test wishlist", emailOfCreator, "Ed");
+            wishlist.AddPresentIdea(emailOfCreator, "My first present");
+            var present = wishlist.GetPerson(emailOfCreator).PresentIdeas.Single();
+            wishlist.RemovePresentIdea(emailOfCreator, present.Id);
+            
+            var person = wishlist.GetPerson(emailOfCreator);
+
+            person.PresentIdeas.Count.Should().Be(0);
+        }
         
         [Test]
         public void Can_Claim_Present()

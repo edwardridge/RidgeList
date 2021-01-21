@@ -52,6 +52,16 @@ namespace RidgeList.FrontEnd.Controllers
             await this._repository.Save(wishlist);
             return new WishlistMapper().Map(wishlist);
         }
+
+        [HttpPost]
+        [Route("removePresentIdea")]
+        public async Task<WishlistModel> RemovePresentIdea(string wishlistId, string email, string presentId)
+        {
+            var wishlist = await this._repository.Load(Guid.Parse(wishlistId));
+            wishlist.RemovePresentIdea(email, Guid.Parse(presentId));
+            await this._repository.Save(wishlist);
+            return new WishlistMapper().Map(wishlist);
+        }
         
         [HttpPost]
         [Route("claimPresent")]

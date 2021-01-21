@@ -98,11 +98,11 @@ interface Props extends RouteComponentProps<WishlistProps> {
             <div>
                 <h1 id="wishlistTitle">Wishlist - {wishlist.name}</h1>
                 <div>
-                    <h4>Your items - {loggedInWishlist?.name}</h4>
+                    <h4>What would you like?</h4>
                     <WishlistPersonRow wishlistPerson={loggedInWishlist ?? {}} wishlistId={wishlist.id} setWishlist={setWishlist} loginDetails={login}></WishlistPersonRow>
                 </div>
                 <div className='mt-lg-5'>
-                    <h4>Everyone else</h4>
+                    <h4>What everyone else would like</h4>
                     {listOfOtherPeoplesIdeas}
                 </div>
             </div>

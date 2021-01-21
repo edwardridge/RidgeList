@@ -11,11 +11,24 @@ interface WishlistPersonRowProps{
 
 interface OtherPersonWishlistRowProps{
     wishlistPerson : WishlistPersonModel;
+    loggedInEmail : string;
     wishlistId: string;
     setWishlist: (wishlist : WishlistModel) => void;
 }
 
 export const OtherPersonWishlistRow = (props : OtherPersonWishlistRowProps) => {
+    let claimPresentClick = async (presentId : string) => {
+         let wishlist = await new WishlistClient()
+             .claimPresent(props.wishlistId, props.loggedInEmail, presentId);
+         props.setWishlist(wishlist);
+    }
+
+    let unclaimPresentClick = async (presentId : string) => {
+        let wishlist = await new WishlistClient()
+            .unclaimPresent(props.wishlistId, presentId);
+        props.setWishlist(wishlist);
+    }
+    
     return (
         <div className='wishlistSummaryItem' key={`${props.wishlistPerson.email}`}>
             <div>
@@ -26,10 +39,13 @@ export const OtherPersonWishlistRow = (props : OtherPersonWishlistRowProps) => {
             </div>
             <div className='personItems'>
                 {props.wishlistPerson.presentIdeas?.map(s => {
+                    let fff = s.claimerEmail === props.loggedInEmail ? <button className='btn btn-success' onClick={() => unclaimPresentClick(s.id)}>Unclaim</button> : null;
+                    let asd = s.claimerName ? <span> - claimed by {s.claimerName} {fff}</span> : <button className='btn btn-success' onClick={() => claimPresentClick(s.id)}>I'll get this!</button>;
+                    
                     return (
                         <div key={s.id}>
                             <span>{s.description}</span>
-                            <button className='btn btn-success'>I'll get this!</button>
+                            {asd}
                         </div>
                     )
                 })}

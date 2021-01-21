@@ -15,6 +15,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\RidgeList.Domain\RidgeList.Domain.csproj" />
+      <ProjectReference Include="..\RidgeList.Models\RidgeList.Models.csproj" />
     </ItemGroup>
 
 </Project>

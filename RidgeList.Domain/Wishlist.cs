@@ -29,7 +29,8 @@ namespace RidgeList.Domain
         public static Wishlist Create(string name, string emailOfCreator, string nameOfCreator)
         {
             return new Wishlist()
-            {
+            {  
+                Id = Guid.NewGuid(),
                 Name =  name,
                 People = new WishlistPeople{ new WishlistPerson() { Email = emailOfCreator, Name = nameOfCreator} },
                 Creator = emailOfCreator
@@ -79,7 +80,12 @@ namespace RidgeList.Domain
 
         public void ClaimPresent(Guid presentId, string emailOfClaimer)
         {
-            throw new NotImplementedException();
+            this.People.SelectMany(s => s.PresentIdeas).First(s => s.Id == presentId).Claimer = emailOfClaimer;
+        }
+
+        public void UnclaimPresent(Guid presentId)
+        {
+            this.People.SelectMany(s => s.PresentIdeas).First(s => s.Id == presentId).Claimer = null;
         }
     }
 
@@ -109,6 +115,7 @@ namespace RidgeList.Domain
             this.PresentIdeas.Add(
                 new PresentIdea()
                 {
+                    Id = Guid.NewGuid(),
                     Description = present
                 });
         }

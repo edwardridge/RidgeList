@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RidgeList.Postgres", "Ridge
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RidgeList.Postgres.Tests", "RidgeList.Postgres.Tests\RidgeList.Postgres.Tests.csproj", "{9145408A-3494-403B-B2CB-248FCF963D8B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RidgeList.Models", "RidgeList.Models\RidgeList.Models.csproj", "{CB294339-460E-45BF-9EAD-83E9F2B8A344}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{9145408A-3494-403B-B2CB-248FCF963D8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9145408A-3494-403B-B2CB-248FCF963D8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9145408A-3494-403B-B2CB-248FCF963D8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB294339-460E-45BF-9EAD-83E9F2B8A344}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB294339-460E-45BF-9EAD-83E9F2B8A344}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB294339-460E-45BF-9EAD-83E9F2B8A344}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB294339-460E-45BF-9EAD-83E9F2B8A344}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

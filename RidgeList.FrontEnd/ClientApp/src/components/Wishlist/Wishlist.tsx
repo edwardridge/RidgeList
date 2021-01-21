@@ -84,7 +84,12 @@ interface Props extends RouteComponentProps<WishlistProps> {
             <div className='wishlistSummaries' cypress-name="ListOfPeople">
                 {
                     otherPeople?.map((s) => 
-                        <OtherPersonWishlistRow key={s.email} wishlistPerson={s} wishlistId={wishlist?.id} setWishlist={setWishlist}></OtherPersonWishlistRow> )
+                        <OtherPersonWishlistRow 
+                            key={s.email} 
+                            wishlistPerson={s} 
+                            wishlistId={wishlist?.id} 
+                            loggedInEmail={login.Email}
+                            setWishlist={setWishlist}></OtherPersonWishlistRow> )
                 }
                 {createNewPerson}
             </div>)

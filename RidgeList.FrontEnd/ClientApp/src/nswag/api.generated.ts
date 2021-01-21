@@ -213,6 +213,82 @@ export class WishlistClient {
         return Promise.resolve<WishlistModel>(<any>null);
     }
 
+    claimPresent(wishlistId: string | null | undefined, email: string | null | undefined, presentId: string | null | undefined): Promise<WishlistModel> {
+        let url_ = this.baseUrl + "/Wishlist/claimPresent?";
+        if (wishlistId !== undefined && wishlistId !== null)
+            url_ += "wishlistId=" + encodeURIComponent("" + wishlistId) + "&";
+        if (email !== undefined && email !== null)
+            url_ += "email=" + encodeURIComponent("" + email) + "&";
+        if (presentId !== undefined && presentId !== null)
+            url_ += "presentId=" + encodeURIComponent("" + presentId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "POST",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processClaimPresent(_response);
+        });
+    }
+
+    protected processClaimPresent(response: Response): Promise<WishlistModel> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : <WishlistModel>JSON.parse(_responseText, this.jsonParseReviver);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<WishlistModel>(<any>null);
+    }
+
+    unclaimPresent(wishlistId: string | null | undefined, presentId: string | null | undefined): Promise<WishlistModel> {
+        let url_ = this.baseUrl + "/Wishlist/unclaimPresent?";
+        if (wishlistId !== undefined && wishlistId !== null)
+            url_ += "wishlistId=" + encodeURIComponent("" + wishlistId) + "&";
+        if (presentId !== undefined && presentId !== null)
+            url_ += "presentId=" + encodeURIComponent("" + presentId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "POST",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUnclaimPresent(_response);
+        });
+    }
+
+    protected processUnclaimPresent(response: Response): Promise<WishlistModel> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : <WishlistModel>JSON.parse(_responseText, this.jsonParseReviver);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<WishlistModel>(<any>null);
+    }
+
     getSummaries(emailAddress: string | null | undefined): Promise<WishlistSummaryModel[]> {
         let url_ = this.baseUrl + "/Wishlist/summaries?";
         if (emailAddress !== undefined && emailAddress !== null)
@@ -338,6 +414,8 @@ export interface WishlistPersonModel {
 export interface PresentIdeaModel {
     id: string;
     description?: string | undefined;
+    claimerName?: string | undefined;
+    claimerEmail?: string | undefined;
 }
 
 export interface WishlistSummaryModel {

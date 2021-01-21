@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using RidgeList.Domain;
+using RidgeList.Models;
 
 namespace RidgeList.FrontEnd.Controllers
 {
@@ -16,14 +17,14 @@ namespace RidgeList.FrontEnd.Controllers
         {
             _repository = repository;
         }
-        
+
         [HttpPost]
         [Route("create")]
         public WishlistModel Create(string nameOfWishlist, string emailOfCreator, string nameOfCreator)
         {
             return CreateNewWishlist(nameOfWishlist, emailOfCreator, nameOfCreator);
         }
-        
+
         [HttpGet]
         [Route("wishlist")]
         public async Task<WishlistModel> GetWishlist(string name)
@@ -31,7 +32,7 @@ namespace RidgeList.FrontEnd.Controllers
             var wishlist = await this._repository.Load(Guid.Parse(name));
             return new WishlistMapper().Map(wishlist);
         }
-        
+
         [HttpPost]
         [Route("addPerson")]
         public async Task<WishlistModel> AddPerson(string wishlistId, string email, string name)
@@ -41,7 +42,7 @@ namespace RidgeList.FrontEnd.Controllers
             await this._repository.Save(wishlist);
             return new WishlistMapper().Map(wishlist);
         }
-        
+
         [HttpPost]
         [Route("addPresentIdea")]
         public async Task<WishlistModel> AddPresentIdea(string wishlistId, string email, string description)
@@ -52,6 +53,26 @@ namespace RidgeList.FrontEnd.Controllers
             return new WishlistMapper().Map(wishlist);
         }
         
+        [HttpPost]
+        [Route("claimPresent")]
+        public async Task<WishlistModel> ClaimPresent(string wishlistId, string email, string presentId)
+        {
+            var wishlist = await this._repository.Load(Guid.Parse(wishlistId));
+            wishlist.ClaimPresent(Guid.Parse(presentId), email);
+            await this._repository.Save(wishlist);
+            return new WishlistMapper().Map(wishlist);
+        }
+        
+        [HttpPost]
+        [Route("unclaimPresent")]
+        public async Task<WishlistModel> UnclaimPresent(string wishlistId, string presentId)
+        {
+            var wishlist = await this._repository.Load(Guid.Parse(wishlistId));
+            wishlist.UnclaimPresent(Guid.Parse(presentId));
+            await this._repository.Save(wishlist);
+            return new WishlistMapper().Map(wishlist);
+        }
+
         [HttpGet]
         [Route("summaries")]
         public async Task<IEnumerable<WishlistSummaryModel>> GetSummaries(string emailAddress)
@@ -66,65 +87,5 @@ namespace RidgeList.FrontEnd.Controllers
             this._repository.Save(wishlist);
             return new WishlistMapper().Map(wishlist);
         }
-    }
-
-    public class WishlistSummaryModel
-    {
-        public string Name { get; set; }        
-        
-        public Guid Id { get; set; }
-
-        public static WishlistSummaryModel Map(WishlistSummary summary)
-        {
-            return new WishlistSummaryModel()
-            {
-                Id = summary.Id,
-                Name = summary.Name
-            };
-        }
-    }
-
-    public class WishlistMapper
-    {
-        public WishlistModel Map(Wishlist wishlist)
-        {
-            return new WishlistModel()
-            {
-                Id = wishlist.Id,
-                Name = wishlist.Name,
-                People = wishlist.GetPeople().Select(s => 
-                    new WishlistPersonModel()
-                    {
-                        Name = s.Name, 
-                        Email = s.Email,
-                        PresentIdeas = s.PresentIdeas.Select(t => new PresentIdeaModel(){ Description = t.Description}).ToList()
-                    }).ToList()
-            };
-        }
-    }
-
-    public class WishlistPersonModel
-    {
-        public string Email { get; set; }
-        
-        public string Name { get; set; }
-
-        public List<PresentIdeaModel> PresentIdeas { get; set; }
-    }
-
-    public class PresentIdeaModel
-    {
-        public Guid Id { get; set; }
-
-        public string Description { get; set; }
-    }
-    
-    public class WishlistModel
-    {
-        public Guid Id { get; set; }
-
-        public string Name { get; set; }
-
-        public List<WishlistPersonModel> People { get; set; }
     }
 }

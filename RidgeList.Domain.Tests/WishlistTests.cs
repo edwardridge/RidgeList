@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
 using NUnit.Framework.Internal.Execution;
+using RidgeList.Models;
 
 namespace RidgeList.Domain.Tests
 {
@@ -70,7 +71,7 @@ namespace RidgeList.Domain.Tests
             
             wishlist.GetPeople().Should().BeEquivalentTo(new []
             {
-                new WishlistPerson() { Email = "a@b.com", Name = null},
+                new WishlistPerson() { Email = "a@b.com", Name = "Ed"},
                 new WishlistPerson() { Email = "edwardridge@gmail.com", Name = "Ed"}
             });
         }
@@ -92,6 +93,7 @@ namespace RidgeList.Domain.Tests
         public void Can_Add_Item_To_Wishlist()
         {
             var emailOfCreator = "a@b.com";
+            
             var wishlist = Wishlist.Create("Eds test wishlist", emailOfCreator, "Ed");
             wishlist.AddPresentIdea(emailOfCreator, "My first present");
 
@@ -105,15 +107,119 @@ namespace RidgeList.Domain.Tests
         public void Can_Claim_Present()
         {
             var emailOfCreator = "a@b.com";
-            var wishlist = Wishlist.Create("Eds test wishlist", emailOfCreator, "Ed");
-            wishlist.AddPerson("Second person", "second@email.com");
+            var presentId = Guid.NewGuid();
+            var wishlist =
+                new WishlistBuilder()
+                    .AddPerson("Ed", emailOfCreator)
+                    .AddPerson("Second person", "second@email.com")
+                    .AddPresentIdea(emailOfCreator, "asd", presentId)
+                    .Build();
             
-            wishlist.AddPresentIdea(emailOfCreator, "My first present");
-
             var presentIdea = wishlist.GetPerson(emailOfCreator).PresentIdeas.Single();
             wishlist.ClaimPresent(presentIdea.Id, emailOfCreator);
 
             presentIdea.Claimer.Should().Be(emailOfCreator);
+        }
+        
+        [Test]
+        public void Can_UnClaim_Present()
+        {
+            var emailOfCreator = "a@b.com";
+            var presentId = Guid.NewGuid();
+            var wishlist =
+                new WishlistBuilder()
+                    .AddPerson("Ed", emailOfCreator)
+                    .AddPerson("Second person", "second@email.com")
+                    .AddPresentIdea(emailOfCreator, "asd", presentId)
+                    .AddClaimer(presentId, "second@email.com")
+                    .Build();
+
+            wishlist.UnclaimPresent(presentId);
+            
+            var presentIdea = wishlist.GetPerson(emailOfCreator).PresentIdeas.Single();
+
+            presentIdea.Claimer.Should().BeNullOrEmpty();
+        }
+
+        [Test]
+        public void Maps_Name_From_Email_In_Claim()
+        {
+            var presentId = Guid.NewGuid();
+
+            var wishlist =
+                new WishlistBuilder()
+                    .AddPerson("Ed", "ed@ed.com")
+                    .AddPerson("Second person", "b@b.com")
+                    .AddPresentIdea("ed@ed.com", "desc 1", presentId)
+                    .AddClaimer(presentId, "b@b.com")
+                    .Build();
+            
+            var mapper = new WishlistMapper();
+            var model = mapper.Map(wishlist);
+            var presentIdeaModels = model.People
+                .Single(s => s.Email == "ed@ed.com")
+                .PresentIdeas;
+            var claimer = presentIdeaModels
+                .Single(s => s.Id == presentId);
+
+            claimer.ClaimerName.Should().Be("Second person");            
+            claimer.ClaimerEmail.Should().Be("b@b.com");
+
+        }
+    }
+
+    public class WishlistBuilder
+    {
+        private Wishlist _wishlist;
+
+        public WishlistBuilder()
+        {
+            this._wishlist = new Wishlist()
+            {
+                Creator = "asd",
+                Name = "test"
+            };
+        }
+
+        public WishlistBuilder AddPerson(string name, string email)
+        {
+            this._wishlist.People.Add(new WishlistPerson()
+            {
+                Email = email,
+                Name = name
+            });
+            return this;
+        }
+
+        public WishlistBuilder AddPresentIdea(string email, string desc, Guid presentId)
+        {
+            this._wishlist
+                .People
+                .Single(s => s.Email == email)
+                .PresentIdeas
+                .Add(new PresentIdea()
+                {
+                    Description = desc,
+                    Id = presentId
+                });
+            
+            return this;
+        }
+        
+        public WishlistBuilder AddClaimer(Guid presentId, string email)
+        {
+            this._wishlist
+                .People
+                .SelectMany(s => s.PresentIdeas)
+                .Single(s => s.Id == presentId)
+                .Claimer = email;
+            
+            return this;
+        }
+
+        public Wishlist Build()
+        {
+            return this._wishlist;
         }
     }
 }

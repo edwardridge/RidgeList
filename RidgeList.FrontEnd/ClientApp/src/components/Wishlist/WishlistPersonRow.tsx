@@ -37,11 +37,17 @@ export const WishlistPersonRow = (props : WishlistPersonRowProps) => {
             
             <div className='personItems'>
                 {props.wishlistPerson.presentIdeas?.map(s => {
-                    return <div key={s.id}>{s.description} <button className='btn btn-danger' onClick={() => removePresentIdea(s.id)}>Remove</button> </div>
+                    return (
+                        <div className='row mt-lg-2' key={s.id}>
+                            <span className='col-8 col-md-10'>{s.description}</span>
+                            <span className='col-4 col-md-2'>
+                                <button className='btn btn-outline-danger w-100' onClick={() => removePresentIdea(s.id)}>Remove</button>
+                            </span>
+                        </div>)
                 })}
             </div>
-            <div className='mt-lg-4'>
-                <Button variant="primary" onClick={() => { setShowAddItem(true) }}>
+            <div className='mt-lg-2'>
+                <Button variant="outline-primary" className='w-100' onClick={() => { setShowAddItem(true) }}>
                     Add New Item
                 </Button>
 

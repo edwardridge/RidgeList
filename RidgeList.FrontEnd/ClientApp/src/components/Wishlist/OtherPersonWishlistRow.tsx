@@ -33,15 +33,17 @@ export const OtherPersonWishlistRow = (props : OtherPersonWishlistRowProps) => {
                 {props.wishlistPerson.presentIdeas?.map(s => {
                     let claimed = s.claimerEmail !== null && s.claimerEmail !== '';
                     let claimedByYou = s.claimerEmail === props.loggedInEmail;
-                    let unclaim = claimedByYou ? <button className='btn btn-success' onClick={() => unclaimPresentClick(s.id)}>Oops, I won't get this</button> : null;
+                    let unclaim = claimedByYou ? <button className='btn btn-outline-danger w-100' onClick={() => unclaimPresentClick(s.id)}>Unclaim</button> : null;
+                    let claimerText = claimed ? `- claimed by ${claimedByYou ? "you" : s.claimerName}` : '';
                     let claimSection = s.claimerName ?
-                        <span> - claimed by {claimedByYou ? "you" : s.claimerName} {unclaim}</span> :
-                        <button className='btn btn-success' onClick={() => claimPresentClick(s.id)}>I'll get this!</button>;
+                        <>{unclaim}</> :
+                        <button className='btn btn-outline-success w-100' onClick={() => claimPresentClick(s.id)}>Claim</button>;
 
+                    let classes = `mt-lg-1 row ${claimed && !claimedByYou ? 'claimed' : ''}`;
                     return (
-                        <div key={s.id} className={claimed && !claimedByYou ? 'claimed' : ''}>
-                            <span>{s.description}</span>
-                            {claimSection}
+                        <div key={s.id} className={classes}>
+                            <span className='col-8 col-md-10'>{s.description} {claimerText}</span>
+                            <span className='col-4 col-md-2 text-right'>{claimSection}</span>
                         </div>
                     )
                 })}

@@ -71,7 +71,7 @@ interface Props extends RouteComponentProps<WishlistProps> {
 
         let createNewPerson = (
             <>
-                <Button variant="success" onClick={() => setAddingNewPerson(true) }>
+                <Button variant="outline-dark" className='w-100' onClick={() => setAddingNewPerson(true)}>
                 Add Someone New
                 </Button>
 
@@ -115,11 +115,11 @@ interface Props extends RouteComponentProps<WishlistProps> {
             <div>
                 <h1 id="wishlistTitle">Wishlist - {wishlist.name}</h1>
                 <div>
-                    <h4>What would you like?</h4>
+                    <h4 className='text-center'>What would you like?</h4>
                     <WishlistPersonRow wishlistPerson={loggedInWishlist ?? {}} wishlistId={wishlist.id} setWishlist={setWishlist} loginDetails={login}></WishlistPersonRow>
                 </div>
                 <div className='mt-lg-5'>
-                    <h4>What everyone else would like</h4>
+                    <h4 className='text-center'>What everyone else would like</h4>
                     <div> {createNewPerson}</div>
                     {listOfOtherPeoplesIdeas}
                 </div>

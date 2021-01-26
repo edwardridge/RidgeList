@@ -69,26 +69,6 @@ export const WishlistHomepage = (props : WishlishHomepageProps) => {
             </Modal.Footer>
         </Modal>
     </>
-        //<div className="modal" id="exampleModal" tabIndex={-1} role="dialog">
-        //    <div className="modal-dialog" role="document">
-        //        <div className="modal-content">
-        //            <div className="modal-header">
-        //                <h5 className="modal-title">Create New Wishlist</h5>
-        //                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-        //                    <span aria-hidden="true">&times;</span>
-        //                </button>
-        //            </div>
-        //            <div className="modal-body">
-        //                <input type="text" value={nameOfNewWishlist} onChange={handleInputChange} placeholder='Name of wishlist...' cypress-name='NameOfWishlist'></input>
-        //            </div>
-        //            <div className="modal-footer">
-        //                <button onClick={onClickCreate} className='btn btn-success' cypress-name='Create'>Create</button>
-        //                <button onClick={onClickCancel} className='btn btn-dark' cypress-name='Cancel' data-dismiss="modal">Cancel</button>
-        //            </div>
-        //        </div>
-        //    </div>
-        //</div>
-        
 
     let summaries =
         <div className='wishlistSummaries'>

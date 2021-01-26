@@ -47,7 +47,7 @@ export const WishlistPersonRow = (props : WishlistPersonRowProps) => {
 
                 <Modal show={showAddItem} onHide={onClickCancelAddItem}>
                     <Modal.Header closeButton>
-                        <Modal.Title>Create New Wishlist</Modal.Title>
+                        <Modal.Title>Add New Item!</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <input type="text" className='w-100' value={newItemDescription} onChange={(event) => { setNewItemDescription(event.target.value) }} placeholder='What do you want?' cypress-name='AddItem'></input>
@@ -57,10 +57,10 @@ export const WishlistPersonRow = (props : WishlistPersonRowProps) => {
                             Close
                         </Button>
                         <Button variant="primary" onClick={() => { clickAddItem(false) }}>
-                            Add
+                            Save And Add More
                         </Button>
                         <Button variant="primary" onClick={() => { clickAddItem(true) }}>
-                            Add And Close
+                            Save And Close
                         </Button>
                     </Modal.Footer>
                 </Modal>

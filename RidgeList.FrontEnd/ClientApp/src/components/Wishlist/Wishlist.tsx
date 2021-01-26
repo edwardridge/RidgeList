@@ -6,6 +6,7 @@ import "./WishlistSummary.css";
 import { useGetLogin } from "../useLogin";
 import {WishlistPersonRow} from "./WishlistPersonRow";
 import {OtherPersonWishlistRow} from "./OtherPersonWishlistRow";
+import { Button, Modal } from "react-bootstrap";
 
 interface WishlistProps {
     id: string;
@@ -26,11 +27,6 @@ interface Props extends RouteComponentProps<WishlistProps> {
         let id = props.match.params.id;
         props.wishlistRepository.getWishlist(id).then(s => { 
             setWishlist(s);
-            let numPeople = s?.people?.length ?? 0;
-            if(numPeople === 1)
-            {
-                setAddingNewPerson(true);
-            }
         });
          
      }, [wishlist?.id]);
@@ -42,41 +38,63 @@ interface Props extends RouteComponentProps<WishlistProps> {
         setNewPersonEmail("");
     }
     
-    let createButonIsDisabled = () => {
-        return (wishlist?.people?.map(s => s.email).indexOf(newPersonEmail) ?? 0) > -1;
-    }
+    //let createButonIsDisabled = () => {
+    //    return (wishlist?.people?.map(s => s.email).indexOf(newPersonEmail) ?? 0) > -1;
+    //}
 
     if (wishlist) {
-        let addNewPersonDetails = (
-            <>
-                <input type="text"
-                       cypress-name="NewPersonName"
-                       onChange={(event) => setNewPersonName(event.target.value)}
-                       value={newPersonName}
-                       placeholder="Name..."
-                       className='form-control col-4'></input>
-                <input type="text"
-                       cypress-name="NewPersonEmail"
-                       onChange={(event) => setNewPersonEmail(event.target.value)}
-                       value={newPersonEmail}
-                       placeholder="Email Address..."
-                       className='form-control col-5'></input>
-                <span className='col-2'><button cypress-name="CreateNewPerson" onClick={createNewPersonClick} disabled={createButonIsDisabled()} className='btn btn-success'>Add New Person</button></span>
-                <span className='col-1'><button cypress-name="CancelNewPerson" onClick={() => { setAddingNewPerson(false); setNewPersonName("") }} className='btn btn-dark'>Cancel</button></span>
-            </>
-        )
+        //let addNewPersonDetails = (
+        //    <>
+        //        <input type="text"
+        //               cypress-name="NewPersonName"
+        //               onChange={(event) => setNewPersonName(event.target.value)}
+        //               value={newPersonName}
+        //               placeholder="Name..."
+        //               className='form-control col-4'></input>
+        //        <input type="text"
+        //               cypress-name="NewPersonEmail"
+        //               onChange={(event) => setNewPersonEmail(event.target.value)}
+        //               value={newPersonEmail}
+        //               placeholder="Email Address..."
+        //               className='form-control col-5'></input>
+        //        <span className='col-2'><button cypress-name="CreateNewPerson" onClick={createNewPersonClick} disabled={createButonIsDisabled()} className='btn btn-success'>Add New Person</button></span>
+        //        <span className='col-1'><button cypress-name="CancelNewPerson" onClick={() => { setAddingNewPerson(false); setNewPersonName("") }} className='btn btn-dark'>Cancel</button></span>
+        //    </>
+        //)
+        let onCLickCancelAddNewPerson = () => {
+            setAddingNewPerson(false);
+            setNewPersonName("");
+        }
         
         let loggedInWishlist = wishlist.people?.find(s => s.email === login.Email);
         let otherPeople = wishlist.people?.filter(s => s.email !== login.Email);
-        
-        let addNewRow = <div className='w-100' cypress-name="AddNewPerson" onClick={()=> setAddingNewPerson(true)}>+</div>
-        
+
         let createNewPerson = (
-            <a>
-                <div className='newItem wishlistSummaryItem form-row'>
-                    {addingNewPerson ? addNewPersonDetails : addNewRow}
-                </div>
-            </a>
+            <>
+                <Button variant="success" onClick={() => setAddingNewPerson(true) }>
+                Add Someone New
+                </Button>
+
+                <Modal show={addingNewPerson} onHide={onCLickCancelAddNewPerson}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Add Somone New!</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <input type="text" className='w-100' onChange={(event) => setNewPersonName(event.target.value)}
+                            value={newPersonName} placeholder="What's their name?" cypress-name='AddItem'></input>
+                        <input type="text" className='w-100' onChange={(event) => setNewPersonEmail(event.target.value)}
+                            value={newPersonEmail} placeholder="What's their email?" cypress-name='AddItem'></input>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={onCLickCancelAddNewPerson}>
+                        Close
+                        </Button>
+                        <Button variant="primary" onClick={createNewPersonClick}>
+                        Add
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+            </>
         )
         
         let listOfOtherPeoplesIdeas = (
@@ -91,7 +109,6 @@ interface Props extends RouteComponentProps<WishlistProps> {
                             loggedInEmail={login.Email}
                             setWishlist={setWishlist}></OtherPersonWishlistRow> )
                 }
-                {createNewPerson}
             </div>)
         
         return (
@@ -103,6 +120,7 @@ interface Props extends RouteComponentProps<WishlistProps> {
                 </div>
                 <div className='mt-lg-5'>
                     <h4>What everyone else would like</h4>
+                    <div> {createNewPerson}</div>
                     {listOfOtherPeoplesIdeas}
                 </div>
             </div>

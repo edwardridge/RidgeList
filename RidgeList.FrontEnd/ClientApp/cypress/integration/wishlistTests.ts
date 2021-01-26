@@ -67,16 +67,14 @@ describe('Wishlist page', () => {
         addNewPerson('ed@ed.com', 'Ed 2');
         
         cy.contains('Ed 2');
-        cy.getByCyName('ListOfPeople').within((a) => {
-            cy.get('.wishlistSummaryItem').should('have.length', 2);
-        });
     });
 
     it('doesnt allow duplicate person to be added', () => {
         cy.createWishlist();
 
         addNewPerson('ed@ed.com', 'Ed 2');
-        
+
+        cy.getByCyName('AddNewPerson').click();
         cy.getByCyName('NewPersonEmail').type('ed@ed.com');
         cy.getByCyName('CreateNewPerson').should('be.disabled');
         cy.getByCyName('NewPersonEmail').type('ed_diff@ed.com');
@@ -93,10 +91,12 @@ describe('Wishlist page', () => {
     });
     
     let addNewPerson = (email : string, name : string) => {
-        cy.getByCyName('NewPersonEmail')
-                .type(email)
+        cy.getByCyName('AddNewPerson')
+            .click()
+            .getByCyName('NewPersonEmail')
+            .type(email)
             .getByCyName('NewPersonName')
-                .type(name)
+            .type(name)
             .getByCyName('CreateNewPerson')
             .click();
     }

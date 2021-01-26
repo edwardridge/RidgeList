@@ -47,7 +47,7 @@ export const WishlistPersonRow = (props : WishlistPersonRowProps) => {
                 })}
             </table>
             <div className='mt-2'>
-                <Button variant="outline-primary" className='w-100' onClick={() => { setShowAddItem(true) }}>
+                <Button variant="outline-primary" cypress-name='AddItem' className='w-100' onClick={() => { setShowAddItem(true) }}>
                     Add New Item
                 </Button>
 
@@ -65,7 +65,7 @@ export const WishlistPersonRow = (props : WishlistPersonRowProps) => {
                         <Button variant="primary" onClick={() => { clickAddItem(false) }}>
                             Save And Add More
                         </Button>
-                        <Button variant="primary" onClick={() => { clickAddItem(true) }}>
+                        <Button variant="primary" cypress-name='AddItemButton' onClick={() => { clickAddItem(true) }}>
                             Save And Close
                         </Button>
                     </Modal.Footer>

@@ -48,7 +48,7 @@ export const WishlistHomepage = (props : WishlishHomepageProps) => {
     }
     
     let createButtons = <>
-        <Button className='w-100' variant="outline-primary" onClick={onClickAddWishlist}>
+        <Button className='w-100' variant="outline-primary" cypress-name='CreateNewWishlist' onClick={onClickAddWishlist}>
             Create New...
         </Button>
 
@@ -63,7 +63,7 @@ export const WishlistHomepage = (props : WishlishHomepageProps) => {
                 <Button variant="secondary" onClick={onClickCancel}>
                     Close
           </Button>
-                <Button variant="primary" onClick={onClickCreate}>
+                <Button variant="primary" cypress-name='Create' onClick={onClickCreate}>
                     Create
           </Button>
             </Modal.Footer>

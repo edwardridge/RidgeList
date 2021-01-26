@@ -48,7 +48,7 @@ export const WishlistHomepage = (props : WishlishHomepageProps) => {
     }
     
     let createButtons = <>
-        <Button variant="primary" onClick={onClickAddWishlist}>
+        <Button className='w-100' variant="outline-primary" onClick={onClickAddWishlist}>
             Create New...
         </Button>
 
@@ -83,7 +83,7 @@ export const WishlistHomepage = (props : WishlishHomepageProps) => {
 
     return (
         <div>
-            <h2>Your Wishlists</h2>
+            <h2 className='text-center'>Your Wishlists</h2>
 
             <div>
                 {createButtons}

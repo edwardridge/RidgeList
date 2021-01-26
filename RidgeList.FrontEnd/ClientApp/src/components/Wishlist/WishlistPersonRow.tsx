@@ -35,18 +35,18 @@ export const WishlistPersonRow = (props : WishlistPersonRowProps) => {
     let addItems = (
         <>
             
-            <div className='personItems'>
+            <table className='table'>
                 {props.wishlistPerson.presentIdeas?.map(s => {
                     return (
-                        <div className='row mt-lg-2' key={s.id}>
-                            <span className='col-8 col-md-10'>{s.description}</span>
-                            <span className='col-4 col-md-2'>
+                        <tr className='row mt-2' key={s.id}>
+                            <td className='col-8 col-md-10'>{s.description}</td>
+                            <td className='col-4 col-md-2'>
                                 <button className='btn btn-outline-danger w-100' onClick={() => removePresentIdea(s.id)}>Remove</button>
-                            </span>
-                        </div>)
+                            </td>
+                        </tr>)
                 })}
-            </div>
-            <div className='mt-lg-2'>
+            </table>
+            <div className='mt-2'>
                 <Button variant="outline-primary" className='w-100' onClick={() => { setShowAddItem(true) }}>
                     Add New Item
                 </Button>
@@ -77,7 +77,7 @@ export const WishlistPersonRow = (props : WishlistPersonRowProps) => {
    
     return (
         
-        <div className='wishlistSummaryItem' key={`${props.wishlistPerson.email}`}>
+        <div className='' key={`${props.wishlistPerson.email}`}>
             {addItems}
         </div>
     )

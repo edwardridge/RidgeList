@@ -37,30 +37,8 @@ interface Props extends RouteComponentProps<WishlistProps> {
         setNewPersonName("");
         setNewPersonEmail("");
     }
-    
-    //let createButonIsDisabled = () => {
-    //    return (wishlist?.people?.map(s => s.email).indexOf(newPersonEmail) ?? 0) > -1;
-    //}
 
     if (wishlist) {
-        //let addNewPersonDetails = (
-        //    <>
-        //        <input type="text"
-        //               cypress-name="NewPersonName"
-        //               onChange={(event) => setNewPersonName(event.target.value)}
-        //               value={newPersonName}
-        //               placeholder="Name..."
-        //               className='form-control col-4'></input>
-        //        <input type="text"
-        //               cypress-name="NewPersonEmail"
-        //               onChange={(event) => setNewPersonEmail(event.target.value)}
-        //               value={newPersonEmail}
-        //               placeholder="Email Address..."
-        //               className='form-control col-5'></input>
-        //        <span className='col-2'><button cypress-name="CreateNewPerson" onClick={createNewPersonClick} disabled={createButonIsDisabled()} className='btn btn-success'>Add New Person</button></span>
-        //        <span className='col-1'><button cypress-name="CancelNewPerson" onClick={() => { setAddingNewPerson(false); setNewPersonName("") }} className='btn btn-dark'>Cancel</button></span>
-        //    </>
-        //)
         let onCLickCancelAddNewPerson = () => {
             setAddingNewPerson(false);
             setNewPersonName("");
@@ -113,13 +91,13 @@ interface Props extends RouteComponentProps<WishlistProps> {
         
         return (
             <div>
-                <h1 id="wishlistTitle">Wishlist - {wishlist.name}</h1>
+                <h1 className='text-center' id="wishlistTitle">Wishlist - {wishlist.name}</h1>
                 <div>
-                    <h4 className='text-center'>What would you like?</h4>
+                    <h4 className='text-center mt-4'>What would you like?</h4>
                     <WishlistPersonRow wishlistPerson={loggedInWishlist ?? {}} wishlistId={wishlist.id} setWishlist={setWishlist} loginDetails={login}></WishlistPersonRow>
                 </div>
-                <div className='mt-lg-5'>
-                    <h4 className='text-center'>What everyone else would like</h4>
+                <div className='mt-5'>
+                    <h4 className='text-center mt-4'>Other giftees wishlists</h4>
                     <div> {createNewPerson}</div>
                     {listOfOtherPeoplesIdeas}
                 </div>

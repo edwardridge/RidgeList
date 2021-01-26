@@ -22,14 +22,14 @@ export const OtherPersonWishlistRow = (props : OtherPersonWishlistRowProps) => {
     }
 
     return (
-        <div className='wishlistSummaryItem' key={`${props.wishlistPerson.email}`}>
+        <div className='wishlistSummaryItem mb-3' key={`${props.wishlistPerson.email}`}>
             <div>
-                <span className='d-inline-block col-10'>
+                <span className='d-inline-block col-10 text-center'>
                     {props.wishlistPerson.name}
                     <span className='emailDetails'> ({props.wishlistPerson.email})</span>
                 </span>
             </div>
-            <div className='personItems'>
+            <table className='table'>
                 {props.wishlistPerson.presentIdeas?.map(s => {
                     let claimed = s.claimerEmail !== null && s.claimerEmail !== '';
                     let claimedByYou = s.claimerEmail === props.loggedInEmail;
@@ -39,15 +39,15 @@ export const OtherPersonWishlistRow = (props : OtherPersonWishlistRowProps) => {
                         <>{unclaim}</> :
                         <button className='btn btn-outline-success w-100' onClick={() => claimPresentClick(s.id)}>Claim</button>;
 
-                    let classes = `mt-lg-1 row ${claimed && !claimedByYou ? 'claimed' : ''}`;
+                    let classes = `mt-1 ml-0 mr-0 row ${claimed ? 'claimed' : ''}`;
                     return (
-                        <div key={s.id} className={classes}>
-                            <span className='col-8 col-md-10'>{s.description} {claimerText}</span>
-                            <span className='col-4 col-md-2 text-right'>{claimSection}</span>
-                        </div>
-                    )
+                        <tr key={s.id} className={classes}>
+                            <td className='col-8 col-md-10'>{s.description} {claimerText}</td>
+                            <td className='col-4 col-md-2 text-right'>{claimSection}</td>
+                        </tr>
+                    ) 
                 })}
-            </div>
+            </table>
         </div>
     )
 }

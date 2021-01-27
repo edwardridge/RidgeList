@@ -2,6 +2,8 @@ import React, {useState} from "react";
 import { LoginDetails } from "../useLogin";
 import {WishlistClient, WishlistModel, WishlistPersonModel} from "../../nswag/api.generated";
 import { Button, Modal } from "react-bootstrap";
+import {useWishlistClient} from "./useWishlistClient";
+import Linkify from "react-linkify";
 
 interface WishlistPersonRowProps{
     loginDetails : LoginDetails;
@@ -13,18 +15,18 @@ interface WishlistPersonRowProps{
 export const WishlistPersonRow = (props : WishlistPersonRowProps) => {
     const [newItemDescription, setNewItemDescription] = useState("");
     const [showAddItem, setShowAddItem] = useState(false);
-
-    let clickAddItem = (closeAddItem: boolean) => {
-        new WishlistClient().addPresentIdea(props.wishlistId, props.loginDetails.Email, newItemDescription).then(s => { 
-            props.setWishlist(s);
-            setNewItemDescription("");
-            if (closeAddItem)
-                setShowAddItem(false);
-        });
+    const wishlistClient = useWishlistClient();
+    
+    let clickAddItem = async (closeAddItem: boolean) => {
+        let wishlist = await wishlistClient.addPresentIdea(props.wishlistId, props.loginDetails.Email, newItemDescription);
+        props.setWishlist(wishlist);
+        setNewItemDescription("");
+        if (closeAddItem)
+            setShowAddItem(false);
     }
 
     let removePresentIdea = async (id: string) => {
-        let wishlist = await new WishlistClient().removePresentIdea(props.wishlistId, props.loginDetails.Email, id);
+        let wishlist = await wishlistClient.removePresentIdea(props.wishlistId, props.loginDetails.Email, id);
         props.setWishlist(wishlist);
     }
 
@@ -37,9 +39,10 @@ export const WishlistPersonRow = (props : WishlistPersonRowProps) => {
             
             <table className='table'>
                 {props.wishlistPerson.presentIdeas?.map(s => {
+                    // @ts-ignore
                     return (
                         <tr className='row mt-2' key={s.id}>
-                            <td className='col-8 col-md-10'>{s.description}</td>
+                            <td className='col-8 col-md-10'><Linkify>{s.description}</Linkify></td>
                             <td className='col-4 col-md-2'>
                                 <button className='btn btn-outline-danger w-100' onClick={() => removePresentIdea(s.id)}>Remove</button>
                             </td>
@@ -47,6 +50,7 @@ export const WishlistPersonRow = (props : WishlistPersonRowProps) => {
                 })}
             </table>
             <div className='mt-2'>
+                
                 <Button variant="outline-primary" cypress-name='AddNewItemButton' className='w-100' onClick={() => { setShowAddItem(true) }}>
                     Add New Item
                 </Button>
@@ -56,7 +60,7 @@ export const WishlistPersonRow = (props : WishlistPersonRowProps) => {
                         <Modal.Title>Add New Item!</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <input type="text" className='form-control w-100' value={newItemDescription} onChange={(event) => { setNewItemDescription(event.target.value) }} placeholder='What do you want?' cypress-name='AddItem'></input>
+                        <textarea className='form-control w-100' value={newItemDescription} onChange={(event) => { setNewItemDescription(event.target.value) }} placeholder='What would you like?' cypress-name='AddItem'></textarea>
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={onClickCancelAddItem}>

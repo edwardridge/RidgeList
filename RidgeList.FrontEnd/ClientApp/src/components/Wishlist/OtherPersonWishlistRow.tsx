@@ -1,5 +1,6 @@
 import {WishlistClient, WishlistModel, WishlistPersonModel} from "../../nswag/api.generated";
 import React from "react";
+import {useWishlistClient} from "./useWishlistClient";
 
 interface OtherPersonWishlistRowProps{
     wishlistPerson : WishlistPersonModel;
@@ -9,14 +10,16 @@ interface OtherPersonWishlistRowProps{
 }
 
 export const OtherPersonWishlistRow = (props : OtherPersonWishlistRowProps) => {
+    let wishlistClient = useWishlistClient();
+    
     let claimPresentClick = async (presentId : string) => {
-        let wishlist = await new WishlistClient()
+        let wishlist = await wishlistClient
             .claimPresent(props.wishlistId, props.loggedInEmail, presentId);
         props.setWishlist(wishlist);
     }
 
     let unclaimPresentClick = async (presentId : string) => {
-        let wishlist = await new WishlistClient()
+        let wishlist = await wishlistClient
             .unclaimPresent(props.wishlistId, presentId);
         props.setWishlist(wishlist);
     }

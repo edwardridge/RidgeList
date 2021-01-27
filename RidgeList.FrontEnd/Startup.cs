@@ -33,10 +33,6 @@ namespace RidgeList.FrontEnd
             
             // services.AddOpenApiDocument();
             services.AddSwaggerDocument();
-            services.Configure<KestrelServerOptions>(options =>
-            {
-                options.AllowSynchronousIO = true;
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

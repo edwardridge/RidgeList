@@ -84,7 +84,7 @@ namespace RidgeList.Domain.Tests
             
             wishlist.GetPeople().Should().BeEquivalentTo(new []
             {
-                new WishlistPerson() { Email = "a@b.com", Name = "Ed"},
+                new WishlistPerson() { Email = "a@b.com", Name = "Ed", Giftee = true},
                 
             });
         }

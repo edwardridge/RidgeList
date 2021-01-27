@@ -26,7 +26,7 @@ export const OtherPersonWishlistRow = (props : OtherPersonWishlistRowProps) => {
     }
     let getPresentIdeas = () => {
         if(props.wishlistPerson.presentIdeas?.length === 0){
-            return <div>They haven't added any gift ideas yet!</div>
+            return <div className='lightGrey text-center'>They haven't added any gift ideas yet!</div>
         }
         return props.wishlistPerson.presentIdeas?.map(s => {
             let claimed = s.claimerEmail !== null && s.claimerEmail !== '';

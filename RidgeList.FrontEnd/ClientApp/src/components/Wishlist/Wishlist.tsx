@@ -71,9 +71,9 @@ interface Props extends RouteComponentProps<WishlistProps> {
                         <Modal.Title>Add Somone New!</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <input type="text" className='w-100' onChange={(event) => setNewPersonName(event.target.value)}
+                        <input type="text" className='form-control w-100' onChange={(event) => setNewPersonName(event.target.value)}
                             value={newPersonName} placeholder="What's their name?" cypress-name='NewPersonName'></input>
-                        <input type="text" className='w-100' onChange={changeNewEmail}
+                        <input type="text" className='form-control w-100 mt-2' onChange={changeNewEmail}
                             value={newPersonEmail} placeholder="What's their email?" cypress-name='NewPersonEmail'></input>
                     </Modal.Body>
                     <Modal.Footer>
@@ -106,15 +106,17 @@ interface Props extends RouteComponentProps<WishlistProps> {
         return (
             <div>
                 <h1 className='text-center' id="wishlistTitle">Wishlist - {wishlist.name}</h1>
+                
                 <div>
                     <h4 className='text-center mt-4'>What would you like?</h4>
                     <WishlistPersonRow cypress-name='WishlistPerson' wishlistPerson={loggedInWishlist ?? {}} wishlistId={wishlist.id} setWishlist={setWishlist} loginDetails={login}></WishlistPersonRow>
                 </div>
                 <div className='mt-5'>
                     <h4 className='text-center mt-4'>Other giftees wishlists</h4>
-                    <div> {createNewPerson}</div>
+                    
                     {listOfOtherPeoplesIdeas}
                 </div>
+                <div className='mt-5'> {createNewPerson}</div>
             </div>
         )
     }

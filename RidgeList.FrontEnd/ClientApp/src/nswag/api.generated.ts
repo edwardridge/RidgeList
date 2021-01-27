@@ -374,13 +374,17 @@ export class WishlistTestClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    createTestWishlist(): Promise<string> {
+    createTestWishlist(req: CreateWishlistRequestModel): Promise<string> {
         let url_ = this.baseUrl + "/WishlistTest/createTestWishlist";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(req);
+
         let options_ = <RequestInit>{
+            body: content_,
             method: "POST",
             headers: {
+                "Content-Type": "application/json",
                 "Accept": "application/json"
             }
         };
@@ -460,6 +464,10 @@ export interface PresentIdeaModel {
 export interface WishlistSummaryModel {
     name?: string | undefined;
     id: string;
+}
+
+export interface CreateWishlistRequestModel {
+    title?: string | undefined;
 }
 
 export class ApiException extends Error {

@@ -24,7 +24,7 @@ export const OtherPersonWishlistRow = (props : OtherPersonWishlistRowProps) => {
     return (
         <div className='wishlistSummaryItem mb-3' key={`${props.wishlistPerson.email}`}>
             <div>
-                <span className='d-inline-block col-10 text-center'>
+                <span className='d-inline-block col-12 text-center'>
                     {props.wishlistPerson.name}
                     <span className='emailDetails'> ({props.wishlistPerson.email})</span>
                 </span>
@@ -42,8 +42,8 @@ export const OtherPersonWishlistRow = (props : OtherPersonWishlistRowProps) => {
                     let classes = `mt-1 ml-0 mr-0 row ${claimed ? 'claimed' : ''}`;
                     return (
                         <tr key={s.id} className={classes}>
-                            <td className='col-8 col-md-10'>{s.description} {claimerText}</td>
-                            <td className='col-4 col-md-2 text-right'>{claimSection}</td>
+                            <td className='col-8 col-md-10' cypress-name={`${s.id}-description`}>{s.description} {claimerText}</td>
+                            <td className='col-4 col-md-2 text-right' cypress-name={`${s.id}-buttons`}>{claimSection}</td>
                         </tr>
                     ) 
                 })}

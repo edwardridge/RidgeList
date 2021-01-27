@@ -47,7 +47,7 @@ export const WishlistPersonRow = (props : WishlistPersonRowProps) => {
                 })}
             </table>
             <div className='mt-2'>
-                <Button variant="outline-primary" cypress-name='AddItem' className='w-100' onClick={() => { setShowAddItem(true) }}>
+                <Button variant="outline-primary" cypress-name='AddNewItemButton' className='w-100' onClick={() => { setShowAddItem(true) }}>
                     Add New Item
                 </Button>
 
@@ -56,7 +56,7 @@ export const WishlistPersonRow = (props : WishlistPersonRowProps) => {
                         <Modal.Title>Add New Item!</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <input type="text" className='w-100' value={newItemDescription} onChange={(event) => { setNewItemDescription(event.target.value) }} placeholder='What do you want?' cypress-name='AddItem'></input>
+                        <input type="text" className='form-control w-100' value={newItemDescription} onChange={(event) => { setNewItemDescription(event.target.value) }} placeholder='What do you want?' cypress-name='AddItem'></input>
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={onClickCancelAddItem}>
@@ -65,7 +65,7 @@ export const WishlistPersonRow = (props : WishlistPersonRowProps) => {
                         <Button variant="primary" onClick={() => { clickAddItem(false) }}>
                             Save And Add More
                         </Button>
-                        <Button variant="primary" cypress-name='AddItemButton' onClick={() => { clickAddItem(true) }}>
+                        <Button variant="primary" cypress-name='SaveItemButton' onClick={() => { clickAddItem(true) }}>
                             Save And Close
                         </Button>
                     </Modal.Footer>

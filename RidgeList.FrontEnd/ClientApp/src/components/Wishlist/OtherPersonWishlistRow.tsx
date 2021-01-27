@@ -29,7 +29,7 @@ export const OtherPersonWishlistRow = (props : OtherPersonWishlistRowProps) => {
         <div className='wishlistSummaryItem mb-3' key={`${props.wishlistPerson.email}`}>
             <div>
                 <span className='d-inline-block col-12 text-center'>
-                    {props.wishlistPerson.name}
+                    {props.wishlistPerson.name} - {props.wishlistPerson.giftee ? 'IS GIFTEE' : 'NOT'}
                     <span className='emailDetails'> ({props.wishlistPerson.email})</span>
                 </span>
             </div>

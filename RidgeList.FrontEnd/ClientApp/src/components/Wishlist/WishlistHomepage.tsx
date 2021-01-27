@@ -13,6 +13,7 @@ interface WishlishHomepageProps{
 export const WishlistHomepage = (props : WishlishHomepageProps) => {
     const [creating, setCreating] = useState(false);
     const [nameOfNewWishlist, setNameOfNewWishlist] = useState("");
+    const [creatorIsGiftee, setCreatorIsGiftee] = useState(true);
     const [wishlistSummaries, setWishlistSummaries] = useState([] as WishlistSummaryModel[]);
     const history = useHistory();
     const login = useGetLogin(false);
@@ -28,7 +29,7 @@ export const WishlistHomepage = (props : WishlishHomepageProps) => {
     }
     
     let onClickCreate = async () => {
-        let newWishlist = await props.wishlistClient.create(nameOfNewWishlist, login.Email, login.Name);
+        let newWishlist = await props.wishlistClient.create(nameOfNewWishlist, login.Email, login.Name, creatorIsGiftee);
         setCreating(false);
         history.push("/wishlist/" + newWishlist.id);
         setShow(false);
@@ -58,6 +59,12 @@ export const WishlistHomepage = (props : WishlishHomepageProps) => {
             </Modal.Header>
             <Modal.Body>
                 <input type="text" className='w-100' value={nameOfNewWishlist} onChange={handleInputChange} placeholder='Name of wishlist...' cypress-name='NameOfWishlist'></input>
+                <div className="form-check">
+                    <input className="form-check-input" type="checkbox" checked={creatorIsGiftee} id="areTheyGiftee" onChange={(e) => {setCreatorIsGiftee(e.target.checked)}}/>
+                    <label className="form-check-label" htmlFor="areTheyGiftee">
+                        Are you receiving gifts?
+                    </label>
+                </div>
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={onClickCancel}>

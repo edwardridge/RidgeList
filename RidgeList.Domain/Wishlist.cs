@@ -26,13 +26,13 @@ namespace RidgeList.Domain
     
     public class Wishlist
     {
-        public static Wishlist Create(string name, string emailOfCreator, string nameOfCreator)
+        public static Wishlist Create(string name, string emailOfCreator, string nameOfCreator, bool creatorIsGiftee = true)
         {
             return new Wishlist()
             {  
                 Id = Guid.NewGuid(),
                 Name =  name,
-                People = new WishlistPeople{ new WishlistPerson() { Email = emailOfCreator, Name = nameOfCreator} },
+                People = new WishlistPeople{ new WishlistPerson() { Email = emailOfCreator, Name = nameOfCreator,Giftee = creatorIsGiftee} },
                 Creator = emailOfCreator
             };
         }
@@ -50,11 +50,11 @@ namespace RidgeList.Domain
         
         public string Creator { get; set; }
 
-        public void AddPerson(string name, string email)
+        public void AddPerson(string name, string email, bool isGiftee)
         {
             if (this.People.ContainsEmail(email) == false)
             {
-                this.People.Add(new WishlistPerson() { Email = email, Name = name });
+                this.People.Add(new WishlistPerson() { Email = email, Name = name, Giftee = isGiftee });
             }
         }
 
@@ -115,6 +115,8 @@ namespace RidgeList.Domain
         public string Email { get; set; }
         
         public List<PresentIdea> PresentIdeas { get; set; }
+        
+        public bool Giftee { get; set; }
 
         public void AddPresentIdea(string present)
         {

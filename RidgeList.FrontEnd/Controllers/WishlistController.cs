@@ -20,9 +20,9 @@ namespace RidgeList.FrontEnd.Controllers
 
         [HttpPost]
         [Route("create")]
-        public WishlistModel Create(string nameOfWishlist, string emailOfCreator, string nameOfCreator)
+        public WishlistModel Create(string nameOfWishlist, string emailOfCreator, string nameOfCreator, bool creatorIsGiftee)
         {
-            return CreateNewWishlist(nameOfWishlist, emailOfCreator, nameOfCreator);
+            return CreateNewWishlist(nameOfWishlist, emailOfCreator, nameOfCreator, creatorIsGiftee);
         }
 
         [HttpGet]
@@ -35,10 +35,10 @@ namespace RidgeList.FrontEnd.Controllers
 
         [HttpPost]
         [Route("addPerson")]
-        public async Task<WishlistModel> AddPerson(string wishlistId, string email, string name)
+        public async Task<WishlistModel> AddPerson(string wishlistId, string email, string name, bool isGiftee)
         {
             var wishlist = await this._repository.Load(Guid.Parse(wishlistId));
-            wishlist.AddPerson(name, email);
+            wishlist.AddPerson(name, email, isGiftee);
             await this._repository.Save(wishlist);
             return new WishlistMapper().Map(wishlist);
         }
@@ -91,9 +91,10 @@ namespace RidgeList.FrontEnd.Controllers
             return summaries.Select(WishlistSummaryModel.Map);
         }
 
-        private WishlistModel CreateNewWishlist(string nameOfWishlist, string emailOfCreator, string nameOfCreator)
+        private WishlistModel CreateNewWishlist(string nameOfWishlist, string emailOfCreator, string nameOfCreator,
+            bool creatorIsGiftee)
         {
-            var wishlist = Wishlist.Create(nameOfWishlist, emailOfCreator, nameOfCreator);
+            var wishlist = Wishlist.Create(nameOfWishlist, emailOfCreator, nameOfCreator, creatorIsGiftee);
             this._repository.Save(wishlist);
             return new WishlistMapper().Map(wishlist);
         }

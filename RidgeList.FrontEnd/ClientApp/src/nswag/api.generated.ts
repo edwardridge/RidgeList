@@ -61,7 +61,7 @@ export class WishlistClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    create(nameOfWishlist: string | null | undefined, emailOfCreator: string | null | undefined, nameOfCreator: string | null | undefined): Promise<WishlistModel> {
+    create(nameOfWishlist: string | null | undefined, emailOfCreator: string | null | undefined, nameOfCreator: string | null | undefined, creatorIsGiftee: boolean | undefined): Promise<WishlistModel> {
         let url_ = this.baseUrl + "/Wishlist/create?";
         if (nameOfWishlist !== undefined && nameOfWishlist !== null)
             url_ += "nameOfWishlist=" + encodeURIComponent("" + nameOfWishlist) + "&";
@@ -69,6 +69,10 @@ export class WishlistClient {
             url_ += "emailOfCreator=" + encodeURIComponent("" + emailOfCreator) + "&";
         if (nameOfCreator !== undefined && nameOfCreator !== null)
             url_ += "nameOfCreator=" + encodeURIComponent("" + nameOfCreator) + "&";
+        if (creatorIsGiftee === null)
+            throw new Error("The parameter 'creatorIsGiftee' cannot be null.");
+        else if (creatorIsGiftee !== undefined)
+            url_ += "creatorIsGiftee=" + encodeURIComponent("" + creatorIsGiftee) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ = <RequestInit>{
@@ -135,7 +139,7 @@ export class WishlistClient {
         return Promise.resolve<WishlistModel>(<any>null);
     }
 
-    addPerson(wishlistId: string | null | undefined, email: string | null | undefined, name: string | null | undefined): Promise<WishlistModel> {
+    addPerson(wishlistId: string | null | undefined, email: string | null | undefined, name: string | null | undefined, isGiftee: boolean | undefined): Promise<WishlistModel> {
         let url_ = this.baseUrl + "/Wishlist/addPerson?";
         if (wishlistId !== undefined && wishlistId !== null)
             url_ += "wishlistId=" + encodeURIComponent("" + wishlistId) + "&";
@@ -143,6 +147,10 @@ export class WishlistClient {
             url_ += "email=" + encodeURIComponent("" + email) + "&";
         if (name !== undefined && name !== null)
             url_ += "name=" + encodeURIComponent("" + name) + "&";
+        if (isGiftee === null)
+            throw new Error("The parameter 'isGiftee' cannot be null.");
+        else if (isGiftee !== undefined)
+            url_ += "isGiftee=" + encodeURIComponent("" + isGiftee) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ = <RequestInit>{
@@ -452,6 +460,7 @@ export interface WishlistPersonModel {
     email?: string | undefined;
     name?: string | undefined;
     presentIdeas?: PresentIdeaModel[] | undefined;
+    giftee: boolean;
 }
 
 export interface PresentIdeaModel {

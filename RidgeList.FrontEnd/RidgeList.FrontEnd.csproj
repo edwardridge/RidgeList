@@ -7,10 +7,13 @@
         <IsPackable>false</IsPackable>
         <SpaRoot>ClientApp\</SpaRoot>
         <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
+        <UserSecretsId>68d6e019-351c-493d-b031-d481d16e421d</UserSecretsId>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.1" />
+        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
         <PackageReference Include="NSwag.AspNetCore" Version="13.9.4" />
         <PackageReference Include="NSwag.MSBuild" Version="13.9.4">
           <PrivateAssets>all</PrivateAssets>

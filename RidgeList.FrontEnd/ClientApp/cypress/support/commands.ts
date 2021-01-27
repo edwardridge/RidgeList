@@ -26,8 +26,8 @@ export function getByCyName(cyName : string) {
     return cy.get(`[cypress-name="${cyName}"]`);
 }
 
-export function createWishList() {
-    cy.request('POST', '/WishlistTest/createTestWishlist').then(response =>
+export function createWishList(title: string) {
+    return cy.request('POST', '/WishlistTest/createTestWishlist', { title: title }).then(response =>
     {
         cy.visit(`/wishlist/${response.body}`);
     });

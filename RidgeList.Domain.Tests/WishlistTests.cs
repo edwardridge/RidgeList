@@ -27,7 +27,7 @@ namespace RidgeList.Domain.Tests
         {
             var repo = new InMemoryWishlistRepository();
             var wishlist1 = Wishlist.Create("Asd", "a@b.com", "Ed");
-            wishlist1.AddPerson("", "c@d.com");
+            wishlist1.AddPerson("", "c@d.com", true);
             await repo.Save(wishlist1);
             
             var wishlist2 = Wishlist.Create("Wishlist 2", "a@b.com", "Ed");
@@ -58,21 +58,21 @@ namespace RidgeList.Domain.Tests
             var wishlist = Wishlist.Create("Eds test wishlist", "a@b.com", "Ed");
             wishlist.Id.Should().NotBeEmpty();
             wishlist.Name.Should().Be("Eds test wishlist");            
-            wishlist.GetPeople().First().Email.Should().Be("a@b.com");       
+            wishlist.GetPeople().First().Email.Should().Be("a@b.com");             
+            wishlist.GetPeople().First().Giftee.Should().Be(true);      
             wishlist.Creator.Should().Be("a@b.com");
-
         }
 
         [Test]
         public void Can_Add_Person_With_Email_And_Name_To_Wishlist()
         {
             var wishlist = Wishlist.Create("Eds test wishlist", "a@b.com", "Ed");
-            wishlist.AddPerson("Ed", "edwardridge@gmail.com");
+            wishlist.AddPerson("Ed", "edwardridge@gmail.com", true);
             
             wishlist.GetPeople().Should().BeEquivalentTo(new []
             {
-                new WishlistPerson() { Email = "a@b.com", Name = "Ed"},
-                new WishlistPerson() { Email = "edwardridge@gmail.com", Name = "Ed"}
+                new WishlistPerson() { Email = "a@b.com", Name = "Ed", Giftee = true},
+                new WishlistPerson() { Email = "edwardridge@gmail.com", Name = "Ed", Giftee = true}
             });
         }
         
@@ -179,7 +179,6 @@ namespace RidgeList.Domain.Tests
 
             claimer.ClaimerName.Should().Be("Second person");            
             claimer.ClaimerEmail.Should().Be("b@b.com");
-
         }
     }
 

@@ -34,6 +34,7 @@ namespace RidgeList.Models
                     {
                         Name = s.Name, 
                         Email = s.Email,
+                        Giftee = s.Giftee,
                         PresentIdeas = s.PresentIdeas
                             .Select(t => new PresentIdeaModel()
                             {
@@ -60,6 +61,8 @@ namespace RidgeList.Models
         public string Name { get; set; }
 
         public List<PresentIdeaModel> PresentIdeas { get; set; }
+        
+        public bool Giftee { get; set; }
     }
 
     public class PresentIdeaModel

@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -19,9 +20,9 @@ namespace RidgeList.FrontEnd.Controllers
         
         [HttpPost]
         [Route("createTestWishlist")]
-        public Guid CreateTestWishlist()
+        public async Task<Guid> CreateTestWishlist([FromBody] CreateWishlistRequestModel req)
         {
-           var wishlist = Wishlist.Create("[Test] Wishlist", testEmailAccount, "Test");
+            var wishlist = Wishlist.Create("[Test] " + req.title, testEmailAccount, "Test");
            _repository.Save(wishlist);
            return wishlist.Id;
         }
@@ -39,5 +40,10 @@ namespace RidgeList.FrontEnd.Controllers
                 }
             }
         }
+    }
+
+    public class CreateWishlistRequestModel
+    {
+        public string title { get; set; }
     }
 }

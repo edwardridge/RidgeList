@@ -55,28 +55,30 @@ describe('Wishlist summary page', () => {
     });
 });
 
+let setLoginCookie = (email : string, name: string) => {
+    let loginDetails = new LoginDetails(email, name);
+    return cy.setCookie('login', JSON.stringify(loginDetails));
+}
+
 describe('Wishlist page', () => {
     beforeEach(() => {
-        let loginDetails = new LoginDetails(emailAddress, "Test");
-        cy.setCookie('login', JSON.stringify(loginDetails));
+        setLoginCookie(emailAddress, "Test");
     });
     
     it('allows new people to be added', () => {
-        cy.createWishlist();
+        cy.createWishlist('allows new people to be added');
 
         addNewPerson('ed@ed.com', 'Ed 2');
         
         cy.contains('Ed 2');
-        cy.getByCyName('ListOfPeople').within((a) => {
-            cy.get('.wishlistSummaryItem').should('have.length', 2);
-        });
     });
 
     it('doesnt allow duplicate person to be added', () => {
-        cy.createWishlist();
+        cy.createWishlist('doesnt allow duplicate person to be added');
 
         addNewPerson('ed@ed.com', 'Ed 2');
-        
+
+        cy.getByCyName('AddNewPerson').click();
         cy.getByCyName('NewPersonEmail').type('ed@ed.com');
         cy.getByCyName('CreateNewPerson').should('be.disabled');
         cy.getByCyName('NewPersonEmail').type('ed_diff@ed.com');
@@ -84,19 +86,40 @@ describe('Wishlist page', () => {
     });
 
     it('allows present idea to be added', () => {
-        cy.createWishlist();
+        cy.createWishlist('allows present idea to be added');
 
         addNewPerson('ed@ed.com', 'Ed 2');
 
-        cy.getByCyName('AddItem').type('New present idea');
-        cy.getByCyName('AddItemButton').click();
+        addItem('New present idea');
+        cy.contains('New present idea');
+    });
+
+    it('allows you to claim and unclaim someone elses present', () => {
+        // cy.pause();
+        cy.createWishlist('allows you to claim and unclaim someone elses present');
+
+        addNewPerson('ed@ed.com', 'Ed 2');
+        addItem('New present idea');
+        
+        setLoginCookie('ed@ed.com', "Ed 2");
+        cy.visit('/').contains('allows you to claim and unclaim someone elses present').click();
+
+        cy.contains('New present idea').next('td').click();
+        cy.contains('New present idea').parent().within(() => cy.contains('Unclaim'));
     });
     
+    let addItem = (description : string) => {
+        cy.getByCyName('AddNewItemButton').click().getByCyName('AddItem').type(description);
+        cy.getByCyName('SaveItemButton').click();
+    }
+    
     let addNewPerson = (email : string, name : string) => {
-        cy.getByCyName('NewPersonEmail')
-                .type(email)
+        return cy.getByCyName('AddNewPerson')
+            .click()
+            .getByCyName('NewPersonEmail')
+            .type(email)
             .getByCyName('NewPersonName')
-                .type(name)
+            .type(name)
             .getByCyName('CreateNewPerson')
             .click();
     }

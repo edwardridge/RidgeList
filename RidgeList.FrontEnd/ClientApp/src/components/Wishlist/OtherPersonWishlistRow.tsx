@@ -1,6 +1,7 @@
 import {WishlistClient, WishlistModel, WishlistPersonModel} from "../../nswag/api.generated";
 import React from "react";
 import {useWishlistClient} from "./useWishlistClient";
+import Linkify from "react-linkify";
 
 interface OtherPersonWishlistRowProps{
     wishlistPerson : WishlistPersonModel;
@@ -45,7 +46,7 @@ export const OtherPersonWishlistRow = (props : OtherPersonWishlistRowProps) => {
                     let classes = `mt-1 ml-0 mr-0 row ${claimed ? 'claimed' : ''}`;
                     return (
                         <tr key={s.id} className={classes}>
-                            <td className='col-8 col-md-10' cypress-name={`${s.id}-description`}>{s.description} {claimerText}</td>
+                            <td className='col-8 col-md-10' cypress-name={`${s.id}-description`}><Linkify>{s.description} {claimerText}</Linkify></td>
                             <td className='col-4 col-md-2 text-right' cypress-name={`${s.id}-buttons`}>{claimSection}</td>
                         </tr>
                     ) 

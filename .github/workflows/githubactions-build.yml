@@ -37,20 +37,21 @@ jobs:
     #consume Default Application Credentials will automatically detect and use
     #these credentials.
         export_default_credentials: true
-        
+    
+    - name: GCloud Docker auth
+      run: gcloud auth configure-docker
+      
     - uses: whoan/docker-build-with-cache-action@v5
       with:
         username: _json_key
         password: "${{ secrets.GCLOUD_AUTH }}"
         registry: gcr.io
-        image_name: ${{ env.IMAGE }}
-        
-    - name: GCloud Docker auth
-      run: gcloud auth configure-docker
-    
-    - uses: actions/checkout@v2
-    - name: Build the Docker image
-      run: docker build . --file RidgeList.FrontEnd/Dockerfile --tag "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"
+        image_name: "gcr.io/$PROJECT_ID/$IMAGE"
+        build_extra_args: "--file RidgeList.FrontEnd/Dockerfile"
+
+    # - uses: actions/checkout@v2
+    # - name: Build the Docker image
+      # run: docker build . --file RidgeList.FrontEnd/Dockerfile --tag "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"
      
     - name: Push the Docker image
       run: docker push "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"

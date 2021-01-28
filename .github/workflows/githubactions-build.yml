@@ -42,11 +42,5 @@ jobs:
     - name: Build the Docker image
       run: docker build . --file RidgeList.FrontEnd/Dockerfile --tag "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"
       
-    - name: Deploy service to Cloud Run
-      uses: stefda/action-cloud-run@v1.0
-      with:
-        image: "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"
-        service: ${{ env.SERVICE }}
-        project: ${{ env.PROJECT_ID }}
-        region: europe-west2
-        service key: ${{ secrets.GCLOUD_AUTH }}
+    - name: Push the Docker image
+      run: docker push "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"

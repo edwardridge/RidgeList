@@ -29,7 +29,8 @@ namespace RidgeList.FrontEnd
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/build"; });
 
-            services.AddScoped<IWishlistRepository>(new Func<IServiceProvider, IWishlistRepository>(s => new MartenDbRepository()));
+            //services.AddScoped<IWishlistRepository>(new Func<IServiceProvider, IWishlistRepository>(s => new MartenDbRepository()));
+            services.AddSingleton<IWishlistRepository>(new Func<IServiceProvider, IWishlistRepository>(s => new InMemoryWishlistRepository()));
             
             // services.AddOpenApiDocument();
             services.AddSwaggerDocument();

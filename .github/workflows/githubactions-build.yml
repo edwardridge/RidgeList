@@ -5,6 +5,11 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
+    
+env:
+  PROJECT_ID: ${{ secrets.G_PROJECT_ID }}
+  IMAGE: ridgelist
+  SERVICE: ridgelist
 
 jobs:
 
@@ -13,6 +18,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    
     - uses: actions/checkout@v2
     - name: Build the Docker image
-      run: docker build . --file RidgeList.FrontEnd/Dockerfile --tag ridgelist:$(date +%s)
+      run: docker build . --file RidgeList.FrontEnd/Dockerfile --tag "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"
+      
+    - name: Deploy service to Cloud Run
+      uses: stefda/action-cloud-run@v1.0
+      with:
+        image: gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA
+        service: $SERVICE
+        project: $PROJECT_ID
+        region: europe-west2
+        service key: ${{ secrets.GCLOUD_AUTH }}

@@ -43,7 +43,7 @@ jobs:
         username: _json_key
         password: "${{ secrets.GCLOUD_AUTH }}"
         registry: gcr.io
-        image_name: ${{ env.image }}
+        image_name: ${{ env.IMAGE }}
         
     - name: GCloud Docker auth
       run: gcloud auth configure-docker

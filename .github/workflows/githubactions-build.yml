@@ -36,7 +36,7 @@ jobs:
     #GOOGLE_APPLICATION_CREDENTIALS environment variable. Future steps that
     #consume Default Application Credentials will automatically detect and use
     #these credentials.
-     #   export_default_credentials: # optional
+        export_default_credentials: true
     
     - uses: actions/checkout@v2
     - name: Build the Docker image

@@ -10,11 +10,13 @@ env:
   PROJECT_ID: ${{ secrets.G_PROJECT_ID }}
   IMAGE: ridgelist
   SERVICE: ridgelist
+  
+ 
 
 jobs:
 
   build:
-
+    environment: dev
     runs-on: ubuntu-latest
 
     steps:

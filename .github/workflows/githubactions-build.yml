@@ -29,7 +29,7 @@ jobs:
         # ID of the Google Cloud project. If provided, this will configure gcloud to
     #use this project ID by default for commands. Individual commands can still
     #override the project using the --project flag which takes precedence.
-        project_id: $PROJECT_ID
+        project_id: env.PROJECT_ID
         # Export the provided credentials as Google Default Application Credentials.
     #This will make the credentials available to later steps via the
     #GOOGLE_APPLICATION_CREDENTIALS environment variable. Future steps that
@@ -44,8 +44,8 @@ jobs:
     - name: Deploy service to Cloud Run
       uses: stefda/action-cloud-run@v1.0
       with:
-        image: gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA
-        service: $SERVICE
-        project: $PROJECT_ID
+        image: "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"
+        service: env.SERVICE
+        project: env.PROJECT_ID
         region: europe-west2
         service key: ${{ secrets.GCLOUD_AUTH }}

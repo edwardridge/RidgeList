@@ -38,6 +38,13 @@ jobs:
     #these credentials.
         export_default_credentials: true
         
+    - uses: whoan/docker-build-with-cache-action@v5
+      with:
+        username: _json_key
+        password: "${{ secrets.GCLOUD_AUTH }}"
+        registry: gcr.io
+        image_name: ${{ env.image }}
+        
     - name: GCloud Docker auth
       run: gcloud auth configure-docker
     

@@ -19,6 +19,24 @@ jobs:
 
     steps:
     
+    - name: Set up gcloud Cloud SDK environment
+      uses: google-github-actions/setup-gcloud@v0.2.0
+      with:
+        # Service account key to use for authentication. This should be the JSON
+    formatted private key which can be exported from the Cloud Console. The
+    value can be raw or base64-encoded.
+        service_account_key: ${{ secrets.GCLOUD_AUTH }}
+        # ID of the Google Cloud project. If provided, this will configure gcloud to
+    use this project ID by default for commands. Individual commands can still
+    override the project using the --project flag which takes precedence.
+        project_id: $PROJECT_ID
+        # Export the provided credentials as Google Default Application Credentials.
+    #This will make the credentials available to later steps via the
+    #GOOGLE_APPLICATION_CREDENTIALS environment variable. Future steps that
+    #consume Default Application Credentials will automatically detect and use
+    #these credentials.
+     #   export_default_credentials: # optional
+    
     - uses: actions/checkout@v2
     - name: Build the Docker image
       run: docker build . --file RidgeList.FrontEnd/Dockerfile --tag "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"

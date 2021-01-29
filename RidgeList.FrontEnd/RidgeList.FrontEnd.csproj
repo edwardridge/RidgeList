@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
@@ -12,6 +12,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Google.Cloud.SecretManager.V1" Version="1.3.0" />
         <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.1" />
         <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
         <PackageReference Include="NSwag.AspNetCore" Version="13.9.4" />
@@ -61,8 +62,8 @@
         </ItemGroup>
     </Target>
 
-    <Target Name="NSwag" AfterTargets="Build" Condition="'$(Configuration)' != 'Release'">
+    <!--<Target Name="NSwag" AfterTargets="Build" Condition="'$(Configuration)' != 'Release'">
         <Exec EnvironmentVariables="ASPNETCORE_ENVIRONMENT=Development" Command="$(NSwagExe_Net50) aspnetcore2openapi /assembly:$(TargetDir)RidgeList.FrontEnd.dll /output:$(OutDir)openapi.json" />
         <Exec Command="$(NSwagExe_Net50) openapi2tsclient /input:$(OutDir)openapi.json /name:API /TypeStyle:Interface /output:ClientApp/src/nswag/api.generated.ts" />
-    </Target>
+    </Target>-->
 </Project>

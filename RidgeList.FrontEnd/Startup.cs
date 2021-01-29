@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -9,6 +10,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RidgeList.Domain;
 using RidgeList.Postgres;
+using Google.Cloud.SecretManager.V1;
+using System.Linq;
+using Marten;
 
 namespace RidgeList.FrontEnd
 {
@@ -28,9 +32,26 @@ namespace RidgeList.FrontEnd
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/build"; });
+            services.AddSingleton(new Func<IServiceProvider, IDocumentStore>(s => {
+                var dbSettingsFromSecrets = new DbSettings()
+                {
+                    DbUsername = Configuration["DbUsername"],
+                    DbPassword = Configuration["DbPassword"],
+                    DbHost = Configuration["DbHost"],
+                    DbDatabase = Configuration["DbDatabase"]
+                };
 
-            //services.AddScoped<IWishlistRepository>(new Func<IServiceProvider, IWishlistRepository>(s => new MartenDbRepository()));
-            services.AddSingleton<IWishlistRepository>(new Func<IServiceProvider, IWishlistRepository>(s => new InMemoryWishlistRepository()));
+                var connectionString = MartenDbRepository.BuildConnectionString(dbSettingsFromSecrets);
+                return DocumentStore.For((s) =>
+                {
+                    s.Connection(connectionString);
+
+                    s.Schema.For<UserWishlists>().Identity(s => s.Email);
+                });
+                //
+            }));
+            services.AddScoped<IWishlistRepository, MartenDbRepository>();
+            //services.AddSingleton<IWishlistRepository>(new Func<IServiceProvider, IWishlistRepository>(s => new InMemoryWishlistRepository()));
             
             // services.AddOpenApiDocument();
             services.AddSwaggerDocument();

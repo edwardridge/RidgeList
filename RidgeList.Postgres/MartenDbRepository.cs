@@ -7,21 +7,36 @@ using RidgeList.Domain;
 
 namespace RidgeList.Postgres
 {
-    
-    
+
+
+    public class DbSettings
+    {
+        public string DbUsername { get; set; }
+
+        public string DbPassword { get; set; }
+
+        public string DbHost { get; set; }
+
+        public string DbDatabase { get; set; }
+    }
+
     public class MartenDbRepository : IWishlistRepository
     {
-        private DocumentStore documentStore;
+        private IDocumentStore documentStore;
 
-        public MartenDbRepository()
+        //public static string BuildConnectionString(string username, string password, string host, string database)
+        //{
+        //    return @$"Username={username};Password={password};Host={host};Port=5432;Database={database}";
+        //}
+        
+        public static string BuildConnectionString(DbSettings dbSettingsFromSecrets)
         {
-            this.documentStore = DocumentStore.For((s) =>
-            {
-                s.Connection(
-                    @"Username=postgres;Password=local;Host=localhost;Port=5432;Database=postgres;Include Error Detail=true");
+            return @$"Username={dbSettingsFromSecrets.DbUsername};Password={dbSettingsFromSecrets.DbPassword};Host={dbSettingsFromSecrets.DbHost};Port=5432;Database={dbSettingsFromSecrets.DbDatabase};sslmode=Require;Trust Server Certificate=true;";
+        }
 
-                s.Schema.For<UserWishlists>().Identity(s => s.Email);
-            });
+        public MartenDbRepository(IDocumentStore documentStore)
+        {
+            this.documentStore = documentStore;
         }
         
         public async Task Save(Wishlist wishlist)

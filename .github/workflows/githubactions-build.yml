@@ -9,13 +9,13 @@ on:
 env:
   PROJECT_ID: ${{ secrets.G_PROJECT_ID }}
   IMAGE: ridgelist
-  SERVICE: ridgelist
+  SERVICE: ridgelist-ci
   
 jobs:
 
 
   build:
-    environment: dev
+    environment: ci
     runs-on: ubuntu-latest
 
     steps:
@@ -23,19 +23,8 @@ jobs:
     - name: Set up gcloud Cloud SDK environment
       uses: google-github-actions/setup-gcloud@v0.2.0
       with:
-        # Service account key to use for authentication. This should be the JSON
-    #formatted private key which can be exported from the Cloud Console. The
-   # value can be raw or base64-encoded.
         service_account_key: ${{ secrets.GCLOUD_AUTH }}
-        # ID of the Google Cloud project. If provided, this will configure gcloud to
-    #use this project ID by default for commands. Individual commands can still
-    #override the project using the --project flag which takes precedence.
         project_id: ${{ env.PROJECT_ID }}
-        # Export the provided credentials as Google Default Application Credentials.
-    #This will make the credentials available to later steps via the
-    #GOOGLE_APPLICATION_CREDENTIALS environment variable. Future steps that
-    #consume Default Application Credentials will automatically detect and use
-    #these credentials.
         export_default_credentials: true
         
     - name: GCloud Docker auth
@@ -49,4 +38,4 @@ jobs:
       run: docker push "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"
     
     - name: Deploy to cloud run
-      run: gcloud run deploy ridgelist --image="gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" --platform=managed --region=europe-west2
+      run: gcloud run deploy ${{ env.SERVICE }} --image="gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" --platform=managed --region=europe-west2

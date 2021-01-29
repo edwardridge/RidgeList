@@ -38,4 +38,4 @@ jobs:
       run: docker push "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"
     
     - name: Deploy to cloud run
-      run: gcloud run deploy ${{ env.SERVICE }} --image="gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" --platform=managed --region=europe-west2
+      run: gcloud run deploy ${{ env.SERVICE }} --image="gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" --platform=managed --region=europe-west2 --port=80

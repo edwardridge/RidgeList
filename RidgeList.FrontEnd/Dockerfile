@@ -13,6 +13,9 @@ RUN apt-get -y install gnupg2
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
 RUN apt-get install -y nodejs
 
+# https://github.com/GoogleCloudPlatform/google-cloud-dotnet-powerpack/issues/22
+RUN apt-get install -y libc-dev
+
 WORKDIR /src
 COPY ["RidgeList.FrontEnd/RidgeList.FrontEnd.csproj", "RidgeList.FrontEnd/"]
 COPY ["RidgeList.FrontEnd/nuget.config", "RidgeList.FrontEnd/nuget.config"]

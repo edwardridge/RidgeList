@@ -32,26 +32,26 @@ namespace RidgeList.FrontEnd
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/build"; });
-            // services.AddSingleton(new Func<IServiceProvider, IDocumentStore>(s => {
-            //     var dbSettingsFromSecrets = new DbSettings()
-            //     {
-            //         DbUsername = Configuration["DbUsername"],
-            //         DbPassword = Configuration["DbPassword"],
-            //         DbHost = Configuration["DbHost"],
-            //         DbDatabase = Configuration["DbDatabase"]
-            //     };
-            //
-            //     var connectionString = MartenDbRepository.BuildConnectionString(dbSettingsFromSecrets);
-            //     return DocumentStore.For((s) =>
-            //     {
-            //         s.Connection(connectionString);
-            //
-            //         s.Schema.For<UserWishlists>().Identity(s => s.Email);
-            //     });
-            //     //
-            // }));
-            // services.AddScoped<IWishlistRepository, MartenDbRepository>();
-            services.AddSingleton<IWishlistRepository>(new Func<IServiceProvider, IWishlistRepository>(s => new InMemoryWishlistRepository()));
+            services.AddSingleton(new Func<IServiceProvider, IDocumentStore>(s => {
+                var dbSettingsFromSecrets = new DbSettings()
+                {
+                    DbUsername = Configuration["DbUsername"],
+                    DbPassword = Configuration["DbPassword"],
+                    DbHost = Configuration["DbHost"],
+                    DbDatabase = Configuration["DbDatabase"]
+                };
+            
+                var connectionString = MartenDbRepository.BuildConnectionString(dbSettingsFromSecrets);
+                return DocumentStore.For((s) =>
+                {
+                    s.Connection(connectionString);
+            
+                    s.Schema.For<UserWishlists>().Identity(s => s.Email);
+                });
+                //
+            }));
+            services.AddScoped<IWishlistRepository, MartenDbRepository>();
+            // services.AddSingleton<IWishlistRepository>(new Func<IServiceProvider, IWishlistRepository>(s => new InMemoryWishlistRepository()));
             
             // services.AddOpenApiDocument();
             services.AddSwaggerDocument();

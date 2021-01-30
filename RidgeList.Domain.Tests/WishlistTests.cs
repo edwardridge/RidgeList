@@ -95,7 +95,7 @@ namespace RidgeList.Domain.Tests
             var emailOfCreator = "a@b.com";
             
             var wishlist = Wishlist.Create("Eds test wishlist", emailOfCreator, "Ed");
-            wishlist.AddPresentIdea(emailOfCreator, "My first present");
+            wishlist.AddGiftIdea(emailOfCreator, "My first present");
 
             var person = wishlist.GetPerson(emailOfCreator);
 
@@ -109,9 +109,9 @@ namespace RidgeList.Domain.Tests
             var emailOfCreator = "a@b.com";
             
             var wishlist = Wishlist.Create("Eds test wishlist", emailOfCreator, "Ed");
-            wishlist.AddPresentIdea(emailOfCreator, "My first present");
+            wishlist.AddGiftIdea(emailOfCreator, "My first present");
             var present = wishlist.GetPerson(emailOfCreator).PresentIdeas.Single();
-            wishlist.RemovePresentIdea(emailOfCreator, present.Id);
+            wishlist.RemoveGiftIdea(emailOfCreator, present.Id);
             
             var person = wishlist.GetPerson(emailOfCreator);
 
@@ -131,7 +131,7 @@ namespace RidgeList.Domain.Tests
                     .Build();
             
             var presentIdea = wishlist.GetPerson(emailOfCreator).PresentIdeas.Single();
-            wishlist.ClaimPresent(presentIdea.Id, emailOfCreator);
+            wishlist.ClaimGift(presentIdea.Id, emailOfCreator);
 
             presentIdea.Claimer.Should().Be(emailOfCreator);
         }

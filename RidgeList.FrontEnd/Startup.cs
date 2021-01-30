@@ -13,6 +13,7 @@ using RidgeList.Postgres;
 using Google.Cloud.SecretManager.V1;
 using System.Linq;
 using Marten;
+using MediatR;
 
 namespace RidgeList.FrontEnd
 {
@@ -40,8 +41,8 @@ namespace RidgeList.FrontEnd
                     DbHost = Configuration["DbHost"],
                     DbDatabase = Configuration["DbDatabase"]
                 };
-            
-                var connectionString = MartenDbRepository.BuildConnectionString(dbSettingsFromSecrets);
+                var useSsl = Configuration["ASPNETCORE_ENVIRONMENT"] != "Development";
+                var connectionString = MartenDbRepository.BuildConnectionString(dbSettingsFromSecrets, useSsl);
                 return DocumentStore.For((s) =>
                 {
                     s.Connection(connectionString);
@@ -55,6 +56,8 @@ namespace RidgeList.FrontEnd
             
             // services.AddOpenApiDocument();
             services.AddSwaggerDocument();
+            
+            services.AddMediatR(typeof(Startup), typeof(Wishlist));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

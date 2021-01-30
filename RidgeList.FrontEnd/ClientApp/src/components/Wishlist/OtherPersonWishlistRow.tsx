@@ -15,13 +15,13 @@ export const OtherPersonWishlistRow = (props : OtherPersonWishlistRowProps) => {
     
     let claimPresentClick = async (presentId : string) => {
         let wishlist = await wishlistClient
-            .claimPresent(props.wishlistId, props.loggedInEmail, presentId);
+            .claimGift(props.wishlistId, props.loggedInEmail, presentId);
         props.setWishlist(wishlist);
     }
 
     let unclaimPresentClick = async (presentId : string) => {
         let wishlist = await wishlistClient
-            .unclaimPresent(props.wishlistId, presentId);
+            .unclaimGift(props.wishlistId, presentId);
         props.setWishlist(wishlist);
     }
     let getPresentIdeas = () => {

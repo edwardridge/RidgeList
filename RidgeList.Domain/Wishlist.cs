@@ -68,7 +68,7 @@ namespace RidgeList.Domain
             this.People.Single(s => s.Email == email).Name = newName;
         }
 
-        public void AddPresentIdea(string email, string present)
+        public void AddGiftIdea(string email, string present)
         {
             this.GetPerson(email)?.AddPresentIdea(present);
         }
@@ -78,7 +78,7 @@ namespace RidgeList.Domain
             return this.People.SingleOrDefault(s => s.Email == email);
         }
 
-        public void ClaimPresent(Guid presentId, string emailOfClaimer)
+        public void ClaimGift(Guid presentId, string emailOfClaimer)
         {
             this.People.SelectMany(s => s.PresentIdeas).First(s => s.Id == presentId).Claimer = emailOfClaimer;
         }
@@ -88,7 +88,7 @@ namespace RidgeList.Domain
             this.People.SelectMany(s => s.PresentIdeas).First(s => s.Id == presentId).Claimer = null;
         }
 
-        public void RemovePresentIdea(string emailOfCreator, Guid presentId)
+        public void RemoveGiftIdea(string emailOfCreator, Guid presentId)
         {
             var present = this.GetPerson(emailOfCreator).PresentIdeas.Single(s => s.Id == presentId);
             this.GetPerson(emailOfCreator).PresentIdeas.Remove(present);

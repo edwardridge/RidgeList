@@ -24,14 +24,11 @@ namespace RidgeList.Postgres
     {
         private IDocumentStore documentStore;
 
-        //public static string BuildConnectionString(string username, string password, string host, string database)
-        //{
-        //    return @$"Username={username};Password={password};Host={host};Port=5432;Database={database}";
-        //}
-        
-        public static string BuildConnectionString(DbSettings dbSettingsFromSecrets)
+        public static string BuildConnectionString(DbSettings dbSettingsFromSecrets, bool useSsl)
         {
-            return @$"Username={dbSettingsFromSecrets.DbUsername};Password={dbSettingsFromSecrets.DbPassword};Host={dbSettingsFromSecrets.DbHost};Port=5432;Database={dbSettingsFromSecrets.DbDatabase};sslmode=Require;Trust Server Certificate=true;";
+            var useSslString = useSsl ? ";sslmode=Require;Trust Server Certificate=true;" : "";
+            var buildConnectionString = @$"Username={dbSettingsFromSecrets.DbUsername};Password={dbSettingsFromSecrets.DbPassword};Host={dbSettingsFromSecrets.DbHost};Port=5432;Database={dbSettingsFromSecrets.DbDatabase}{useSslString}";
+            return buildConnectionString;
         }
 
         public MartenDbRepository(IDocumentStore documentStore)
@@ -62,7 +59,7 @@ namespace RidgeList.Postgres
         {
             using (var session = documentStore.OpenSession())
             {
-                return session.Load<Wishlist>(id);
+                return await session.LoadAsync<Wishlist>(id);
             }
         }
 

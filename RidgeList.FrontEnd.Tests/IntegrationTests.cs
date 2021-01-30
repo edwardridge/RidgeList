@@ -14,44 +14,26 @@ using RidgeList.Postgres;
 
 namespace RidgeList.FrontEnd.Tests
 {
-    public class TestWebApplicationFactory : WebApplicationFactory<RidgeList.FrontEnd.Startup>
-    {
-        protected override void ConfigureWebHost(IWebHostBuilder builder)
-        {
-            builder.ConfigureServices(s =>
-            {
-                var docStore = s.SingleOrDefault(s => s.ServiceType == typeof(IDocumentStore));
-                s.Remove(docStore);
-                
-                var martenRepository = s.SingleOrDefault(s => s.ServiceType == typeof(MartenDbRepository));
-                s.Remove(martenRepository);
-                
-                s.Add((new ServiceDescriptor(typeof(IWishlistRepository), new InMemoryWishlistRepository())));
-            });
-        }
-    }
-    
     public class FrontEndTests
     {
-        private readonly TestWebApplicationFactory _factory;
+        private readonly WebApplicationFactory<RidgeList.FrontEnd.Startup> _factory;
+        private InMemoryWishlistRepository inMemoryRepository;
+        private HttpClient client;
 
         public FrontEndTests()
         {
-            _factory = new TestWebApplicationFactory();
+            _factory = new WebApplicationFactory<RidgeList.FrontEnd.Startup>();
         }
-        [Test]
-        public async Task Test_Wishlist()
+
+        [SetUp]
+        public void Setup()
         {
-            var inMemoryRepository = new InMemoryWishlistRepository();
-            var client = _factory
+            this.inMemoryRepository = new InMemoryWishlistRepository();
+            this.client = _factory
                 .WithWebHostBuilder(t =>
                 {
                     t.ConfigureServices(s =>
                     {
-                        // var docStore = s.SingleOrDefault(s => s.ServiceType == typeof(IDocumentStore));
-                        // s.Remove(docStore);
-                        //
-                        // var martenRepository = s.Where(s => s.ServiceType == typeof(IWishlistRepository));
                         s.RemoveAll(typeof(IDocumentStore));
                         s.RemoveAll(typeof(IWishlistRepository));
 
@@ -62,14 +44,28 @@ namespace RidgeList.FrontEnd.Tests
                 {
                     AllowAutoRedirect = false
                 });
-
-            // Act
+        }
+        
+        [Test]
+        public async Task Test_Create_Wishlist()
+        {
             var response = await client.PostAsync("/wishlist/create?nameOfWishlist=TestWIshlist&emailOfCreator=ed&nameOfCreator=ed&creatorIsGiftee=true", new StringContent(""));
 
-            // Assert
-            response.EnsureSuccessStatusCode();
             inMemoryRepository._wishlists.Count.Should().BeGreaterThan(0);
             inMemoryRepository._wishlists.Single().Value.Creator.Should().Be("ed");
+        }
+        
+        [Test]
+        public async Task Test_AddPerson_Wishlist()
+        {
+            var wishlist = Wishlist.Create("a", "b", "c", true);
+            await this.inMemoryRepository.Save(wishlist);
+            
+            var response = await client.PostAsync($"/wishlist/addPerson?wishlistId={wishlist.Id.ToString()}&name=Ed&email=ed&isGiftee=true", new StringContent(""));
+
+            response.EnsureSuccessStatusCode();
+            inMemoryRepository._wishlists.Count.Should().BeGreaterThan(0);
+            inMemoryRepository._wishlists.Single().Value.People.Count.Should().Be(2);
         }
     }
 }

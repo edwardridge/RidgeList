@@ -18,7 +18,7 @@ export const WishlistPersonRow = (props : WishlistPersonRowProps) => {
     const wishlistClient = useWishlistClient();
     
     let clickAddItem = async (closeAddItem: boolean) => {
-        let wishlist = await wishlistClient.addPresentIdea(props.wishlistId, props.loginDetails.Email, newItemDescription);
+        let wishlist = await wishlistClient.addGiftIdea(props.wishlistId, props.loginDetails.Email, newItemDescription);
         props.setWishlist(wishlist);
         setNewItemDescription("");
         if (closeAddItem)
@@ -26,7 +26,7 @@ export const WishlistPersonRow = (props : WishlistPersonRowProps) => {
     }
 
     let removePresentIdea = async (id: string) => {
-        let wishlist = await wishlistClient.removePresentIdea(props.wishlistId, props.loginDetails.Email, id);
+        let wishlist = await wishlistClient.removeGiftIdea(props.wishlistId, props.loginDetails.Email, id);
         props.setWishlist(wishlist);
     }
 

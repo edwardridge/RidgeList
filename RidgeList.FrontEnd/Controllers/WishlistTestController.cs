@@ -23,7 +23,7 @@ namespace RidgeList.FrontEnd.Controllers
         public async Task<Guid> CreateTestWishlist([FromBody] CreateWishlistRequestModel req)
         {
             var wishlist = Wishlist.Create("[Test] " + req.title, testEmailAccount, "Test");
-           _repository.Save(wishlist);
+           await _repository.Save(wishlist);
            return wishlist.Id;
         }
 

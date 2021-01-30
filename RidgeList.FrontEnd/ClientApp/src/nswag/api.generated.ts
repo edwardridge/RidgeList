@@ -139,9 +139,11 @@ export class WishlistClient {
         return Promise.resolve<WishlistModel>(<any>null);
     }
 
-    addPerson(wishlistId: string | null | undefined, email: string | null | undefined, name: string | null | undefined, isGiftee: boolean | undefined): Promise<WishlistModel> {
+    addPerson(wishlistId: string | undefined, email: string | null | undefined, name: string | null | undefined, isGiftee: boolean | undefined): Promise<WishlistModel> {
         let url_ = this.baseUrl + "/Wishlist/addPerson?";
-        if (wishlistId !== undefined && wishlistId !== null)
+        if (wishlistId === null)
+            throw new Error("The parameter 'wishlistId' cannot be null.");
+        else if (wishlistId !== undefined)
             url_ += "wishlistId=" + encodeURIComponent("" + wishlistId) + "&";
         if (email !== undefined && email !== null)
             url_ += "email=" + encodeURIComponent("" + email) + "&";
@@ -182,9 +184,11 @@ export class WishlistClient {
         return Promise.resolve<WishlistModel>(<any>null);
     }
 
-    addPresentIdea(wishlistId: string | null | undefined, email: string | null | undefined, description: string | null | undefined): Promise<WishlistModel> {
-        let url_ = this.baseUrl + "/Wishlist/addPresentIdea?";
-        if (wishlistId !== undefined && wishlistId !== null)
+    addGiftIdea(wishlistId: string | undefined, email: string | null | undefined, description: string | null | undefined): Promise<WishlistModel> {
+        let url_ = this.baseUrl + "/Wishlist/addGiftIdea?";
+        if (wishlistId === null)
+            throw new Error("The parameter 'wishlistId' cannot be null.");
+        else if (wishlistId !== undefined)
             url_ += "wishlistId=" + encodeURIComponent("" + wishlistId) + "&";
         if (email !== undefined && email !== null)
             url_ += "email=" + encodeURIComponent("" + email) + "&";
@@ -200,11 +204,11 @@ export class WishlistClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processAddPresentIdea(_response);
+            return this.processAddGiftIdea(_response);
         });
     }
 
-    protected processAddPresentIdea(response: Response): Promise<WishlistModel> {
+    protected processAddGiftIdea(response: Response): Promise<WishlistModel> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -221,13 +225,17 @@ export class WishlistClient {
         return Promise.resolve<WishlistModel>(<any>null);
     }
 
-    removePresentIdea(wishlistId: string | null | undefined, email: string | null | undefined, presentId: string | null | undefined): Promise<WishlistModel> {
-        let url_ = this.baseUrl + "/Wishlist/removePresentIdea?";
-        if (wishlistId !== undefined && wishlistId !== null)
+    removeGiftIdea(wishlistId: string | undefined, email: string | null | undefined, presentId: string | undefined): Promise<WishlistModel> {
+        let url_ = this.baseUrl + "/Wishlist/removeGiftIdea?";
+        if (wishlistId === null)
+            throw new Error("The parameter 'wishlistId' cannot be null.");
+        else if (wishlistId !== undefined)
             url_ += "wishlistId=" + encodeURIComponent("" + wishlistId) + "&";
         if (email !== undefined && email !== null)
             url_ += "email=" + encodeURIComponent("" + email) + "&";
-        if (presentId !== undefined && presentId !== null)
+        if (presentId === null)
+            throw new Error("The parameter 'presentId' cannot be null.");
+        else if (presentId !== undefined)
             url_ += "presentId=" + encodeURIComponent("" + presentId) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -239,11 +247,11 @@ export class WishlistClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processRemovePresentIdea(_response);
+            return this.processRemoveGiftIdea(_response);
         });
     }
 
-    protected processRemovePresentIdea(response: Response): Promise<WishlistModel> {
+    protected processRemoveGiftIdea(response: Response): Promise<WishlistModel> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -260,13 +268,17 @@ export class WishlistClient {
         return Promise.resolve<WishlistModel>(<any>null);
     }
 
-    claimPresent(wishlistId: string | null | undefined, email: string | null | undefined, presentId: string | null | undefined): Promise<WishlistModel> {
-        let url_ = this.baseUrl + "/Wishlist/claimPresent?";
-        if (wishlistId !== undefined && wishlistId !== null)
+    claimGift(wishlistId: string | undefined, email: string | null | undefined, presentId: string | undefined): Promise<WishlistModel> {
+        let url_ = this.baseUrl + "/Wishlist/claimGift?";
+        if (wishlistId === null)
+            throw new Error("The parameter 'wishlistId' cannot be null.");
+        else if (wishlistId !== undefined)
             url_ += "wishlistId=" + encodeURIComponent("" + wishlistId) + "&";
         if (email !== undefined && email !== null)
             url_ += "email=" + encodeURIComponent("" + email) + "&";
-        if (presentId !== undefined && presentId !== null)
+        if (presentId === null)
+            throw new Error("The parameter 'presentId' cannot be null.");
+        else if (presentId !== undefined)
             url_ += "presentId=" + encodeURIComponent("" + presentId) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -278,11 +290,11 @@ export class WishlistClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processClaimPresent(_response);
+            return this.processClaimGift(_response);
         });
     }
 
-    protected processClaimPresent(response: Response): Promise<WishlistModel> {
+    protected processClaimGift(response: Response): Promise<WishlistModel> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -299,11 +311,15 @@ export class WishlistClient {
         return Promise.resolve<WishlistModel>(<any>null);
     }
 
-    unclaimPresent(wishlistId: string | null | undefined, presentId: string | null | undefined): Promise<WishlistModel> {
-        let url_ = this.baseUrl + "/Wishlist/unclaimPresent?";
-        if (wishlistId !== undefined && wishlistId !== null)
+    unclaimGift(wishlistId: string | undefined, presentId: string | undefined): Promise<WishlistModel> {
+        let url_ = this.baseUrl + "/Wishlist/unclaimGift?";
+        if (wishlistId === null)
+            throw new Error("The parameter 'wishlistId' cannot be null.");
+        else if (wishlistId !== undefined)
             url_ += "wishlistId=" + encodeURIComponent("" + wishlistId) + "&";
-        if (presentId !== undefined && presentId !== null)
+        if (presentId === null)
+            throw new Error("The parameter 'presentId' cannot be null.");
+        else if (presentId !== undefined)
             url_ += "presentId=" + encodeURIComponent("" + presentId) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -315,11 +331,11 @@ export class WishlistClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUnclaimPresent(_response);
+            return this.processUnclaimGift(_response);
         });
     }
 
-    protected processUnclaimPresent(response: Response): Promise<WishlistModel> {
+    protected processUnclaimGift(response: Response): Promise<WishlistModel> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {

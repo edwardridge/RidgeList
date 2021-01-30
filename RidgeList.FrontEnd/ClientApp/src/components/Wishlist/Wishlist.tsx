@@ -100,43 +100,52 @@ interface Props extends RouteComponentProps<WishlistProps> {
         )
         
         let listOfOtherPeoplesIdeas = (
-            
-            <div className='wishlistSummaries' cypress-name="ListOfPeople">
-                {
-                    otherGiftees?.map((s) => 
-                        <OtherPersonWishlistRow 
-                            cypress-name='WishlistPerson'
-                            key={s.email} 
-                            wishlistPerson={s} 
-                            wishlistId={wishlist?.id} 
-                            loggedInEmail={login.Email}
-                            setWishlist={setWishlist}></OtherPersonWishlistRow> )
-                }
-            </div>)
+            <>
+                <h4 className='text-center mt-4'>Other giftees wishlists</h4>
+                <div className='wishlistSummaries' cypress-name="ListOfPeople">
+                    {
+                        otherGiftees?.map((s) => 
+                            <OtherPersonWishlistRow 
+                                cypress-name='WishlistPerson'
+                                key={s.email} 
+                                wishlistPerson={s} 
+                                wishlistId={wishlist?.id} 
+                                loggedInEmail={login.Email}
+                                setWishlist={setWishlist}></OtherPersonWishlistRow> )
+                    }
+                </div>
+            </>)
+        
+        let otherNonGifteeSection = <>
+            <h4 className='text-center mt-4'>Non gift receivers</h4>
+            <table className='table'>
+                {otherNonGiftees?.map(nonGiftee => {
+                    return <tr key={nonGiftee.email}>
+                        <td>{nonGiftee.name}</td>
+                    </tr>;
+                })}
+            </table>
+        </>
+        
+        let addNewItems = <>
+            <h1 className='text-center' id="wishlistTitle">Wishlist - {wishlist.name}</h1>
+
+            <div>
+                <h4 className='text-center mt-4'>What would you like?</h4>
+                <WishlistPersonRow cypress-name='WishlistPerson' wishlistPerson={loggedInWishlist} wishlistId={wishlist.id} setWishlist={setWishlist} loginDetails={login}></WishlistPersonRow>
+            </div>
+        </>
         
         return (
             <div>
-                <h1 className='text-center' id="wishlistTitle">Wishlist - {wishlist.name}</h1>
+                {loggedInWishlist.giftee ? addNewItems : <></>}
+                <div className='mt-5'>
+                    {otherGiftees?.length ?? 0 > 0 ? listOfOtherPeoplesIdeas : <></>}
+                </div>
+                <div className='mt-5'>
+                    {otherNonGiftees?.length ?? 0 > 0 ? otherNonGifteeSection : <></>}
+                </div>
                 
-                <div>
-                    <h4 className='text-center mt-4'>What would you like?</h4>
-                    <WishlistPersonRow cypress-name='WishlistPerson' wishlistPerson={loggedInWishlist} wishlistId={wishlist.id} setWishlist={setWishlist} loginDetails={login}></WishlistPersonRow>
-                </div>
-                <div className='mt-5'>
-                    <h4 className='text-center mt-4'>Other giftees wishlists</h4>
-                    
-                    {listOfOtherPeoplesIdeas}
-                </div>
-                <div className='mt-5'>
-                    <h4 className='text-center mt-4'>Non gift receivers</h4>
-                    <table className='table'>
-                    {otherNonGiftees?.map(nonGiftee => {
-                        return <tr key={nonGiftee.email}>
-                            <td>{nonGiftee.name}</td>
-                        </tr>;
-                    })}
-                    </table>
-                </div>
                 <div className='mt-5'> {createNewPerson}</div>
             </div>
         )

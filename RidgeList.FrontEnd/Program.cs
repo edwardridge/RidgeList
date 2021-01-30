@@ -23,7 +23,6 @@ namespace RidgeList.FrontEnd
             .ConfigureAppConfiguration((hostContext, builder) =>
             {
                 var isDev = hostContext.HostingEnvironment.IsDevelopment();
-                //if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS"))){
                 if (!isDev)
                 {
                     var config = builder.Build();

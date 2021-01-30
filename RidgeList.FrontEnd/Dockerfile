@@ -1,6 +1,11 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
 FROM mcr.microsoft.com/dotnet/aspnet:5.0-buster-slim AS base
+
+# https://github.com/GoogleCloudPlatform/google-cloud-dotnet-powerpack/issues/22
+RUN apt-get update
+RUN apt-get install -y libc-dev
+
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
@@ -12,9 +17,6 @@ RUN apt-get update
 RUN apt-get -y install gnupg2
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
 RUN apt-get install -y nodejs
-
-# https://github.com/GoogleCloudPlatform/google-cloud-dotnet-powerpack/issues/22
-RUN apt-get install -y libc-dev
 
 WORKDIR /src
 COPY ["RidgeList.FrontEnd/RidgeList.FrontEnd.csproj", "RidgeList.FrontEnd/"]

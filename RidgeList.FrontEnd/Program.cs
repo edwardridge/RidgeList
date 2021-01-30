@@ -20,24 +20,24 @@ namespace RidgeList.FrontEnd
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-            // .ConfigureAppConfiguration((hostContext, builder) =>
-            // {
-            //     //if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS"))){
-            //     //if (hostContext.HostingEnvironment.IsDevelopment())
-            //     //{
-            //     var f = builder.Build();
-            //     var projectId = f["GoogleProject"];
-            //     var secretName = f["GoogleSecretName"];
-            //     var dbSettings = GetDbSettingsFromSecrets(projectId, secretName);
-            //     builder.AddInMemoryCollection(new Dictionary<string, string>() 
-            //     {
-            //         { nameof(dbSettings.DbDatabase), dbSettings.DbDatabase },
-            //         { nameof(dbSettings.DbUsername), dbSettings.DbUsername },
-            //         { nameof(dbSettings.DbPassword), dbSettings.DbPassword },
-            //         { nameof(dbSettings.DbHost), dbSettings.DbHost },
-            //     });
-            //     //}
-            // })
+            .ConfigureAppConfiguration((hostContext, builder) =>
+            {
+                //if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS"))){
+                //if (hostContext.HostingEnvironment.IsDevelopment())
+                //{
+                var f = builder.Build();
+                var projectId = f["GoogleProject"];
+                var secretName = f["GoogleSecretName"];
+                var dbSettings = GetDbSettingsFromSecrets(projectId, secretName);
+                builder.AddInMemoryCollection(new Dictionary<string, string>() 
+                {
+                    { nameof(dbSettings.DbDatabase), dbSettings.DbDatabase },
+                    { nameof(dbSettings.DbUsername), dbSettings.DbUsername },
+                    { nameof(dbSettings.DbPassword), dbSettings.DbPassword },
+                    { nameof(dbSettings.DbHost), dbSettings.DbHost },
+                });
+                //}
+            })
             .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
 
 

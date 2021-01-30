@@ -31,6 +31,7 @@ WORKDIR "/src/RidgeList.FrontEnd"
 RUN dotnet build "RidgeList.FrontEnd.csproj" -c Release -o /app/build
 
 RUN dotnet test "../RidgeList.Domain.Tests/RidgeList.Domain.Tests.csproj"
+RUN dotnet test "../RidgeList.FrontEnd.Tests/RidgeList.FrontEnd.Tests.csproj"
 
 FROM build AS publish
 RUN dotnet publish "RidgeList.FrontEnd.csproj" -c Release -o /app/publish

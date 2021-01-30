@@ -8,7 +8,7 @@ namespace RidgeList.Domain
     
     public class InMemoryWishlistRepository : IWishlistRepository
     {
-        private Dictionary<Guid, Wishlist> _wishlists;
+        public Dictionary<Guid, Wishlist> _wishlists;
 
         public InMemoryWishlistRepository()
         {

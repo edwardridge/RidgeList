@@ -14,6 +14,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RidgeList.Postgres.Tests", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RidgeList.Models", "RidgeList.Models\RidgeList.Models.csproj", "{CB294339-460E-45BF-9EAD-83E9F2B8A344}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GithubActions", "GithubActions", "{8B1E94C9-2953-4DD2-908B-EEF1A642AD64}"
+ProjectSection(SolutionItems) = preProject
+	.github\workflows\githubactions-build.yml = .github\workflows\githubactions-build.yml
+EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

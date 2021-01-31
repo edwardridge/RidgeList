@@ -64,15 +64,15 @@ export const WishlistPersonRow = (props : WishlistPersonRowProps) => {
             <div className='mt-2'>
                 
                 <Button variant="outline-primary" size='lg' cypress-name='AddNewItemButton' className='w-100' onClick={clickNewItemButton}>
-                    Add New Item
+                    Add New Gift Idea
                 </Button>
 
                 <Modal show={showAddItem} onHide={onClickCancelAddItem}>
                     <Modal.Header closeButton>
-                        <Modal.Title>Add New Item</Modal.Title>
+                        <Modal.Title>Add New Gift Idea</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <textarea ref={inputRef} className='form-control w-100' value={newItemDescription} onChange={(event) => { setNewItemDescription(event.target.value) }} placeholder='What would you like?' cypress-name='AddItem'></textarea>
+                        <textarea ref={inputRef} rows={8} className='form-control w-100' value={newItemDescription} onChange={(event) => { setNewItemDescription(event.target.value) }} placeholder='What would you like? You can also include links!' cypress-name='AddItem'></textarea>
                     </Modal.Body>
                     <Modal.Footer>
                         <Button size='lg' block={true} variant="primary" onClick={() => { clickAddItem(false) }}>
@@ -93,7 +93,7 @@ export const WishlistPersonRow = (props : WishlistPersonRowProps) => {
    
     return (
         
-        <div className='' key={`${props.wishlistPerson.email}`}>
+        <div className='mt-4' key={`${props.wishlistPerson.email}`}>
             {addItems}
         </div>
     )

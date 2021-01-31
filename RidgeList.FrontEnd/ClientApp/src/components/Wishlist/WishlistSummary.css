@@ -82,3 +82,7 @@ a .newItem input{
     border: none;
     color: #155724;
 }
+
+.bigLine{
+    border: 1px dashed #aaa;
+}

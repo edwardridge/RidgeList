@@ -108,6 +108,7 @@ interface Props extends RouteComponentProps<WishlistProps> {
         
         let listOfOtherPeoplesIdeas = (
             <>
+                <hr className='bigLine'></hr>
                 <h3 className='text-center mt-4'>Other people's gift ideas</h3>
                 <div className='wishlistSummaries' cypress-name="ListOfPeople">
                     {
@@ -124,6 +125,7 @@ interface Props extends RouteComponentProps<WishlistProps> {
             </>)
         
         let otherNonGifteeSection = <>
+            <hr className='bigLine'></hr>
             <h3 className='text-center mt-4'>Gift givers</h3>
             <table className='table'>
                 {otherNonGiftees?.map(nonGiftee => {
@@ -146,10 +148,11 @@ interface Props extends RouteComponentProps<WishlistProps> {
         return (
             <div>
                 {loggedInWishlist.giftee ? addNewItems : <></>}
-                <div className='mt-5'>
+                
+                <div>
                     {otherGiftees?.length ?? 0 > 0 ? listOfOtherPeoplesIdeas : <></>}
                 </div>
-                <div className='mt-5'>
+                <div>
                     {otherNonGiftees?.length ?? 0 > 0 ? otherNonGifteeSection : <></>}
                 </div>
                 

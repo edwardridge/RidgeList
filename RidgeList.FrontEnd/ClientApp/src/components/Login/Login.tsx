@@ -20,7 +20,7 @@ export const Login : React.FC<any> = (props) => {
         setLogin(loginEmail, loginName);
         history.push('/wishlists');
     }
-    
+     
     return (
         <div className='loginWrapper '>
             <h5>Welcome to RidgeList! To login, please enter your name and email address - note that the wishlists are linked to your email address.</h5>

@@ -71,11 +71,11 @@ export const WishlistHomepage = (props : WishlishHomepageProps) => {
                 </div>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" size='lg' onClick={onClickCancel}>
-                    Close
-                </Button>
-                <Button variant="primary" size='lg' cypress-name='Create' onClick={onClickCreate}>
+                <Button block={true} variant="primary" size='lg' cypress-name='Create' onClick={onClickCreate}>
                     Create
+                </Button>
+                <Button block={true} variant="secondary" size='lg' onClick={onClickCancel}>
+                    Close
                 </Button>
             </Modal.Footer>
         </Modal>

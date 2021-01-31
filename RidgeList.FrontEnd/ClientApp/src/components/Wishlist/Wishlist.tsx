@@ -95,11 +95,11 @@ interface Props extends RouteComponentProps<WishlistProps> {
                         </div>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="secondary" size='lg' onClick={onCLickCancelAddNewPerson}>
-                        Close
-                        </Button>
-                        <Button variant="primary" size='lg' disabled={addingNewPersonButtonDisabled} onClick={createNewPersonClick} cypress-name='CreateNewPerson'>
+                        <Button variant="primary" block={true} size='lg' disabled={addingNewPersonButtonDisabled} onClick={createNewPersonClick} cypress-name='CreateNewPerson'>
                         Add
+                        </Button>
+                        <Button variant="secondary" block={true} size='lg' onClick={onCLickCancelAddNewPerson}>
+                            Close
                         </Button>
                     </Modal.Footer>
                 </Modal>
@@ -108,7 +108,7 @@ interface Props extends RouteComponentProps<WishlistProps> {
         
         let listOfOtherPeoplesIdeas = (
             <>
-                <h3 className='text-center mt-4'>Other giftees wishlists</h3>
+                <h3 className='text-center mt-4'>Other people's gift ideas</h3>
                 <div className='wishlistSummaries' cypress-name="ListOfPeople">
                     {
                         otherGiftees?.map((s) => 
@@ -124,7 +124,7 @@ interface Props extends RouteComponentProps<WishlistProps> {
             </>)
         
         let otherNonGifteeSection = <>
-            <h3 className='text-center mt-4'>Non gift receivers</h3>
+            <h3 className='text-center mt-4'>Gift givers</h3>
             <table className='table'>
                 {otherNonGiftees?.map(nonGiftee => {
                     return <tr key={nonGiftee.email}>

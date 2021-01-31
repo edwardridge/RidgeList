@@ -31,12 +31,12 @@ export const OtherPersonWishlistRow = (props : OtherPersonWishlistRowProps) => {
         return props.wishlistPerson.presentIdeas?.map(s => {
             let claimed = s.claimerEmail !== null && s.claimerEmail !== '';
             let claimedByYou = s.claimerEmail === props.loggedInEmail;
-            let unclaim = claimedByYou ? <button className='btn btn-outline-danger w-100'
+            let unclaim = claimedByYou ? <button className='btn btn-lg btn-outline-danger w-100'
                                                  onClick={() => unclaimPresentClick(s.id)}>Unclaim</button> : null;
             let claimerText = claimed ? `- claimed by ${claimedByYou ? "you" : s.claimerName}` : '';
             let claimSection = s.claimerName ?
                 <>{unclaim}</> :
-                <button className='btn btn-outline-success w-100'
+                <button className='btn btn-lg btn-outline-success w-100'
                         onClick={() => claimPresentClick(s.id)}>Claim</button>;
 
             let classes = `mt-1 ml-0 mr-0 row ${claimed ? 'claimed' : ''}`;

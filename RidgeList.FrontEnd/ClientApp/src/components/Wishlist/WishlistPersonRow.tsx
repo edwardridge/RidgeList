@@ -46,18 +46,20 @@ export const WishlistPersonRow = (props : WishlistPersonRowProps) => {
     }
 
     let addItems = (
-        <>
+        <div className='loggedInPersonGifts'>
             
-            <table className='table'>
+            <table className='table '>
+                <tbody>
                 {props.wishlistPerson.presentIdeas?.map(s => {
                     return (
-                        <tr className='row mt-2' key={s.id}>
+                        <tr className='row' key={s.id}>
                             <td className='col-8 col-md-10'><Linkify>{s.description}</Linkify></td>
                             <td className='col-4 col-md-2'>
                                 <button className='btn btn-outline-danger w-100 btn-lg' onClick={() => removePresentIdea(s.id)}>Remove</button>
                             </td>
                         </tr>)
                 })}
+                </tbody>
             </table>
             <div className='mt-2'>
                 
@@ -73,20 +75,20 @@ export const WishlistPersonRow = (props : WishlistPersonRowProps) => {
                         <textarea ref={inputRef} className='form-control w-100' value={newItemDescription} onChange={(event) => { setNewItemDescription(event.target.value) }} placeholder='What would you like?' cypress-name='AddItem'></textarea>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button size='lg' variant="secondary" onClick={onClickCancelAddItem}>
-                            Close
-                        </Button>
-                        <Button size='lg' variant="primary" onClick={() => { clickAddItem(false) }}>
+                        <Button size='lg' block={true} variant="primary" onClick={() => { clickAddItem(false) }}>
                             Save And Add More
                         </Button>
-                        <Button size='lg' variant="primary" cypress-name='SaveItemButton' onClick={() => { clickAddItem(true) }}>
+                        <Button size='lg' block={true} variant="primary" cypress-name='SaveItemButton' onClick={() => { clickAddItem(true) }}>
                             Save And Close
+                        </Button>
+                        <Button size='lg' block={true} variant="secondary" onClick={onClickCancelAddItem}>
+                            Close
                         </Button>
                     </Modal.Footer>
                 </Modal>
                 
             </div>
-    </>
+    </div>
     );
    
     return (

@@ -1,4 +1,9 @@
 @import "../../styles/globalVars.css";
+
+body{
+    font-size: larger;
+}
+
 .wishlistSummaries{
     margin-top: 20px;
     border: 1px solid var(--listBackgroundBorderColor);
@@ -58,4 +63,22 @@ a .newItem input{
 
 .claimed{
     text-decoration: line-through;
+}
+
+.loggedInPersonGifts{
+    border: 1px solid #000000;
+    padding: 10px;
+    border-radius: 10px;
+
+}
+
+.loggedInPersonGifts table td {
+    border: none;
+}
+
+.loggedInPersonGifts tr{
+    margin-left: 0;
+    margin-right: 0;
+    border: none;
+    color: #155724;
 }

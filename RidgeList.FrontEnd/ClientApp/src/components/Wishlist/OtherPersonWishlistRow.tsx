@@ -54,8 +54,7 @@ export const OtherPersonWishlistRow = (props : OtherPersonWishlistRowProps) => {
         <div className='wishlistSummaryItem mb-3' key={`${props.wishlistPerson.email}`}>
             <div>
                 <span className='d-inline-block col-12 text-center'>
-                    {props.wishlistPerson.name}
-                    <span className='emailDetails'> ({props.wishlistPerson.email})</span>
+                    <h4>{props.wishlistPerson.name}</h4>
                 </span>
             </div>
             <table className='table'>

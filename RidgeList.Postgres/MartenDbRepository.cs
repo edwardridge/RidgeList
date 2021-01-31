@@ -21,7 +21,8 @@ namespace RidgeList.Postgres
         {
             using (var session = documentStore.OpenSession())
             {
-                return (await session.LoadAsync<UserWishlists>(emailAddress)).Wishlists;
+                var userWishlists = await session.LoadAsync<UserWishlists>(emailAddress);
+                return userWishlists?.Wishlists ?? new Guid[0].ToList();
             }
         }
 

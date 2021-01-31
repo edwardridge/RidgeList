@@ -39,6 +39,10 @@ namespace RidgeList.FrontEnd.Controllers
                 var wishlist = await _repository.Load(summary);
                 if (wishlist.Name.Contains("[Test]"))
                 {
+                    foreach (var p in wishlist.People)
+                    {
+                        await _wishlistSummaryRepository.RemoveWishlistFromPerson(p.Email, wishlist.Id);
+                    }
                     await _repository.Delete(wishlist.Id);
                 }
             }

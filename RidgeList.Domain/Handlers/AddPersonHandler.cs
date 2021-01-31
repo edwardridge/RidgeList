@@ -1,4 +1,6 @@
 using System;
+using System.Threading.Tasks;
+using MediatR;
 
 namespace RidgeList.Domain.Handlers
 {
@@ -6,13 +8,14 @@ namespace RidgeList.Domain.Handlers
     
     public class AddPersonHandler : EditWishlistHandlerBase<AddPersonCommand>
     {
-        public AddPersonHandler(IWishlistRepository repository) : base(repository)
+        public AddPersonHandler(IWishlistRepository repository, IMediator mediator) : base(repository, mediator)
         {
         }
 
-        public override void EditWishlist(AddPersonCommand command, Wishlist wishlist)
+        public override async Task EditWishlist(AddPersonCommand command, Wishlist wishlist)
         {
             wishlist.AddPerson(command.Name, command.Email, command.IsGiftee);
+            await this._mediator.Publish(new PersonAddedToWishlist(command.Email, wishlist.Id));
         }
     }
 }

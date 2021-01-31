@@ -13,10 +13,12 @@ namespace RidgeList.Domain.Handlers
     public abstract class EditWishlistHandlerBase<T> : IRequestHandler<T, Wishlist> where T : IEditWishlistCommand
     {
         private readonly IWishlistRepository _repository;
+        protected readonly IMediator _mediator;
 
-        public EditWishlistHandlerBase(IWishlistRepository repository)
+        public EditWishlistHandlerBase(IWishlistRepository repository, IMediator mediator)
         {
             _repository = repository;
+            _mediator = mediator;
         }
         
         public async Task<Wishlist> Handle(T command, CancellationToken cancellationToken)
@@ -28,6 +30,6 @@ namespace RidgeList.Domain.Handlers
             return wishlist;
         }
 
-        public abstract void EditWishlist(T command, Wishlist wishlist);
+        public abstract Task EditWishlist(T command, Wishlist wishlist);
     }
 }

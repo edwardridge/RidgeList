@@ -5,6 +5,42 @@ using System.Threading.Tasks;
 
 namespace RidgeList.Domain
 {
+    public interface IWishlistSummaryRepository
+    {
+        Task<IEnumerable<Guid>> GetWishlistSummaries(string emailAddress);
+
+        Task AddWishlistToPerson(string email, Guid wishlistId);
+        
+        Task RemoveWishlistFromPerson(string email, Guid wishlistId);
+    }
+
+    public class InMemoryWishlistSummaryRepository : IWishlistSummaryRepository
+    {
+        public Dictionary<string, List<Guid>> _wishlistsSummaries = new Dictionary<string, List<Guid>>();
+        
+        public Task<IEnumerable<Guid>> GetWishlistSummaries(string emailAddress)
+        {
+            return Task.FromResult(_wishlistsSummaries[emailAddress] as IEnumerable<Guid>);
+        }
+
+        public Task AddWishlistToPerson(string email, Guid wishlistId)
+        {
+            if (_wishlistsSummaries.ContainsKey(email))
+            {
+                _wishlistsSummaries[email].Add(wishlistId);
+                return Task.CompletedTask;
+            }
+
+            _wishlistsSummaries[email] = new List<Guid>() {wishlistId};
+            return Task.CompletedTask;
+        }
+
+        public Task RemoveWishlistFromPerson(string email, Guid wishlistId)
+        {
+            _wishlistsSummaries[email].Remove(wishlistId);
+            return Task.CompletedTask;
+        }
+    }
     
     public class InMemoryWishlistRepository : IWishlistRepository
     {
@@ -26,18 +62,6 @@ namespace RidgeList.Domain
             return Task.FromResult(this._wishlists[id]);
         }
 
-        public Task<IEnumerable<WishlistSummary>> GetWishlistSummaries(string emailAddress)
-        {
-            var summaries = this._wishlists
-                .Where(s => s.Value.GetPeople().ContainsEmail(emailAddress))
-                .Select(s => new WishlistSummary()
-            {
-                Id = s.Value.Id,
-                Name = s.Value.Name
-            });
-            return Task.FromResult(summaries);
-        }
-
         public Task Delete(Guid id)
         {
             this._wishlists.Remove(id);
@@ -51,10 +75,6 @@ namespace RidgeList.Domain
 
         Task<Wishlist> Load(Guid id);
 
-        Task<IEnumerable<WishlistSummary>> GetWishlistSummaries(string emailAddress);
-
         Task Delete(Guid id);
-
-        // Task<WishlistSummary> GetW
     }
 }

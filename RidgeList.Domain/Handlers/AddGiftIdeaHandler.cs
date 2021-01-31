@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using MediatR;
 
 namespace RidgeList.Domain.Handlers
@@ -7,13 +8,14 @@ namespace RidgeList.Domain.Handlers
     
     public class AddGiftIdeaHandler : EditWishlistHandlerBase<AddGiftIdeaCommand>
     {
-        public AddGiftIdeaHandler(IWishlistRepository repository) : base(repository)
+        public AddGiftIdeaHandler(IWishlistRepository repository, IMediator mediator) : base(repository, mediator)
         {
         }
 
-        public override void EditWishlist(AddGiftIdeaCommand command, Wishlist wishlist)
+        public override Task EditWishlist(AddGiftIdeaCommand command, Wishlist wishlist)
         {
             wishlist.AddGiftIdea(command.Email, command.Description);
+            return Task.CompletedTask;
         }
     }
 }

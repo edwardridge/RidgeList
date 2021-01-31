@@ -8,7 +8,58 @@ using RidgeList.Domain;
 namespace RidgeList.Postgres
 {
 
+    public class MartenDbSummaryRepository : IWishlistSummaryRepository
+    {
+        private readonly IDocumentStore documentStore;
 
+        public MartenDbSummaryRepository(IDocumentStore documentStore)
+        {
+            this.documentStore = documentStore;
+        }
+        
+        public async Task<IEnumerable<Guid>> GetWishlistSummaries(string emailAddress)
+        {
+            using (var session = documentStore.OpenSession())
+            {
+                return (await session.LoadAsync<UserWishlists>(emailAddress)).Wishlists;
+            }
+        }
+
+        public async Task AddWishlistToPerson(string email, Guid wishlistId)
+        {
+            using (var session = documentStore.OpenSession())
+            {
+                var userWishlists = await session.LoadAsync<UserWishlists>(email);
+                if (userWishlists == null)
+                {
+                    userWishlists = new UserWishlists()
+                    {
+                        Email = email,
+                        Wishlists = {wishlistId}
+                    };
+                }
+                else
+                {
+                    userWishlists.Wishlists.Add(wishlistId);
+                }
+                
+                session.Store(userWishlists);
+                session.SaveChanges();
+            }
+        }
+
+        public async Task RemoveWishlistFromPerson(string email, Guid wishlistId)
+        {
+            using (var session = documentStore.OpenSession())
+            {
+                var userWishlists = await session.LoadAsync<UserWishlists>(email);
+                userWishlists.Wishlists.Remove(wishlistId);
+                session.Store(userWishlists);
+                session.SaveChanges();
+            }
+        }
+    }
+    
     public class DbSettings
     {
         public string DbUsername { get; set; }
@@ -41,16 +92,6 @@ namespace RidgeList.Postgres
             using (var session = documentStore.OpenSession())
             {
                 session.Store(wishlist);
-
-                foreach (var person in wishlist.People)
-                {
-                    var f = session.Load<UserWishlists>(person.Email) ?? new UserWishlists() { Email = person.Email };
-                    
-                    f.Wishlists.Add(wishlist.Id);
-                    f.Wishlists = f.Wishlists.Distinct().ToList();
-                    session.Store(f);
-                }
-                
                 await session.SaveChangesAsync();
             }
         }
@@ -63,42 +104,11 @@ namespace RidgeList.Postgres
             }
         }
 
-        public async Task<IEnumerable<WishlistSummary>> GetWishlistSummaries(string emailAddress)
-        {
-            using (var session = documentStore.OpenSession())
-            {
-                var userWishlists = session.Load<UserWishlists>(emailAddress);
-
-                if (userWishlists == null)
-                {
-                    return new List<WishlistSummary>();
-                }
-                
-                var wishlists = userWishlists.Wishlists.Select(s => session.Load<Wishlist>(s)).ToList();
-                return wishlists.Select(s => new WishlistSummary()
-                {
-                    Id = s.Id,
-                    Name = s.Name
-                });
-            }
-        }
-
         public async Task Delete(Guid id)
         {
             using (var session = documentStore.OpenSession())
             {
                 var wishlist = session.Load<Wishlist>(id);
-                
-                foreach (var person in wishlist.People)
-                {
-                    var f = session.Load<UserWishlists>(person.Email);
-                    if (f != null)
-                    {
-                        f.Wishlists.Remove(wishlist.Id);
-                        session.Store(f);
-                    }
-                }
-                
                 session.Delete<Wishlist>(id);
                 await session.SaveChangesAsync();
             }

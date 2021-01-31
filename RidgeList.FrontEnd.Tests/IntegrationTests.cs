@@ -19,6 +19,7 @@ namespace RidgeList.FrontEnd.Tests
         private readonly WebApplicationFactory<RidgeList.FrontEnd.Startup> _factory;
         private InMemoryWishlistRepository inMemoryRepository;
         private HttpClient client;
+        private InMemoryWishlistSummaryRepository inMemorySummaryRepository;
 
         public FrontEndTests()
         {
@@ -29,6 +30,7 @@ namespace RidgeList.FrontEnd.Tests
         public void Setup()
         {
             this.inMemoryRepository = new InMemoryWishlistRepository();
+            this.inMemorySummaryRepository = new InMemoryWishlistSummaryRepository();
             this.client = _factory
                 .WithWebHostBuilder(t =>
                 {
@@ -36,8 +38,13 @@ namespace RidgeList.FrontEnd.Tests
                     {
                         s.RemoveAll(typeof(IDocumentStore));
                         s.RemoveAll(typeof(IWishlistRepository));
+                        s.RemoveAll(typeof(IWishlistSummaryRepository));
+
+                        
 
                         s.Add((new ServiceDescriptor(typeof(IWishlistRepository), inMemoryRepository)));
+                        s.Add((new ServiceDescriptor(typeof(IWishlistSummaryRepository), inMemorySummaryRepository)));
+
                     });
                 })
                 .CreateClient(new WebApplicationFactoryClientOptions
@@ -66,6 +73,8 @@ namespace RidgeList.FrontEnd.Tests
             response.EnsureSuccessStatusCode();
             inMemoryRepository._wishlists.Count.Should().BeGreaterThan(0);
             inMemoryRepository._wishlists.Single().Value.People.Count.Should().Be(2);
+            var wishlistSummaries = await inMemorySummaryRepository.GetWishlistSummaries("ed");
+            wishlistSummaries.Count().Should().Be(1);
         }
     }
 }

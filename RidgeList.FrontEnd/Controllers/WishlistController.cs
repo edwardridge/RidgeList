@@ -15,11 +15,13 @@ namespace RidgeList.FrontEnd.Controllers
     public class WishlistController : Controller
     {
         private readonly IWishlistRepository _repository;
+        private readonly IWishlistSummaryRepository _wishlistSummaryRepository;
         private readonly IMediator _mediator;
 
-        public WishlistController(IWishlistRepository repository, IMediator mediator)
+        public WishlistController(IWishlistRepository repository, IWishlistSummaryRepository wishlistSummaryRepository, IMediator mediator)
         {
             _repository = repository;
+            _wishlistSummaryRepository = wishlistSummaryRepository;
             _mediator = mediator;
         }
 
@@ -79,7 +81,17 @@ namespace RidgeList.FrontEnd.Controllers
         [Route("summaries")]
         public async Task<IEnumerable<WishlistSummaryModel>> GetSummaries(string emailAddress)
         {
-            var summaries = await this._repository.GetWishlistSummaries(emailAddress);
+            var ids = await this._wishlistSummaryRepository.GetWishlistSummaries(emailAddress);
+            var summaries = new List<WishlistSummary>();
+            foreach (var id in ids)
+            {
+                var wishlist = await _repository.Load(id);
+                summaries.Add(new WishlistSummary()
+                {
+                    Id = id,
+                    Name = wishlist.Name
+                });
+            }
             return summaries.Select(WishlistSummaryModel.Map);
         }
 

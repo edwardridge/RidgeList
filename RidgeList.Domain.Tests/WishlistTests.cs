@@ -22,30 +22,30 @@ namespace RidgeList.Domain.Tests
             reloadedWishlist.Should().NotBeNull();
         }
 
-        [Test]
-        public async Task Gets_All_Wishlists_Only_Returns_Wishlists_For_Email()
-        {
-            var repo = new InMemoryWishlistRepository();
-            var wishlist1 = Wishlist.Create("Asd", "a@b.com", "Ed");
-            wishlist1.AddPerson("", "c@d.com", true);
-            await repo.Save(wishlist1);
-            
-            var wishlist2 = Wishlist.Create("Wishlist 2", "a@b.com", "Ed");
-            await repo.Save(wishlist2);
-
-            var wishlistSumaries = await repo.GetWishlistSummaries("a@b.com");
-            wishlistSumaries.Select(s => s.Name).Should().BeEquivalentTo(new []
-            {
-                "Asd" ,
-                "Wishlist 2" 
-            });
-            
-            var wishlistSumaries2 = await repo.GetWishlistSummaries("c@d.com");
-            wishlistSumaries2.Select(s => s.Name).Should().BeEquivalentTo(new []
-            {
-                "Asd" 
-            });
-        }
+        // [Test]
+        // public async Task Gets_All_Wishlists_Only_Returns_Wishlists_For_Email()
+        // {
+        //     var repo = new InMemoryWishlistRepository();
+        //     var wishlist1 = Wishlist.Create("Asd", "a@b.com", "Ed");
+        //     wishlist1.AddPerson("", "c@d.com", true);
+        //     await repo.Save(wishlist1);
+        //     
+        //     var wishlist2 = Wishlist.Create("Wishlist 2", "a@b.com", "Ed");
+        //     await repo.Save(wishlist2);
+        //
+        //     var wishlistSumaries = await repo.GetWishlistSummaries("a@b.com");
+        //     wishlistSumaries.Select(s => s.Name).Should().BeEquivalentTo(new []
+        //     {
+        //         "Asd" ,
+        //         "Wishlist 2" 
+        //     });
+        //     
+        //     var wishlistSumaries2 = await repo.GetWishlistSummaries("c@d.com");
+        //     wishlistSumaries2.Select(s => s.Name).Should().BeEquivalentTo(new []
+        //     {
+        //         "Asd" 
+        //     });
+        // }
     }
 
     

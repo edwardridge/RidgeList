@@ -15,35 +15,35 @@ namespace RidgeList.Postgres.Tests
         {
         }
 
-        [Test]
-        public async Task Test1()
-        {
-            //MartenDbRepository repo = new MartenDbRepository();
-            //await repo.Save(new Wishlist()
-            //{
-            //    Id = Guid.NewGuid(),
-            //    Creator = "asd",
-            //    Name = "sdf",
-            //    People = new WishlistPeople()
-            //    {
-            //        new WishlistPerson()
-            //        {
-            //            Email = "asd",
-            //            Name = "ed",
-            //            PresentIdeas = new List<PresentIdea>()
-            //            {
-            //                new PresentIdea()
-            //                {
-            //                    Description = "asd",
-
-            //                }
-            //            }
-            //        }
-            //    }
-            //});
-
-            //var f = await repo.GetWishlistSummaries("asd");
-            //f.ToList().Single().Name.Should().Be("sdf");
-        }
+        // [Test]
+        // public async Task Test1()
+        // {
+        //     MartenDbRepository repo = new MartenDbRepository();
+        //     await repo.Save(new Wishlist()
+        //     {
+        //         Id = Guid.NewGuid(),
+        //         Creator = "asd",
+        //         Name = "sdf",
+        //         People = new WishlistPeople()
+        //         {
+        //             new WishlistPerson()
+        //             {
+        //                 Email = "asd",
+        //                 Name = "ed",
+        //                 PresentIdeas = new List<PresentIdea>()
+        //                 {
+        //                     new PresentIdea()
+        //                     {
+        //                         Description = "asd",
+        //
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     });
+        //
+        //     var f = await repo.GetWishlistSummaries("asd");
+        //     f.ToList().Single().Name.Should().Be("sdf");
+        // }
     }
 }

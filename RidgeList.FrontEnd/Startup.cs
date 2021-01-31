@@ -52,9 +52,10 @@ namespace RidgeList.FrontEnd
                 //
             }));
             services.AddScoped<IWishlistRepository, MartenDbRepository>();
+            services.AddScoped<IWishlistSummaryRepository, MartenDbSummaryRepository>();
+
             // services.AddSingleton<IWishlistRepository>(new Func<IServiceProvider, IWishlistRepository>(s => new InMemoryWishlistRepository()));
             
-            // services.AddOpenApiDocument();
             services.AddSwaggerDocument();
             
             services.AddMediatR(typeof(Startup), typeof(Wishlist));

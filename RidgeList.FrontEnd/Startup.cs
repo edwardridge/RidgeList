@@ -43,11 +43,12 @@ namespace RidgeList.FrontEnd
                 };
                 var useSsl = Configuration["ASPNETCORE_ENVIRONMENT"] != "Development";
                 var connectionString = MartenDbRepository.BuildConnectionString(dbSettingsFromSecrets, useSsl);
-                return DocumentStore.For((s) =>
+                return DocumentStore.For((storeOptions) =>
                 {
-                    s.Connection(connectionString);
+                    storeOptions.Connection(connectionString);
+                    storeOptions.DatabaseSchemaName = Configuration["ASPNETCORE_ENVIRONMENT"];
             
-                    s.Schema.For<UserWishlists>().Identity(s => s.Email);
+                    storeOptions.Schema.For<UserWishlists>().Identity(s => s.Email);
                 });
                 //
             }));

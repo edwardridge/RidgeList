@@ -1,4 +1,4 @@
-import React, {useState, useEffect, ChangeEvent} from "react";
+import React, {useState, useEffect, ChangeEvent, useRef} from "react";
 import {RouteComponentProps, withRouter} from "react-router-dom";
 import {WishlistClient, WishlistModel, WishlistPersonModel} from "../../nswag/api.generated";
 import {IWishlistRepository} from "./IWishlistRepository";
@@ -26,6 +26,7 @@ interface Props extends RouteComponentProps<WishlistProps> {
      const login = useGetLogin(false);
      let [addingNewPersonButtonDisabled, setAddingNewPersonButtonDisabled] = useState(false);
      let wishlistClient = useWishlistClient();
+     let nameInputRef = useRef<HTMLInputElement>(null);
     
      useEffect(() => {
         let id = props.match.params.id;
@@ -53,6 +54,11 @@ interface Props extends RouteComponentProps<WishlistProps> {
          let f = wishlist?.people?.some(s => s.email === npe) ?? false;
          setAddingNewPersonButtonDisabled(f);
      }
+     
+     let clickAddNewPerson = () => {
+         setAddingNewPerson(true);
+         setTimeout(() => nameInputRef?.current?.focus(), 0);
+     }
 
     if (wishlist) {
         let onCLickCancelAddNewPerson = () => {
@@ -66,7 +72,7 @@ interface Props extends RouteComponentProps<WishlistProps> {
         
         let createNewPerson = (
             <>
-                <Button variant="outline-dark" cypress-name='AddNewPerson' className='w-100' onClick={() => setAddingNewPerson(true)}>
+                <Button variant="outline-dark" size='lg' cypress-name='AddNewPerson' className='w-100' onClick={clickAddNewPerson}>
                 Add Someone New
                 </Button>
 
@@ -75,12 +81,13 @@ interface Props extends RouteComponentProps<WishlistProps> {
                         <Modal.Title>Add Somone New!</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <input type="text" className='form-control w-100' onChange={(event) => setNewPersonName(event.target.value)}
-                            value={newPersonName} placeholder="What's their name?" cypress-name='NewPersonName'></input>
-                        <input type="text" className='form-control w-100 mt-2' onChange={changeNewEmail}
-                            value={newPersonEmail} placeholder="What's their email?" cypress-name='NewPersonEmail'></input>
-
-                        <div className="form-check">
+                        <div className='input-group-lg'>
+                            <input type="text" ref={nameInputRef} className='form-control w-100' onChange={(event) => setNewPersonName(event.target.value)}
+                                value={newPersonName} placeholder="What's their name?" cypress-name='NewPersonName'></input>
+                            <input type="text" className='form-control w-100 mt-2' onChange={changeNewEmail}
+                                value={newPersonEmail} placeholder="What's their email?" cypress-name='NewPersonEmail'></input>
+                        </div>
+                        <div className="form-check mt-3">
                             <input className="form-check-input" type="checkbox" checked={newPersonIsGiftee} id="areTheyGiftee" onChange={(e) => {setNewPersonIsGiftee(e.target.checked)}}/>
                                 <label className="form-check-label" htmlFor="areTheyGiftee">
                                     Are they receiving gifts?   
@@ -88,10 +95,10 @@ interface Props extends RouteComponentProps<WishlistProps> {
                         </div>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="secondary" onClick={onCLickCancelAddNewPerson}>
+                        <Button variant="secondary" size='lg' onClick={onCLickCancelAddNewPerson}>
                         Close
                         </Button>
-                        <Button variant="primary" disabled={addingNewPersonButtonDisabled} onClick={createNewPersonClick} cypress-name='CreateNewPerson'>
+                        <Button variant="primary" size='lg' disabled={addingNewPersonButtonDisabled} onClick={createNewPersonClick} cypress-name='CreateNewPerson'>
                         Add
                         </Button>
                     </Modal.Footer>
@@ -101,7 +108,7 @@ interface Props extends RouteComponentProps<WishlistProps> {
         
         let listOfOtherPeoplesIdeas = (
             <>
-                <h4 className='text-center mt-4'>Other giftees wishlists</h4>
+                <h3 className='text-center mt-4'>Other giftees wishlists</h3>
                 <div className='wishlistSummaries' cypress-name="ListOfPeople">
                     {
                         otherGiftees?.map((s) => 
@@ -117,7 +124,7 @@ interface Props extends RouteComponentProps<WishlistProps> {
             </>)
         
         let otherNonGifteeSection = <>
-            <h4 className='text-center mt-4'>Non gift receivers</h4>
+            <h3 className='text-center mt-4'>Non gift receivers</h3>
             <table className='table'>
                 {otherNonGiftees?.map(nonGiftee => {
                     return <tr key={nonGiftee.email}>
@@ -131,7 +138,7 @@ interface Props extends RouteComponentProps<WishlistProps> {
             <h1 className='text-center' id="wishlistTitle">Wishlist - {wishlist.name}</h1>
 
             <div>
-                <h4 className='text-center mt-4'>What would you like?</h4>
+                <h3 className='text-center mt-4'>What would you like?</h3>
                 <WishlistPersonRow cypress-name='WishlistPerson' wishlistPerson={loggedInWishlist} wishlistId={wishlist.id} setWishlist={setWishlist} loginDetails={login}></WishlistPersonRow>
             </div>
         </>

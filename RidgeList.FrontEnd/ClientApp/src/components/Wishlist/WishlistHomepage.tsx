@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState, useEffect } from "react";
+import React, {ChangeEvent, useState, useEffect, useRef} from "react";
 import { useHistory } from "react-router-dom";
 import {WishlistClient, WishlistSummaryModel} from "../../nswag/api.generated";
 import { Link } from "react-router-dom";
@@ -18,6 +18,7 @@ export const WishlistHomepage = (props : WishlishHomepageProps) => {
     const history = useHistory();
     const login = useGetLogin(false);
     const [show, setShow] = useState(false);
+    const inputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         loadWishListSummaries(login.Email);
@@ -46,10 +47,11 @@ export const WishlistHomepage = (props : WishlishHomepageProps) => {
     
     let onClickAddWishlist = () => {
         setShow(true);
+        setTimeout(() => {inputRef?.current?.focus();},0);
     }
     
     let createButtons = <>
-        <Button className='w-100' variant="outline-primary" cypress-name='CreateNewWishlist' onClick={onClickAddWishlist}>
+        <Button className='w-100' size='lg' variant="outline-primary" cypress-name='CreateNewWishlist' onClick={onClickAddWishlist}>
             Create New...
         </Button>
 
@@ -58,21 +60,23 @@ export const WishlistHomepage = (props : WishlishHomepageProps) => {
                 <Modal.Title>Create New Wishlist</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <input type="text" className='w-100' value={nameOfNewWishlist} onChange={handleInputChange} placeholder='Name of wishlist...' cypress-name='NameOfWishlist'></input>
-                <div className="form-check">
-                    <input className="form-check-input" type="checkbox" checked={creatorIsGiftee} id="areTheyGiftee" onChange={(e) => {setCreatorIsGiftee(e.target.checked)}}/>
-                    <label className="form-check-label" htmlFor="areTheyGiftee">
-                        Are you receiving gifts?
-                    </label>
+                <div className='input-group input-group-lg'>
+                    <input ref={inputRef} autoFocus={true} type="text" className='w-100 form-control' value={nameOfNewWishlist} onChange={handleInputChange} placeholder='Name of wishlist...' cypress-name='NameOfWishlist'></input>
+                    <div className="form-check mt-3">
+                        <input className="form-check-input" type="checkbox" checked={creatorIsGiftee} id="areTheyGiftee" onChange={(e) => {setCreatorIsGiftee(e.target.checked)}}/>
+                        <label className="form-check-label" htmlFor="areTheyGiftee">
+                            Are you receiving gifts?
+                        </label>
+                    </div>
                 </div>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" onClick={onClickCancel}>
+                <Button variant="secondary" size='lg' onClick={onClickCancel}>
                     Close
-          </Button>
-                <Button variant="primary" cypress-name='Create' onClick={onClickCreate}>
+                </Button>
+                <Button variant="primary" size='lg' cypress-name='Create' onClick={onClickCreate}>
                     Create
-          </Button>
+                </Button>
             </Modal.Footer>
         </Modal>
     </>

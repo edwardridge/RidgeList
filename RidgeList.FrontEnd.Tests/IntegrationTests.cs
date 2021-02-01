@@ -29,11 +29,13 @@ namespace RidgeList.FrontEnd.Tests
         [SetUp]
         public void Setup()
         {
+            
             this.inMemoryRepository = new InMemoryWishlistRepository();
             this.inMemorySummaryRepository = new InMemoryWishlistSummaryRepository();
             this.client = _factory
                 .WithWebHostBuilder(t =>
                 {
+                    t.UseSetting("ASPNETCORE_ENVIRONMENT", "test");
                     t.ConfigureServices(s =>
                     {
                         s.RemoveAll(typeof(IDocumentStore));
@@ -47,6 +49,7 @@ namespace RidgeList.FrontEnd.Tests
 
                     });
                 })
+                
                 .CreateClient(new WebApplicationFactoryClientOptions
                 {
                     AllowAutoRedirect = false

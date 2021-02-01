@@ -29,8 +29,17 @@ namespace RidgeList.FrontEnd
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var aspnetCoreEnvironment = Configuration["ASPNETCORE_ENVIRONMENT"];
+            if (string.IsNullOrEmpty(aspnetCoreEnvironment))
+            {
+                throw new ApplicationException("ASPNETCORE_ENVIRONMENT is empty");
+            }
+            else
+            {
+                Console.WriteLine("ASPNETCORE_ENVIRONMENT: " + aspnetCoreEnvironment);
+            }
+            
             services.AddControllersWithViews();
-
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/build"; });
             services.AddSingleton(new Func<IServiceProvider, IDocumentStore>(s => {
@@ -46,7 +55,7 @@ namespace RidgeList.FrontEnd
                 return DocumentStore.For((storeOptions) =>
                 {
                     storeOptions.Connection(connectionString);
-                    storeOptions.DatabaseSchemaName = Configuration["ASPNETCORE_ENVIRONMENT"];
+                    storeOptions.DatabaseSchemaName = aspnetCoreEnvironment;
             
                     storeOptions.Schema.For<UserWishlists>().Identity(s => s.Email);
                 });

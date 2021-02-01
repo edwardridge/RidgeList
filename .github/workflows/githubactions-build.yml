@@ -17,7 +17,7 @@ jobs:
     environment: ci
     runs-on: ubuntu-latest
 
-#    steps:
+    steps:
 #      - uses: actions/checkout@v2
 #      - name: Checkout
 #        run: cd RidgeList.FrontEnd/ClientApp && npm install
@@ -31,7 +31,7 @@ jobs:
 #          install: true
 #          working-directory: RidgeList.FrontEnd/ClientApp
 #          headless: true
-    
+      
     - name: Set up gcloud Cloud SDK environment
       uses: google-github-actions/setup-gcloud@v0.2.0
       with:

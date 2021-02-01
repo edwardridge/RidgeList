@@ -74,4 +74,4 @@ jobs:
           export_default_credentials: true
           
       - name: Deploy to cloud run
-        run: gcloud run deploy ${{ env.SERVICE_PROD }} --image="gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" --platform=managed --region=europe-west2 --port=80 --allow-unauthenticated --set-env-vars=ASPNETCORE_ENVIRONMENT=prod --no-traffic
+        run: gcloud run deploy ${{ env.SERVICE_PROD }} --image="gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" --platform=managed --region=europe-west2 --port=80 --allow-unauthenticated --set-env-vars=ASPNETCORE_ENVIRONMENT=prod

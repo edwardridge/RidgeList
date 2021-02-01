@@ -41,7 +41,7 @@ jobs:
           # Command to run in build step before starting tests
 #          build: # optional
           # Whether or not to run install
-#          install: # optional
+          install: true
           # Custom install command to use
 #          install-command: # optional
           # Whether or not to run tests

@@ -2,7 +2,9 @@
   "name": "ridgelist.frontend",
   "version": "0.1.0",
   "private": true,
-  "dependencies": {},
+  "dependencies": {
+    "js-cookie": "^2.2.1"
+  },
   "devDependencies": {
     "cypress": "^6.2.0",
     "ts-jest": "^26.4.4",

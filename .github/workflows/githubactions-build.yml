@@ -25,7 +25,7 @@ jobs:
         uses: cypress-io/github-action@v2.7.0
         with:
           record: false
-           config: baseUrl=https://ridgelist-ci-gfhqqojama-nw.a.run.app
+          config: baseUrl=https://ridgelist-ci-gfhqqojama-nw.a.run.app
           config-file: cypress.json
           browser: chrome
           install: true

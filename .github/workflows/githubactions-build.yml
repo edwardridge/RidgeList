@@ -21,6 +21,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        run: cd RidgeList.FrontEnd && npm install
       - name: Cypress.io
         # You may pin to the exact commit or the version.
         # uses: cypress-io/github-action@6e6d77eeb1dda289679ea46f13aff1ec4d879d55

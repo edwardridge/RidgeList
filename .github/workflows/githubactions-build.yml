@@ -18,9 +18,11 @@ jobs:
     environment: ci
     
     steps:
-      - name: Install dependencies and run tests
-      - uses: actions/checkout@v2
+
       - uses: actions/setup-dotnet@v1
+        name: asd
+      - uses: actions/checkout@v2
+        name: Install dependencies and run tests
         with:
           dotnet-version: 5.0.x
 #      - uses: microsoft/playwright-github-action@v1

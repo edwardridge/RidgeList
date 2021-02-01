@@ -60,7 +60,7 @@ jobs:
           # Tag setting for tests
 #          tag: # optional
           # Working directory containing Cypress folder
-          working-directory: RidgeList.FrontEnd
+          working-directory: RidgeList.FrontEnd/ClientApp
           # Whether or not to use headless mode
           headless: true
           # Provide a specific specs to run

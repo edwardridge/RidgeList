@@ -1,4 +1,4 @@
-import {LoginDetails} from "../../ClientApp/src/components/useLogin";
+import {LoginDetails} from "../../src/components/useLogin";
 
 
 before(() => {

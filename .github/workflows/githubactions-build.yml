@@ -19,8 +19,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v2
       - name: Checkout
-        uses: actions/checkout@v2
         run: cd RidgeList.FrontEnd && npm install
       - name: Cypress.io
         # You may pin to the exact commit or the version.

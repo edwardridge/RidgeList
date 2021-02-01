@@ -10,6 +10,7 @@ env:
   PROJECT_ID: ${{ secrets.G_PROJECT_ID }}
   IMAGE: ridgelist
   SERVICE: ridgelist-ci
+  SERVICE_PROD: ridgelist-prod
   
 jobs:
 
@@ -39,7 +40,7 @@ jobs:
       run: gcloud run deploy ${{ env.SERVICE }} --image="gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" --platform=managed --region=europe-west2 --port=80 --allow-unauthenticated --set-env-vars=ASPNETCORE_ENVIRONMENT=ci
 
 
-  runTests:
+  runCypress:
     environment: ci
     runs-on: ubuntu-latest
     needs: build
@@ -58,3 +59,19 @@ jobs:
           install: true
           working-directory: RidgeList.FrontEnd/ClientApp
           headless: true
+          
+  deployToProd:
+    environment: ci
+    runs-on: ubuntu-latest
+    needs: runCypress
+    steps:
+
+      - name: Set up gcloud Cloud SDK environment
+        uses: google-github-actions/setup-gcloud@v0.2.0
+        with:
+          service_account_key: ${{ secrets.GCLOUD_AUTH }}
+          project_id: ${{ env.PROJECT_ID }}
+          export_default_credentials: true
+          
+      - name: Deploy to cloud run
+        run: gcloud run deploy ${{ env.SERVICE_PROD }} --image="gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" --platform=managed --region=europe-west2 --port=80 --allow-unauthenticated --set-env-vars=ASPNETCORE_ENVIRONMENT=prod --no-traffic

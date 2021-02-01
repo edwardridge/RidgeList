@@ -23,7 +23,7 @@ jobs:
           dotnet-version: 5.0.x
 #      - uses: microsoft/playwright-github-action@v1
       - name: Install dependencies and run tests
-        run: cd RidgeList.Playwright && dotnet test Ridgelist.Playwright.csproj
+        run: dotnet build RidgeList.Playwright/Ridgelist.Playwright.csproj
 
 #  build:
 #    environment: ci

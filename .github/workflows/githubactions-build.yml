@@ -19,6 +19,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Cypress.io
         # You may pin to the exact commit or the version.
         # uses: cypress-io/github-action@6e6d77eeb1dda289679ea46f13aff1ec4d879d55

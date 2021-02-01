@@ -19,12 +19,12 @@ jobs:
     
     steps:
 
-      - uses: actions/setup-dotnet@v1
+      - name: asd
+        uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 5.0.x
-        name: asd
       - uses: actions/checkout@v2
-        name: Install dependencies and run tests
+      - name: Install dependencies and run tests
 #      - uses: microsoft/playwright-github-action@v1
         run: dotnet build RidgeList.Playwright/Ridgelist.Playwright.csproj
 

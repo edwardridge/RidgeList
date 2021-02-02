@@ -7,14 +7,16 @@ using PlaywrightSharp;
 namespace RidgeList.Playwright
 {
     [TestFixture]
-    public class WishlistHomepageTests : WishlistTestBase
+    public class WishlistHomepageTests
     {
+        public const string baseUrl = "https://ridgelist-ci-gfhqqojama-nw.a.run.app";
+        
         [Test]
         public async Task LoginWorks()
         {
-            this.playwright = await PlaywrightSharp.Playwright.CreateAsync();
-            this.browser = await playwright.Chromium.LaunchAsync(headless: false);
-            this.page = await browser.NewPageAsync();
+            var playwright = await PlaywrightSharp.Playwright.CreateAsync();
+            var browser = await playwright.Chromium.LaunchAsync(headless: false);
+            var page = await browser.NewPageAsync();
             await page.GoToAsync(baseUrl);
             await page.Context.ClearCookiesAsync();
             var loginPage = new LoginPageObject(page);

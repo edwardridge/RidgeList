@@ -14,8 +14,8 @@ namespace RidgeList.Playwright
         [Test]
         public async Task LoginWorks()
         {
-            var playwright = await PlaywrightSharp.Playwright.CreateAsync();
-            var browser = await playwright.Chromium.LaunchAsync(headless: false);
+            using var playwright = await PlaywrightSharp.Playwright.CreateAsync();
+            await using var browser = await playwright.Chromium.LaunchAsync(headless: false);
             var page = await browser.NewPageAsync();
             await page.GoToAsync(baseUrl);
             await page.Context.ClearCookiesAsync();

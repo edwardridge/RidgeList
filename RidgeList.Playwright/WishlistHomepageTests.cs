@@ -16,10 +16,10 @@ namespace RidgeList.Playwright
         {
             // var playwright = await PlaywrightSharp.Playwright.CreateAsync();
             // var browser = await playwright.Chromium.LaunchAsync();
-            var page = await browser.NewPageAsync();
-            await page.GoToAsync(baseUrl);
-            await page.Context.ClearCookiesAsync();
-            var loginPage = new LoginPageObject(page);
+            // var page = await browser.NewPageAsync();
+            // await page.GoToAsync(baseUrl);
+            // await page.Context.ClearCookiesAsync();
+            // var loginPage = new LoginPageObject(page);
             await loginPage.LoginUsingFormWithTestAccount();
 
             page.Url.Should().Contain("/wishlists");

@@ -21,13 +21,13 @@ namespace RidgeList.Playwright
             this.browser = await playwright.Chromium.LaunchAsync();
         }
         
-        // [SetUp]
-        // public async Task Setup()
-        // {
-        //     this.page = await browser.NewPageAsync();
-        //     await page.GoToAsync(baseUrl);
-        //     await page.Context.ClearCookiesAsync();
-        //     this.loginPage = new LoginPageObject(page);
-        // }
+        [SetUp]
+        public async Task Setup()
+        {
+            this.page = await browser.NewPageAsync();
+            await page.GoToAsync(baseUrl);
+            await page.Context.ClearCookiesAsync();
+            this.loginPage = new LoginPageObject(page);
+        }
     }
 }

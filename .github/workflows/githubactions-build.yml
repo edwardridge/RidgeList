@@ -10,7 +10,7 @@ env:
   PROJECT_ID: ${{ secrets.G_PROJECT_ID }}
   IMAGE: ridgelist
   SERVICE: ridgelist-ci
-  SERVICE_PROD: ridgelist-production
+  SERVICE_PROD: ridgelist-prodv2
   
 jobs:
   
@@ -89,4 +89,4 @@ jobs:
           export_default_credentials: true
 
       - name: Deploy to cloud run
-        run: gcloud run deploy ${{ env.SERVICE_PROD }} --image="gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" --platform=managed --region=europe-west1 --port=80 --allow-unauthenticated --set-env-vars=ASPNETCORE_ENVIRONMENT=prod
+        run: gcloud run deploy ${{ env.SERVICE_PROD }} --image="gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" --platform=managed --region=europe-west1 --port=80 --allow-unauthenticated --set-env-vars=ASPNETCORE_ENVIRONMENT=prod --no-traffic

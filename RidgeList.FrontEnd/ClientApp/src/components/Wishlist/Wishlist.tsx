@@ -8,6 +8,7 @@ import {WishlistPersonRow} from "./WishlistPersonRow";
 import {OtherPersonWishlistRow} from "./OtherPersonWishlistRow";
 import { Button, Modal } from "react-bootstrap";
 import {useWishlistClient} from "./useWishlistClient";
+import * as signalR from "@microsoft/signalr";
 
 interface WishlistProps {
     id: string;
@@ -33,6 +34,20 @@ interface Props extends RouteComponentProps<WishlistProps> {
         props.wishlistRepository.getWishlist(id).then(s => { 
             setWishlist(s);
         });
+
+         const connection = new signalR.HubConnectionBuilder()
+             .withUrl("/wishlisthub")
+             .build();
+
+         
+
+         connection.start().then(s => {
+             connection.invoke("Connect", id).then(s => {
+                 connection.on("UpdateWishlist", (wishlistModel : WishlistModel) => {
+                     setWishlist(wishlistModel);
+                 });
+             });
+         }).catch(err => document.write(err));
          
      }, [wishlist?.id]);
     

@@ -7,6 +7,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using RidgeList.Domain;
 using RidgeList.Domain.Handlers;
+using RidgeList.FrontEnd.SignalRHubs;
 using RidgeList.Models;
 
 namespace RidgeList.FrontEnd.Controllers
@@ -17,12 +18,17 @@ namespace RidgeList.FrontEnd.Controllers
         private readonly IWishlistRepository _repository;
         private readonly IWishlistSummaryRepository _wishlistSummaryRepository;
         private readonly IMediator _mediator;
+        private readonly IUpdateWishlistHub _updateWishlistHub;
 
-        public WishlistController(IWishlistRepository repository, IWishlistSummaryRepository wishlistSummaryRepository, IMediator mediator)
+        public WishlistController(
+            IWishlistRepository repository, 
+            IWishlistSummaryRepository wishlistSummaryRepository, 
+            IMediator mediator, IUpdateWishlistHub updateWishlistHub)
         {
             _repository = repository;
             _wishlistSummaryRepository = wishlistSummaryRepository;
             _mediator = mediator;
+            _updateWishlistHub = updateWishlistHub;
         }
 
         [HttpPost]
@@ -103,7 +109,9 @@ namespace RidgeList.FrontEnd.Controllers
         private async Task<WishlistModel> SendCommandAndMapResponse(IEditWishlistCommand command)
         {
             var wishlist = await this._mediator.Send(command);
-            return MapWishlistToModel(wishlist);
+            var model = MapWishlistToModel(wishlist);
+            _updateWishlistHub.SendWishlist(model);
+            return model;
         }
     }
 }

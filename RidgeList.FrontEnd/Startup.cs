@@ -14,6 +14,7 @@ using Google.Cloud.SecretManager.V1;
 using System.Linq;
 using Marten;
 using MediatR;
+using RidgeList.FrontEnd.SignalRHubs;
 
 namespace RidgeList.FrontEnd
 {
@@ -63,12 +64,15 @@ namespace RidgeList.FrontEnd
             }));
             services.AddScoped<IWishlistRepository, MartenDbRepository>();
             services.AddScoped<IWishlistSummaryRepository, MartenDbSummaryRepository>();
+            services.AddScoped<IUpdateWishlistHub, UpdateWishlistHub>();
 
             // services.AddSingleton<IWishlistRepository>(new Func<IServiceProvider, IWishlistRepository>(s => new InMemoryWishlistRepository()));
             
             services.AddSwaggerDocument();
             
             services.AddMediatR(typeof(Startup), typeof(Wishlist));
+            
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -100,6 +104,8 @@ namespace RidgeList.FrontEnd
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
+                
+                endpoints.MapHub<WishlistHub>("/wishlisthub");
             });
 
             app.UseSpa(spa =>

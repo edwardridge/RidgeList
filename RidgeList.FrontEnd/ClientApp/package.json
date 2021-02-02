@@ -26,11 +26,12 @@
     "rimraf": "^2.6.2"
   },
   "devDependencies": {
+    "@microsoft/signalr": "^5.0.2",
     "@types/js-cookie": "^2.2.6",
     "@types/react-linkify": "^1.0.0",
-    "cypress": "6.3.0",
     "ajv": "^6.9.1",
     "cross-env": "^5.2.0",
+    "cypress": "6.3.0",
     "eslint-config-react-app": "^5.2.0",
     "eslint-plugin-flowtype": "^4.6.0",
     "eslint-plugin-import": "^2.20.1",

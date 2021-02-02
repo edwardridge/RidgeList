@@ -1,6 +1,8 @@
+using System;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
+using PlaywrightSharp;
 
 namespace RidgeList.Playwright
 {
@@ -12,6 +14,7 @@ namespace RidgeList.Playwright
         [Test]
         public async Task LoginWorks()
         {
+            Environment.SetEnvironmentVariable("pw:api", "DEBUG");
             var playwright = await PlaywrightSharp.Playwright.CreateAsync();
             var browser = await playwright.Chromium.LaunchAsync(headless: false);
             var page = await browser.NewPageAsync();

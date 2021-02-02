@@ -12,6 +12,7 @@ namespace RidgeList.Playwright
         [Test]
         public async Task LoginWorks()
         {
+            
             await page.GoToAsync(baseUrl);
             await page.Context.ClearCookiesAsync();
             var loginPage = new LoginPageObject(page);

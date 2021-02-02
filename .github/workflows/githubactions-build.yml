@@ -10,7 +10,7 @@ env:
   PROJECT_ID: ${{ secrets.G_PROJECT_ID }}
   IMAGE: ridgelist
   SERVICE: ridgelist-ci
-  SERVICE_PROD: ridgelist-prod
+  SERVICE_PROD: ridgelist-production
   
 jobs:
   

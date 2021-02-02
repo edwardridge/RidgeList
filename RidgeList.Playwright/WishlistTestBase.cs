@@ -17,8 +17,8 @@ namespace RidgeList.Playwright
         [OneTimeSetUp]
         public async Task OneTimeSetup()
         {
-            this.playwright = await PlaywrightSharp.Playwright.CreateAsync();
-            this.browser = await playwright.Chromium.LaunchAsync(headless: false);
+            // this.playwright = await PlaywrightSharp.Playwright.CreateAsync();
+            // this.browser = await playwright.Chromium.LaunchAsync(headless: false);
         }
         
         // [SetUp]

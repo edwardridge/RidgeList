@@ -14,8 +14,8 @@ namespace RidgeList.Playwright
         [Test]
         public async Task LoginWorks()
         {
-            var playwright = await PlaywrightSharp.Playwright.CreateAsync();
-            var browser = await playwright.Chromium.LaunchAsync();
+            using var playwright = await PlaywrightSharp.Playwright.CreateAsync();
+            await using var browser = await playwright.Chromium.LaunchAsync();
             var page = await browser.NewPageAsync();
             await page.GoToAsync(baseUrl);
             await page.Context.ClearCookiesAsync();
@@ -23,11 +23,6 @@ namespace RidgeList.Playwright
             await loginPage.LoginUsingFormWithTestAccount();
 
             page.Url.Should().Contain("/wishlists");
-            
-            await browser.DisposeAsync();
-            playwright.Dispose();
-            
-            await page.CloseAsync();
         }
         
         // [Test]

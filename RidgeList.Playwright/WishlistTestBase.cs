@@ -29,18 +29,5 @@ namespace RidgeList.Playwright
             await page.Context.ClearCookiesAsync();
             this.loginPage = new LoginPageObject(page);
         }
-        
-        [OneTimeTearDown]
-        public async Task OneTimeTearDown()
-        {
-            await this.browser.DisposeAsync();
-            this.playwright.Dispose();
-        }
-
-        [TearDown]
-        public async Task Teardown()
-        {
-            await page.CloseAsync();
-        }
     }
 }

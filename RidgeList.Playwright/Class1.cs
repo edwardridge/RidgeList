@@ -4,11 +4,9 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Esprima.Ast;
-using FluentAssertions;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using PlaywrightSharp;
-using PlaywrightSharp.Chromium;
 
 namespace RidgeList.Playwright
 {
@@ -44,88 +42,6 @@ namespace RidgeList.Playwright
                 );
             var responseBody = (await response.Content.ReadAsStringAsync()).Replace("\"", "");
             await page.GoToAsync(WishlistTestBase.baseUrl + "/wishlist/" + responseBody);
-        }
-    }
-
-    public class WishlistTestBase
-    {
-        protected IChromiumBrowser browser;
-        protected IPage page;
-        protected IPlaywright playwright;
-        protected LoginPageObject loginPage;
-        
-        public const string baseUrl = "https://ridgelist-ci-gfhqqojama-nw.a.run.app";
-
-        [OneTimeSetUp]
-        public async Task OneTimeSetup()
-        {
-            this.playwright = await PlaywrightSharp.Playwright.CreateAsync();
-            this.browser = await playwright.Chromium.LaunchAsync(headless: false);
-        }
-        
-        [SetUp]
-        public async Task Setup()
-        {
-            this.page = await browser.NewPageAsync();
-            await page.GoToAsync(baseUrl);
-            await page.Context.ClearCookiesAsync();
-            this.loginPage = new LoginPageObject(page);
-        }
-        
-        [OneTimeTearDown]
-        public async Task OneTimeTearDown()
-        {
-            await this.browser.DisposeAsync();
-            this.playwright.Dispose();
-        }
-
-        [TearDown]
-        public async Task Teardown()
-        {
-            await page.CloseAsync();
-        }
-    }
-    
-    [TestFixture]
-    public class WishlistHomepageTests : WishlistTestBase
-    {
-        [Test]
-        public async Task LoginWorks()
-        {
-            await loginPage.LoginUsingFormWithTestAccount();
-
-            page.Url.Should().Contain("/wishlists");
-        }
-        
-        [Test]
-        public async Task NoCookieRedirectsBackToHomepage()
-        {
-            await loginPage.LoginWithCookie("test@testwishlist.com", "Test", baseUrl, baseUrl);
-
-            await page.Context.ClearCookiesAsync();
-            await page.GoToAsync(baseUrl);
-            
-            page.Url.Should().NotContain("/wishlists");
-        }
-    }
-
-    public class WishlistSummaryPageTests : WishlistTestBase
-    {
-        [SetUp]
-        public async Task SetupThis()
-        {
-            await loginPage.LoginWithCookie("test@testwishlist.com", "Test", baseUrl, baseUrl);
-        }
-
-        [Test]
-        public async Task CanCreateNewWishlist()
-        {
-            var rand = new Random().Next(0, 10000);
-            var name = $"[Test] From Cypress {rand}";
-            await page.ClickAsync(Cy.Name("CreateNewWishlist"));
-            await page.TypeAsync(Cy.Name("NameOfWishlist"), name);
-            await page.ClickAsync(Cy.Name("Create"));
-            page.Url.Should().Contain("/wishlist");
         }
     }
 

@@ -5,14 +5,27 @@ using NUnit.Framework;
 namespace RidgeList.Playwright
 {
     [TestFixture]
-    public class WishlistHomepageTests : WishlistTestBase
+    public class WishlistHomepageTests 
     {
+        public const string baseUrl = "https://ridgelist-ci-gfhqqojama-nw.a.run.app";
+        
         [Test]
         public async Task LoginWorks()
         {
+            var playwright = await PlaywrightSharp.Playwright.CreateAsync();
+            var browser = await playwright.Chromium.LaunchAsync(headless: false);
+            var page = await browser.NewPageAsync();
+            await page.GoToAsync(baseUrl);
+            await page.Context.ClearCookiesAsync();
+            var loginPage = new LoginPageObject(page);
             await loginPage.LoginUsingFormWithTestAccount();
 
             page.Url.Should().Contain("/wishlists");
+            
+            await browser.DisposeAsync();
+            playwright.Dispose();
+            
+            await page.CloseAsync();
         }
         
         // [Test]

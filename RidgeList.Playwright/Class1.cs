@@ -10,18 +10,18 @@ using PlaywrightSharp;
 
 namespace RidgeList.Playwright
 {
-    public class ClearDown
-    {
-        [Test, Ignore("")]
-        public async Task ClearDownOldWishlists(string baseUrl)
-        {
-            var httpClient = new HttpClient()
-            {
-                BaseAddress = new Uri(baseUrl)
-            };
-            await httpClient.PostAsync("/WishlistTest/clearOldTestWishlists", new StringContent(string.Empty));
-        }
-    }
+    //public class ClearDown
+    //{
+    //    [Test, Ignore("")]
+    //    public async Task ClearDownOldWishlists(string baseUrl)
+    //    {
+    //        var httpClient = new HttpClient()
+    //        {
+    //            BaseAddress = new Uri(baseUrl)
+    //        };
+    //        await httpClient.PostAsync("/WishlistTest/clearOldTestWishlists", new StringContent(string.Empty));
+    //    }
+    //}
 
     public static class PlaywrightHelpers
     {

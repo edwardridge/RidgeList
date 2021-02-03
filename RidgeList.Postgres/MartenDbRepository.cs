@@ -19,23 +19,25 @@ namespace RidgeList.Postgres
         
         public async Task<IEnumerable<Guid>> GetWishlistSummaries(string emailAddress)
         {
+            var emailLower = emailAddress.ToLower();
             using (var session = documentStore.OpenSession())
             {
-                var userWishlists = await session.LoadAsync<UserWishlists>(emailAddress);
+                var userWishlists = await session.LoadAsync<UserWishlists>(emailLower);
                 return userWishlists?.Wishlists ?? new Guid[0].ToList();
             }
         }
 
         public async Task AddWishlistToPerson(string email, Guid wishlistId)
         {
+            var emailLower = email.ToLower();
             using (var session = documentStore.OpenSession())
             {
-                var userWishlists = await session.LoadAsync<UserWishlists>(email);
+                var userWishlists = await session.LoadAsync<UserWishlists>(emailLower);
                 if (userWishlists == null)
                 {
                     userWishlists = new UserWishlists()
                     {
-                        Email = email,
+                        Email = emailLower,
                         Wishlists = {wishlistId}
                     };
                 }

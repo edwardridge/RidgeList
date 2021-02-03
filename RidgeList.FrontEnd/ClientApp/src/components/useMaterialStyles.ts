@@ -23,4 +23,7 @@ export const useMaterialStyles = makeStyles((theme) => ({
         maxWidth: 720,
         backgroundColor: theme.palette.background.paper,
     },
+    margin: {
+        margin: theme.spacing(1),
+    },
 }));

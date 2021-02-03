@@ -1,9 +1,9 @@
 import React, {useRef, useState} from "react";
 import { LoginDetails } from "../useLogin";
-import {WishlistClient, WishlistModel, WishlistPersonModel} from "../../nswag/api.generated";
+import { WishlistModel, WishlistPersonModel} from "../../nswag/api.generated";
 import {useWishlistClient} from "./useWishlistClient";
 import Linkify from "react-linkify";
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, List, ListItem, ListItemIcon, ListItemText, TextField } from "@material-ui/core";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, List, ListItem, ListItemIcon, ListItemText, TextField } from "@material-ui/core";
 import { DeleteForever } from '@material-ui/icons';
 
 interface WishlistPersonRowProps{
@@ -48,25 +48,21 @@ export const WishlistPersonRow = (props : WishlistPersonRowProps) => {
 
     let addItems = (
         <List component="nav">
-
                 {props.wishlistPerson.presentIdeas?.map(s => {
                     return (
                         <ListItem divider key={s.id}>
                             <ListItemText><Linkify>{s.description}</Linkify></ListItemText>
                             <ListItemIcon>
-                                <DeleteForever color="action" onClick={() => removePresentIdea(s.id)}></DeleteForever >
+                                <IconButton edge="end" onClick={() => removePresentIdea(s.id)}><DeleteForever color="secondary" fontSize="large"></DeleteForever ></IconButton>
                             </ListItemIcon>
                         </ListItem>)
                 })}
             <ListItem divider button component="a">
-                <Button type="submit" fullWidth cypress-name='AddNewItemButton' color="primary" onClick={clickNewItemButton}>
+                <Button type="submit" fullWidth variant="contained" cypress-name='AddNewItemButton' color="primary" onClick={clickNewItemButton}>
                     Add New Gift Idea
                 </Button>
            </ListItem>
             <div className='mt-2'>
-                
-                
-
                 <Dialog open={showAddItem} onClose={onClickCancelAddItem}>
                     <DialogTitle>Add New Gift Idea</DialogTitle>
                     <DialogContent>

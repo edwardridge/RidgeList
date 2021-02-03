@@ -1,4 +1,4 @@
-import {WishlistClient, WishlistModel, WishlistPersonModel} from "../../nswag/api.generated";
+import { WishlistModel, WishlistPersonModel} from "../../nswag/api.generated";
 import React from "react";
 import {useWishlistClient} from "./useWishlistClient";
 import Linkify from "react-linkify";
@@ -27,7 +27,7 @@ export const OtherPersonWishlistRow = (props : OtherPersonWishlistRowProps) => {
     }
 
     let toggleClaim = async (claimed: boolean, claimedByYou: boolean, presentId: string) => {
-        if (claimed == true && claimedByYou === false) return;
+        if (claimed === true && claimedByYou === false) return;
         return claimedByYou ? unclaimPresentClick(presentId) : claimPresentClick(presentId);
     }
 
@@ -38,6 +38,7 @@ export const OtherPersonWishlistRow = (props : OtherPersonWishlistRowProps) => {
         return props.wishlistPerson.presentIdeas?.map(s => {
             let claimed = s.claimerEmail !== null && s.claimerEmail !== '';
             let claimedByYou = s.claimerEmail === props.loggedInEmail;
+            let claimedBySomeoneElse = claimed === true && claimedByYou === false;
             let claimerText = claimed ? `- claimed by ${claimedByYou ? "you" : s.claimerName}` : '';
             
             let classes = `${claimed ? 'claimed' : ''}`;
@@ -52,7 +53,7 @@ export const OtherPersonWishlistRow = (props : OtherPersonWishlistRowProps) => {
                             disableRipple
                         />
                     </ListItemIcon>
-                    <ListItemText cypress-name={`${s.id}-description`}>
+                    <ListItemText cypress-name={`${s.id}-description`} className={claimedBySomeoneElse === true ? 'claimed' : '' }>
                         <Linkify>{s.description} {claimerText}</Linkify></ListItemText>
                 </ListItem>
             )

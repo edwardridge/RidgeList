@@ -1,18 +1,16 @@
 import React, {ChangeEvent, useState, useEffect, useRef} from "react";
 import { useHistory } from "react-router-dom";
 import {WishlistClient, WishlistSummaryModel} from "../../nswag/api.generated";
-import { Link } from "react-router-dom";
 import './WishlistSummary.css';
 import { useGetLogin } from "../useLogin";
 import { useMaterialStyles } from "../useMaterialStyles";
-import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControlLabel, Grid, List, ListItem, ListItemText, Paper, TextField, Typography } from "@material-ui/core";
+import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, Grid, List, ListItem, ListItemText, TextField, Typography } from "@material-ui/core";
 
 interface WishlishHomepageProps{
     wishlistClient: WishlistClient;
 }
 
 export const WishlistHomepage = (props : WishlishHomepageProps) => {
-    const [creating, setCreating] = useState(false);
     const [nameOfNewWishlist, setNameOfNewWishlist] = useState("");
     const [creatorIsGiftee, setCreatorIsGiftee] = useState(true);
     const [wishlistSummaries, setWishlistSummaries] = useState([] as WishlistSummaryModel[]);
@@ -24,7 +22,7 @@ export const WishlistHomepage = (props : WishlishHomepageProps) => {
 
     useEffect(() => {
         loadWishListSummaries(login.Email);
-    }, [wishlistSummaries.length]);
+    }, [wishlistSummaries.length, login.Email]);
 
     let onClickCancel = () => {
         setNameOfNewWishlist("");
@@ -33,7 +31,6 @@ export const WishlistHomepage = (props : WishlishHomepageProps) => {
     
     let onClickCreate = async () => {
         let newWishlist = await props.wishlistClient.create(nameOfNewWishlist, login.Email, login.Name, creatorIsGiftee);
-        setCreating(false);
         history.push("/wishlist/" + newWishlist.id);
         setShow(false);
     }
@@ -61,10 +58,8 @@ export const WishlistHomepage = (props : WishlishHomepageProps) => {
 
             <DialogTitle>Create New Wishlist</DialogTitle>
             <DialogContent>
-                <div className='input-group input-group-lg'>
-                    <TextField autoFocus margin="dense" value={nameOfNewWishlist} onChange={handleInputChange} label='Name of wishlist...' cypress-name='NameOfWishlist' fullWidth></TextField>
-                    <FormControlLabel control={<Checkbox checked={creatorIsGiftee} onChange={(e) => { setCreatorIsGiftee(e.target.checked) }} name="areTheyGiftee" color="primary" />} label="Are you receiving gifts?" />
-                </div>
+                <TextField autoFocus margin="dense" value={nameOfNewWishlist} onChange={handleInputChange} label='Name of wishlist...' cypress-name='NameOfWishlist' fullWidth></TextField>
+                <FormControlLabel control={<Checkbox checked={creatorIsGiftee} onChange={(e) => { setCreatorIsGiftee(e.target.checked) }} name="areTheyGiftee" color="primary" />} label="Are you receiving gifts?" />
             </DialogContent>
             <DialogActions>
                 <Button cypress-name='Create' onClick={onClickCreate}>

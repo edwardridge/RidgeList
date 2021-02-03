@@ -4,10 +4,8 @@ import { useSetLogin, useGetLogin } from "../useLogin";
 import { useMaterialStyles } from "../useMaterialStyles";
 import "./Login.css"
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container';
 
 export const Login : React.FC<any> = (props) => {
     const [loginEmail, setLoginEmail] = useState("");    
@@ -36,18 +34,7 @@ export const Login : React.FC<any> = (props) => {
                 </Typography>
                 <form className={classes.form} noValidate>
                     <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="NameLogin"
-                        label="Email Address"
-                        name="NameLogin"
-                        onChange={(e) => setLoginName(e.target.value)}
-                        cypress-name="NameLogin"
                         autoFocus
-                    />
-                    <TextField
                         variant="outlined"
                         margin="normal"
                         required
@@ -58,7 +45,19 @@ export const Login : React.FC<any> = (props) => {
                         id="EmailLogin"
                         cypress-name="EmailLogin"
                         autoComplete="email"
+                        onChange={(e) => setLoginName(e.target.value)}
+                    />
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="NameLogin"
+                        label="Email Address"
+                        name="NameLogin"
                         onChange={(e) => setLoginEmail(e.target.value)}
+                        cypress-name="NameLogin"
+                        
                     />
                     <Button
                         type="submit"

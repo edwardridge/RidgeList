@@ -12,12 +12,13 @@ import {Logout} from "./components/Login/Logout";
 import { Container, CssBaseline } from '@material-ui/core';
 
 export default class App extends Component {
-  static displayName = App.name;
+    static displayName = App.name;
 
-  render () {
+    render() {
+
     return (
         <Layout>
-            <Container component="main" maxWidth="xs">
+            <Container component="main" maxWidth="md">
                 <CssBaseline />
                 <Route exact path='/' component={Login}></Route>
                 <Route path='/wishlists' >
@@ -28,8 +29,7 @@ export default class App extends Component {
                 </Route>
                 <Route path='/logout' component={Logout} />
             </Container>
-          
-      </Layout>
+        </Layout>
     );
   }
 }

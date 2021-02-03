@@ -43,11 +43,11 @@ namespace RidgeList.Models
                                 ClaimerName = 
                                     string.IsNullOrEmpty(t.Claimer) ? 
                                         null : 
-                                        wishlist.GetPeople().Single(g => g.Email == t.Claimer).Name,
+                                        wishlist.GetPeople().Single(g => g.Email.ToLower() == t.Claimer.ToLower()).Name,
                                 ClaimerEmail= 
                                 string.IsNullOrEmpty(t.Claimer) ? 
                                 null : 
-                                wishlist.GetPeople().Single(g => g.Email == t.Claimer).Email
+                                wishlist.GetPeople().Single(g => g.Email.ToLower() == t.Claimer.ToLower()).Email
                             }).ToList()
                     }).ToList()
             };

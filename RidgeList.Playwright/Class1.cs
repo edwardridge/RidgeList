@@ -13,11 +13,11 @@ namespace RidgeList.Playwright
     public class ClearDown
     {
         [Test, Ignore("")]
-        public async Task ClearDownOldWishlists()
+        public async Task ClearDownOldWishlists(string baseUrl)
         {
             var httpClient = new HttpClient()
             {
-                BaseAddress = new Uri(WishlistTestBase.baseUrl)
+                BaseAddress = new Uri(baseUrl)
             };
             await httpClient.PostAsync("/WishlistTest/clearOldTestWishlists", new StringContent(string.Empty));
         }
@@ -29,11 +29,11 @@ namespace RidgeList.Playwright
         {
             public string title { get; set; }
         }
-        public static async Task CreateWishlist(string title, IPage page)
+        public static async Task CreateWishlist(string baseUrl, string title, IPage page)
         {
             var httpClient = new HttpClient()
             {
-                BaseAddress = new Uri(WishlistTestBase.baseUrl)
+                BaseAddress = new Uri(baseUrl)
             };
             var response = await httpClient.PostAsync("/WishlistTest/createTestWishlist", 
                 new StringContent(
@@ -41,7 +41,7 @@ namespace RidgeList.Playwright
                     )
                 );
             var responseBody = (await response.Content.ReadAsStringAsync()).Replace("\"", "");
-            await page.GoToAsync(WishlistTestBase.baseUrl + "/wishlist/" + responseBody);
+            await page.GoToAsync(baseUrl + "/wishlist/" + responseBody);
         }
     }
 
@@ -82,15 +82,15 @@ namespace RidgeList.Playwright
 
         public Task EnterNameAndEmail(string name, string email)
         {
-            _page.TypeAsync(Cy.Name("NewPersonEmail"), email).MakeItSync();
-            _page.TypeAsync(Cy.Name("NewPersonName"), name).MakeItSync();
+            _page.TypeAsync(Cy.InputName("NewPersonEmail"), email).MakeItSync();
+            _page.TypeAsync(Cy.InputName("NewPersonName"), name).MakeItSync();
             return Task.CompletedTask;
         }
         
         public Task AddItem(string description)
         {
             _page.ClickAsync(Cy.Name("AddNewItemButton")).MakeItSync();
-            _page.TypeAsync(Cy.Name("AddItem"), description).MakeItSync();
+            _page.TypeAsync(Cy.TextAreaName("AddItem"), description).MakeItSync();
             _page.ClickAsync(Cy.Name("SaveItemButton")).MakeItSync();
             return Task.CompletedTask;
         }
@@ -134,6 +134,16 @@ namespace RidgeList.Playwright
         public static string Name(string str)
         {
             return $"[cypress-name={str}]";
+        }
+
+        public static string InputName(string str)
+        {
+            return $"[cypress-name={str}] >> input";
+        }
+
+        public static string TextAreaName(string str)
+        {
+            return $"[cypress-name={str}] >> textarea";
         }
     }
 

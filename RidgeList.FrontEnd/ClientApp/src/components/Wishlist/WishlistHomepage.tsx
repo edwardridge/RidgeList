@@ -4,7 +4,7 @@ import {WishlistClient, WishlistSummaryModel} from "../../nswag/api.generated";
 import './WishlistSummary.css';
 import { useGetLogin } from "../useLogin";
 import { useMaterialStyles } from "../useMaterialStyles";
-import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, Grid, List, ListItem, ListItemText, TextField, Typography } from "@material-ui/core";
+import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, Grid, List, ListItem, ListItemText, Paper, TextField, Typography } from "@material-ui/core";
 
 interface WishlishHomepageProps{
     wishlistClient: WishlistClient;
@@ -50,7 +50,7 @@ export const WishlistHomepage = (props : WishlishHomepageProps) => {
     }
     
     let createButtons = <>
-        <Button fullWidth cypress-name='CreateNewWishlist' onClick={onClickAddWishlist}>
+        <Button fullWidth variant="contained" cypress-name='CreateNewWishlist' onClick={onClickAddWishlist}>
             Create New...
         </Button>
 
@@ -62,10 +62,10 @@ export const WishlistHomepage = (props : WishlishHomepageProps) => {
                 <FormControlLabel control={<Checkbox checked={creatorIsGiftee} onChange={(e) => { setCreatorIsGiftee(e.target.checked) }} name="areTheyGiftee" color="primary" />} label="Are you receiving gifts?" />
             </DialogContent>
             <DialogActions>
-                <Button cypress-name='Create' onClick={onClickCreate}>
+                <Button color="primary" cypress-name='Create' onClick={onClickCreate}>
                     Create
                 </Button>
-                <Button onClick={onClickCancel}>
+                <Button color="secondary" onClick={onClickCancel}>
                     Close
                 </Button>
             </DialogActions>
@@ -73,14 +73,14 @@ export const WishlistHomepage = (props : WishlishHomepageProps) => {
     </>
 
     let summaries =
-        <div className={classes.root}>
+        <Paper >
             <List component="nav">
                 {
                     wishlistSummaries.map(s =>
                         <ListItem divider key={s.name} onClick={() => history.push(`/wishlist/${s.id}`)} button><ListItemText primary={s.name} /></ListItem>)
                 }
             </List>
-        </div>
+        </Paper>
 
     return (
         <div className={classes.paper}>

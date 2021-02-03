@@ -16,7 +16,7 @@ namespace RidgeList.Playwright
         [Test]
         public async Task AllowsNewPeopleToBeAdded()
         {
-            await PlaywrightHelpers.CreateWishlist("AllowsNewPeopleToBeAdded", page);
+            await PlaywrightHelpers.CreateWishlist(baseUrl, "AllowsNewPeopleToBeAdded", page);
             var wishlistPage = new WishlistPageObject(page);
             await wishlistPage.AddNewPerson("ed@ed.com", "Ed");
         }
@@ -24,7 +24,7 @@ namespace RidgeList.Playwright
         [Test]
         public async Task DoesntAllowDuplicateNamesToBeAdded()
         {
-            await PlaywrightHelpers.CreateWishlist("DoesntAllowDuplicateNamesToBeAdded", page);
+            await PlaywrightHelpers.CreateWishlist(baseUrl, "DoesntAllowDuplicateNamesToBeAdded", page);
             var wishlistPage = new WishlistPageObject(page);
             await wishlistPage.AddNewPerson("Ed", "ed@ed.com");
             
@@ -42,7 +42,7 @@ namespace RidgeList.Playwright
         [Test]
         public async Task AllowsYouToAddItem()
         {
-            await PlaywrightHelpers.CreateWishlist("AllowsYouToAddItem", page);
+            await PlaywrightHelpers.CreateWishlist(baseUrl, "AllowsYouToAddItem", page);
             var wishlistPage = new WishlistPageObject(page);
             await wishlistPage.AddNewPerson("Ed", "ed@ed.com");
 
@@ -54,7 +54,7 @@ namespace RidgeList.Playwright
         {
             var rand = Guid.NewGuid().ToString();
             var nameOfWishlist = "AllowsYouToClaimAndUnclaim " + rand;
-            await PlaywrightHelpers.CreateWishlist(nameOfWishlist, page);
+            await PlaywrightHelpers.CreateWishlist(baseUrl, nameOfWishlist, page);
             var wishlistPage = new WishlistPageObject(page);
             await wishlistPage.AddNewPerson("New", "new@new.com");
             await wishlistPage.AddItem("New present idea");
@@ -63,7 +63,7 @@ namespace RidgeList.Playwright
             await page.GoToAsync(baseUrl);
             await page.ClickAsync("text=" + nameOfWishlist);
 
-            await page.ClickAsync("td:right-of(:text('New present idea'))");
+            await page.ClickAsync("text=New present idea");
         }
         
         [Test]
@@ -71,7 +71,7 @@ namespace RidgeList.Playwright
         {
             var rand = Guid.NewGuid().ToString();
             var nameOfWishlist = "NewItemAutoAppearsOnOtherPersonsWishlist " + rand;
-            await PlaywrightHelpers.CreateWishlist(nameOfWishlist, page);
+            await PlaywrightHelpers.CreateWishlist(baseUrl, nameOfWishlist, page);
             var wishlistPage = new WishlistPageObject(page);
             await wishlistPage.AddNewPerson("New", "new@new.com");
 
@@ -80,9 +80,11 @@ namespace RidgeList.Playwright
             await loginPage2.LoginWithCookie("new@new.com", "New", baseUrl, baseUrl);
             await page2.GoToAsync(baseUrl);
             await page2.ClickAsync("text=" + nameOfWishlist);
-            
+
+            await page2.WaitForTimeoutAsync(1000);
+
             await wishlistPage.AddItem("New present idea");
-            await page2.ClickAsync("td:right-of(:text('New present idea'))");
+            await page2.ClickAsync("text=New present idea");
         }
     }
 }

@@ -31,7 +31,7 @@
         <Content Include="ClientApp\cypress\tsconfig.json" />
         <None Remove="$(SpaRoot)**" />
         <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
-        <None Remove="ClientApp\src\components\Common\WishlistButton.tsx" />
+        <None Remove="ClientApp\src\components\useMaterialStyles.ts" />
         <None Include="ClientApp\cypress.json" />
     </ItemGroup>
 
@@ -42,7 +42,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <TypeScriptCompile Include="ClientApp\src\components\Common\WishlistButton.tsx" />
+      <TypeScriptCompile Include="ClientApp\src\components\useMaterialStyles.ts" />
     </ItemGroup>
 
     <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

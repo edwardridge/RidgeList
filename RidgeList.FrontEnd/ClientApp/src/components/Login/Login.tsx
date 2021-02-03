@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Button } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
-import {useSetLogin, useGetLogin} from "../useLogin";
+import { useSetLogin, useGetLogin } from "../useLogin";
+import { useMaterialStyles } from "../useMaterialStyles";
 import "./Login.css"
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
+import Container from '@material-ui/core/Container';
 
 export const Login : React.FC<any> = (props) => {
     const [loginEmail, setLoginEmail] = useState("");    
@@ -10,6 +15,7 @@ export const Login : React.FC<any> = (props) => {
     const history = useHistory();
     const getLogin = useGetLogin(true);
     const setLogin = useSetLogin();
+    const classes = useMaterialStyles();
     
     useEffect(() => {
        if(getLogin.IsLoggedIn) {
@@ -23,16 +29,49 @@ export const Login : React.FC<any> = (props) => {
     }
      
     return (
-        <div className='loginWrapper'>
-            <h5>Welcome to RidgeList! To login, please enter your name and email address - note that the wishlists are linked to your email address.</h5>
-            <div className='form-group mt-lg-4 input-group-lg'>
-                <input type="text" className='form-control' id='NameLogin' cypress-name="NameLogin" placeholder="Your name..." onChange={(e) => setLoginName(e.target.value)}/>
+        <>
+            <div className={classes.paper}>
+                <Typography component="h1" variant="h5" color="primary">
+                    Welcome to RidgeList!
+                </Typography>
+                <form className={classes.form} noValidate>
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="NameLogin"
+                        label="Email Address"
+                        name="NameLogin"
+                        onChange={(e) => setLoginName(e.target.value)}
+                        cypress-name="NameLogin"
+                        autoFocus
+                    />
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="EmailLogin"
+                        label="Name"
+                        type="text"
+                        id="EmailLogin"
+                        cypress-name="EmailLogin"
+                        autoComplete="email"
+                        onChange={(e) => setLoginEmail(e.target.value)}
+                    />
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}
+                        cypress-name='LoginButton'
+                        onClick={loginClicked}
+                    >
+                        Enter
+          </Button>
+                </form>
             </div>
-            <div className='form-group input-group-lg'>
-                <input type="text" className='form-control' id='EmailLogin' cypress-name="EmailLogin" placeholder="Your email address..." onChange={(e) => setLoginEmail(e.target.value)}/>
-            </div>
-            <Button size='lg' variant="success" cypress-name='LoginButton' onClick={loginClicked}>
-                Login
-            </Button>
-        </div>)
+        </>)
 }

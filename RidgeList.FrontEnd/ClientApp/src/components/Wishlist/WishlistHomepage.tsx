@@ -4,7 +4,8 @@ import {WishlistClient, WishlistSummaryModel} from "../../nswag/api.generated";
 import { Link } from "react-router-dom";
 import './WishlistSummary.css';
 import { useGetLogin } from "../useLogin";
-import { Modal, ModalDialog, Button } from "react-bootstrap"
+import { useMaterialStyles } from "../useMaterialStyles";
+import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControlLabel, Grid, List, ListItem, ListItemText, Paper, TextField, Typography } from "@material-ui/core";
 
 interface WishlishHomepageProps{
     wishlistClient: WishlistClient;
@@ -19,6 +20,7 @@ export const WishlistHomepage = (props : WishlishHomepageProps) => {
     const login = useGetLogin(false);
     const [show, setShow] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
+    const classes = useMaterialStyles();
 
     useEffect(() => {
         loadWishListSummaries(login.Email);
@@ -51,55 +53,55 @@ export const WishlistHomepage = (props : WishlishHomepageProps) => {
     }
     
     let createButtons = <>
-        <Button className='w-100' size='lg' variant="outline-primary" cypress-name='CreateNewWishlist' onClick={onClickAddWishlist}>
+        <Button fullWidth cypress-name='CreateNewWishlist' onClick={onClickAddWishlist}>
             Create New...
         </Button>
 
-        <Modal show={show} onHide={onClickCancel}>
-            <Modal.Header closeButton>
-                <Modal.Title>Create New Wishlist</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
+        <Dialog open={show} onClose={onClickCancel}>
+
+            <DialogTitle>Create New Wishlist</DialogTitle>
+            <DialogContent>
                 <div className='input-group input-group-lg'>
-                    <input ref={inputRef} autoFocus={true} type="text" className='w-100 form-control' value={nameOfNewWishlist} onChange={handleInputChange} placeholder='Name of wishlist...' cypress-name='NameOfWishlist'></input>
-                    <div className="form-check mt-3">
-                        <input className="form-check-input" type="checkbox" checked={creatorIsGiftee} id="areTheyGiftee" onChange={(e) => {setCreatorIsGiftee(e.target.checked)}}/>
-                        <label className="form-check-label" htmlFor="areTheyGiftee">
-                            Are you receiving gifts?
-                        </label>
-                    </div>
+                    <TextField autoFocus margin="dense" value={nameOfNewWishlist} onChange={handleInputChange} label='Name of wishlist...' cypress-name='NameOfWishlist' fullWidth></TextField>
+                    <FormControlLabel control={<Checkbox checked={creatorIsGiftee} onChange={(e) => { setCreatorIsGiftee(e.target.checked) }} name="areTheyGiftee" color="primary" />} label="Are you receiving gifts?" />
                 </div>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button block={true} variant="primary" size='lg' cypress-name='Create' onClick={onClickCreate}>
+            </DialogContent>
+            <DialogActions>
+                <Button cypress-name='Create' onClick={onClickCreate}>
                     Create
                 </Button>
-                <Button block={true} variant="secondary" size='lg' onClick={onClickCancel}>
+                <Button onClick={onClickCancel}>
                     Close
                 </Button>
-            </Modal.Footer>
-        </Modal>
+            </DialogActions>
+        </Dialog>
     </>
 
     let summaries =
-        <div className='wishlistSummaries'>
-            {
-                wishlistSummaries.map(s =>
-                    <Link key={s.name} to={`wishlist/${s.id}`}> <div key={s.name} className='wishlistSummaryItem'>{s.name}</div></Link>)
-            }
-            <a>
-                
-            </a>
+        <div className={classes.root}>
+            <List component="nav">
+                {
+                    wishlistSummaries.map(s =>
+                        <ListItem divider key={s.name} onClick={() => history.push(`/wishlist/${s.id}`)} button><ListItemText primary={s.name} /></ListItem>)
+                }
+            </List>
         </div>
 
     return (
-        <div>
-            <h2 className='text-center'>Your Wishlists</h2>
-
-            <div>
-                {createButtons}
-            </div>
-            { summaries }
+        <div className={classes.paper}>
+            <Grid container spacing={3}>
+                <Grid item xs={12}>
+                    <Typography component="h1" variant="h5" color="primary" align="center">
+                        Your Wishlists
+                    </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                    { summaries }
+                </Grid>
+                <Grid item xs={12}>
+                    {createButtons}
+                </Grid>
+            </Grid>
         </div>
     );
 }

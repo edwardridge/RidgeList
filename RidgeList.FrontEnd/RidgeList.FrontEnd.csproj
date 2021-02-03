@@ -31,6 +31,7 @@
         <Content Include="ClientApp\cypress\tsconfig.json" />
         <None Remove="$(SpaRoot)**" />
         <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+        <None Remove="ClientApp\src\components\Common\WishlistButton.tsx" />
         <None Include="ClientApp\cypress.json" />
     </ItemGroup>
 
@@ -38,6 +39,10 @@
       <ProjectReference Include="..\RidgeList.Domain\RidgeList.Domain.csproj" />
       <ProjectReference Include="..\RidgeList.Models\RidgeList.Models.csproj" />
       <ProjectReference Include="..\RidgeList.Postgres\RidgeList.Postgres.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <TypeScriptCompile Include="ClientApp\src\components\Common\WishlistButton.tsx" />
     </ItemGroup>
 
     <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

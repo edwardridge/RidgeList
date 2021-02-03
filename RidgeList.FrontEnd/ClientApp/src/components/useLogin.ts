@@ -33,7 +33,7 @@ export const useLogout = () => {
 }
 
 export class LoginDetails{
-    private static NotLoggedInEmail = "NOT_LOGGED_IN";
+    private static NotLoggedInEmail = "not_logged_in";
     public Email : string;
     constructor(emailInput : string, public Name : string) {
         this.Email = emailInput.toLowerCase();
@@ -45,5 +45,5 @@ export class LoginDetails{
     
     public static NotLoggedInUser = ()  => {
         return new LoginDetails(LoginDetails.NotLoggedInEmail, "");
-    }
+    }   
 }

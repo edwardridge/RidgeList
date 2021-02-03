@@ -58,16 +58,19 @@ export const WishlistPersonRow = (props : WishlistPersonRowProps) => {
                             </ListItemIcon>
                         </ListItem>)
                 })}
-            <div className='mt-2'>
-                
+            <ListItem divider button component="a">
                 <Button type="submit" fullWidth cypress-name='AddNewItemButton' color="primary" onClick={clickNewItemButton}>
                     Add New Gift Idea
                 </Button>
+           </ListItem>
+            <div className='mt-2'>
+                
+                
 
                 <Dialog open={showAddItem} onClose={onClickCancelAddItem}>
                     <DialogTitle>Add New Gift Idea</DialogTitle>
                     <DialogContent>
-                        <TextField multiline rows={8} value={newItemDescription} onChange={(event) => { setNewItemDescription(event.target.value) }} placeholder='What would you like? You can also include links!' cypress-name='AddItem'></TextField>
+                        <TextField multiline fullWidth rows={8} value={newItemDescription} onChange={(event) => { setNewItemDescription(event.target.value) }} placeholder='What would you like? You can also include links!' cypress-name='AddItem'></TextField>
                     </DialogContent>
                     <DialogActions> 
                         <Button color="primary" onClick={() => { clickAddItem(false) }}>

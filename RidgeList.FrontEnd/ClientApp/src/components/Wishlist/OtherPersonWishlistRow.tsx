@@ -2,6 +2,7 @@ import {WishlistClient, WishlistModel, WishlistPersonModel} from "../../nswag/ap
 import React from "react";
 import {useWishlistClient} from "./useWishlistClient";
 import Linkify from "react-linkify";
+import { List, ListItem, Paper, ListItemText, ListItemIcon, Checkbox, Typography } from "@material-ui/core";
 
 interface OtherPersonWishlistRowProps{
     wishlistPerson : WishlistPersonModel;
@@ -24,6 +25,12 @@ export const OtherPersonWishlistRow = (props : OtherPersonWishlistRowProps) => {
             .unclaimGift(props.wishlistId, presentId);
         props.setWishlist(wishlist);
     }
+
+    let toggleClaim = async (claimed: boolean, claimedByYou: boolean, presentId: string) => {
+        if (claimed == true && claimedByYou === false) return;
+        return claimedByYou ? unclaimPresentClick(presentId) : claimPresentClick(presentId);
+    }
+
     let getPresentIdeas = () => {
         if(props.wishlistPerson.presentIdeas?.length === 0){
             return <div className='lightGrey text-center'>They haven't added any gift ideas yet!</div>
@@ -31,36 +38,35 @@ export const OtherPersonWishlistRow = (props : OtherPersonWishlistRowProps) => {
         return props.wishlistPerson.presentIdeas?.map(s => {
             let claimed = s.claimerEmail !== null && s.claimerEmail !== '';
             let claimedByYou = s.claimerEmail === props.loggedInEmail;
-            let unclaim = claimedByYou ? <button className='btn btn-lg btn-outline-danger w-100'
-                                                 onClick={() => unclaimPresentClick(s.id)}>Unclaim</button> : null;
             let claimerText = claimed ? `- claimed by ${claimedByYou ? "you" : s.claimerName}` : '';
-            let claimSection = s.claimerName ?
-                <>{unclaim}</> :
-                <button className='btn btn-lg btn-outline-success w-100'
-                        onClick={() => claimPresentClick(s.id)}>Claim</button>;
-
-            let classes = `mt-1 ml-0 mr-0 row ${claimed ? 'claimed' : ''}`;
+            
+            let classes = `${claimed ? 'claimed' : ''}`;
             return (
-                <tr key={s.id} className={classes}>
-                    <td className='col-8 col-md-10' cypress-name={`${s.id}-description`}>
-                        <Linkify>{s.description} {claimerText}</Linkify></td>
-                    <td className='col-4 col-md-2 text-right' cypress-name={`${s.id}-buttons`}>{claimSection}</td>
-                </tr>
+                <ListItem divider button component="a" key={s.id} className={classes} onClick={() => toggleClaim(claimed, claimedByYou, s.id)}>
+                    <ListItemIcon>
+                        <Checkbox
+                            disabled={claimed === true && !claimedByYou}
+                            edge="start"
+                            checked={claimedByYou}
+                            tabIndex={-1}
+                            disableRipple
+                        />
+                    </ListItemIcon>
+                    <ListItemText cypress-name={`${s.id}-description`}>
+                        <Linkify>{s.description} {claimerText}</Linkify></ListItemText>
+                </ListItem>
             )
         });
     }
     
     return (
-        <div className='wishlistSummaryItem mb-3' key={`${props.wishlistPerson.email}`}>
-            <div>
-                <span className='d-inline-block col-12 text-center'>
-                    <h4 className='d-inline-block'>{props.wishlistPerson.name}</h4>
-                    <span className='lightGrey'> ({props.wishlistPerson.email})</span>
-                </span>
-            </div>
-            <table className='table'>
+        <Paper key={`${props.wishlistPerson.email}`} className='mt-4'>
+            <Typography component="h6" variant="h6" align="center" id="wishlistTitle">
+                {props.wishlistPerson.name} <span className='lightGrey'> ({props.wishlistPerson.email})</span>
+            </Typography>
+            <List>
                 {getPresentIdeas()}
-            </table>
-        </div>
+            </List>
+        </Paper>
     )
 }

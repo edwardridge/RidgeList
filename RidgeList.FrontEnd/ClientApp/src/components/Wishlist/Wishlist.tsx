@@ -6,10 +6,9 @@ import "./WishlistSummary.css";
 import { useGetLogin } from "../useLogin";
 import {WishlistPersonRow} from "./WishlistPersonRow";
 import {OtherPersonWishlistRow} from "./OtherPersonWishlistRow";
-import { Button, Modal } from "react-bootstrap";
 import {useWishlistClient} from "./useWishlistClient";
 import * as signalR from "@microsoft/signalr";
-import { Grid, Typography } from "@material-ui/core";
+import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, Grid, Paper, TextField, Typography } from "@material-ui/core";
 import { useMaterialStyles } from "../useMaterialStyles";
 
 interface WishlistProps {
@@ -90,45 +89,41 @@ interface Props extends RouteComponentProps<WishlistProps> {
         
         let createNewPerson = (
             <>
-                <Button variant="outline-dark" size='lg' cypress-name='AddNewPerson' className='w-100' onClick={clickAddNewPerson}>
+                <Button type="submit" cypress-name='AddNewPerson' onClick={clickAddNewPerson}>
                 Add Someone New
                 </Button>
 
-                <Modal show={addingNewPerson} onHide={onCLickCancelAddNewPerson}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Add Somone New!</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <div className='input-group-lg'>
-                            <input type="text" ref={nameInputRef} className='form-control w-100' onChange={(event) => setNewPersonName(event.target.value)}
-                                value={newPersonName} placeholder="What's their name?" cypress-name='NewPersonName'></input>
-                            <input type="text" className='form-control w-100 mt-2' onChange={changeNewEmail}
-                                value={newPersonEmail} placeholder="What's their email?" cypress-name='NewPersonEmail'></input>
-                        </div>
-                        <div className="form-check mt-3">
-                            <input className="form-check-input" type="checkbox" checked={newPersonIsGiftee} id="areTheyGiftee" onChange={(e) => {setNewPersonIsGiftee(e.target.checked)}}/>
-                                <label className="form-check-label" htmlFor="areTheyGiftee">
-                                    Are they receiving gifts?   
-                                </label>
-                        </div>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="primary" block={true} size='lg' disabled={addingNewPersonButtonDisabled} onClick={createNewPersonClick} cypress-name='CreateNewPerson'>
+                <Dialog open={addingNewPerson} onClose={onCLickCancelAddNewPerson}>
+                    <DialogTitle>
+                        Add Somone New!
+                    </DialogTitle>
+                    <DialogContent>
+                            <TextField onChange={(event) => setNewPersonName(event.target.value)}
+                                value={newPersonName} placeholder="What's their name?" cypress-name='NewPersonName'></TextField>
+                            <TextField onChange={changeNewEmail}
+                                value={newPersonEmail} placeholder="What's their email?" cypress-name='NewPersonEmail'></TextField>
+                       
+                        <FormControlLabel control={<Checkbox checked={newPersonIsGiftee} id="areTheyGiftee" onChange={(e) => { setNewPersonIsGiftee(e.target.checked) }} color="primary" />}
+                                label ="Are they receiving gifts?" />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button color="primary" disabled={addingNewPersonButtonDisabled} onClick={createNewPersonClick} cypress-name='CreateNewPerson'>
                         Add
                         </Button>
-                        <Button variant="secondary" block={true} size='lg' onClick={onCLickCancelAddNewPerson}>
+                        <Button color="secondary" onClick={onCLickCancelAddNewPerson}>
                             Close
                         </Button>
-                    </Modal.Footer>
-                </Modal>
+                    </DialogActions>
+                </Dialog>
             </>
         )
         
         let listOfOtherPeoplesIdeas = (
             <div className='mt-5'>
-                <hr className='bigLine'></hr>
-                <h3 className='text-center mt-5'>Other people's gift ideas</h3>
-                <div className='wishlistSummaries' cypress-name="ListOfPeople">
+                <Typography component="h5" variant="h5" align="center" id="wishlistTitle">
+                    Other people's gift ideas
+                </Typography>
+                <div cypress-name="ListOfPeople">
                     {
                         otherGiftees?.map((s) => 
                             <OtherPersonWishlistRow 
@@ -143,7 +138,6 @@ interface Props extends RouteComponentProps<WishlistProps> {
             </div>)
         
         let otherNonGifteeSection = <div className='mt-5'>
-            <hr className='bigLine'></hr>
             <h3 className='text-center mt-5'>Gift givers</h3>
             <table className='table'>
                 {otherNonGiftees?.map(s => `${s.name} (${s.email})`).join(', ')}

@@ -9,6 +9,8 @@ import {OtherPersonWishlistRow} from "./OtherPersonWishlistRow";
 import { Button, Modal } from "react-bootstrap";
 import {useWishlistClient} from "./useWishlistClient";
 import * as signalR from "@microsoft/signalr";
+import { Grid, Typography } from "@material-ui/core";
+import { useMaterialStyles } from "../useMaterialStyles";
 
 interface WishlistProps {
     id: string;
@@ -28,6 +30,7 @@ interface Props extends RouteComponentProps<WishlistProps> {
      let [addingNewPersonButtonDisabled, setAddingNewPersonButtonDisabled] = useState(false);
      let wishlistClient = useWishlistClient();
      let nameInputRef = useRef<HTMLInputElement>(null);
+     const classes = useMaterialStyles();
     
      useEffect(() => {
         let id = props.match.params.id;
@@ -148,26 +151,35 @@ interface Props extends RouteComponentProps<WishlistProps> {
         </div>
         
         let addNewItems = <>
-            <h1 className='text-center' id="wishlistTitle">Wishlist - {wishlist.name}</h1>
-
+            <Typography component="h2" variant="h2" color="primary" align="center" id="wishlistTitle">
+                Wishlist - {wishlist.name}
+            </Typography>
             <div>
-                <h3 className='text-center mt-4'>What would you like?</h3>
+                <Typography component="h5" variant="h5" align="center" id="wishlistTitle">
+                    What would you like?
+                </Typography>
                 <WishlistPersonRow cypress-name='WishlistPerson' wishlistPerson={loggedInWishlist} wishlistId={wishlist.id} setWishlist={setWishlist} loginDetails={login}></WishlistPersonRow>
             </div>
         </>
         
         return (
-            <div>
-                {loggedInWishlist.giftee ? addNewItems : <></>}
+            <div className={classes.paper}>
+                <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                        {loggedInWishlist.giftee ? addNewItems : <></>}
+                    </Grid>
                 
-                <div>
-                    {otherGiftees?.length ?? 0 > 0 ? listOfOtherPeoplesIdeas : <></>}
-                </div>
-                <div>
-                    {otherNonGiftees?.length ?? 0 > 0 ? otherNonGifteeSection : <></>}
-                </div>
+                    <Grid item xs={12}>
+                        {otherGiftees?.length ?? 0 > 0 ? listOfOtherPeoplesIdeas : <></>}
+                    </Grid>
+                    <Grid item xs={12}>
+                        {otherNonGiftees?.length ?? 0 > 0 ? otherNonGifteeSection : <></>}
+                    </Grid>
                 
-                <div className='mt-5'> {createNewPerson}</div>
+                    <Grid item xs={12}>
+                            {createNewPerson}
+                    </Grid>
+                </Grid>
             </div>
         )
     }

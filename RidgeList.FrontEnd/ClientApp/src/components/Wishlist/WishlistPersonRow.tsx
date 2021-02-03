@@ -1,9 +1,10 @@
 import React, {useRef, useState} from "react";
 import { LoginDetails } from "../useLogin";
 import {WishlistClient, WishlistModel, WishlistPersonModel} from "../../nswag/api.generated";
-import { Button, Modal } from "react-bootstrap";
 import {useWishlistClient} from "./useWishlistClient";
 import Linkify from "react-linkify";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, List, ListItem, ListItemIcon, ListItemText, TextField } from "@material-ui/core";
+import { DeleteForever } from '@material-ui/icons';
 
 interface WishlistPersonRowProps{
     loginDetails : LoginDetails;
@@ -46,54 +47,48 @@ export const WishlistPersonRow = (props : WishlistPersonRowProps) => {
     }
 
     let addItems = (
-        <div className='loggedInPersonGifts'>
-            
-            <table className='table '>
-                <tbody>
+        <List component="nav">
+
                 {props.wishlistPerson.presentIdeas?.map(s => {
                     return (
-                        <tr className='row' key={s.id}>
-                            <td className='col-8 col-md-10'><Linkify>{s.description}</Linkify></td>
-                            <td className='col-4 col-md-2'>
-                                <button className='btn btn-outline-danger w-100 btn-lg' onClick={() => removePresentIdea(s.id)}>Remove</button>
-                            </td>
-                        </tr>)
+                        <ListItem divider key={s.id}>
+                            <ListItemText><Linkify>{s.description}</Linkify></ListItemText>
+                            <ListItemIcon>
+                                <DeleteForever color="action" onClick={() => removePresentIdea(s.id)}></DeleteForever >
+                            </ListItemIcon>
+                        </ListItem>)
                 })}
-                </tbody>
-            </table>
             <div className='mt-2'>
                 
-                <Button variant="outline-primary" size='lg' cypress-name='AddNewItemButton' className='w-100' onClick={clickNewItemButton}>
+                <Button type="submit" fullWidth cypress-name='AddNewItemButton' color="primary" onClick={clickNewItemButton}>
                     Add New Gift Idea
                 </Button>
 
-                <Modal show={showAddItem} onHide={onClickCancelAddItem}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Add New Gift Idea</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <textarea ref={inputRef} rows={8} className='form-control w-100' value={newItemDescription} onChange={(event) => { setNewItemDescription(event.target.value) }} placeholder='What would you like? You can also include links!' cypress-name='AddItem'></textarea>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button size='lg' block={true} variant="primary" onClick={() => { clickAddItem(false) }}>
+                <Dialog open={showAddItem} onClose={onClickCancelAddItem}>
+                    <DialogTitle>Add New Gift Idea</DialogTitle>
+                    <DialogContent>
+                        <TextField multiline rows={8} value={newItemDescription} onChange={(event) => { setNewItemDescription(event.target.value) }} placeholder='What would you like? You can also include links!' cypress-name='AddItem'></TextField>
+                    </DialogContent>
+                    <DialogActions> 
+                        <Button color="primary" onClick={() => { clickAddItem(false) }}>
                             Save And Add More
                         </Button>
-                        <Button size='lg' block={true} variant="primary" cypress-name='SaveItemButton' onClick={() => { clickAddItem(true) }}>
+                        <Button cypress-name='SaveItemButton' color="primary" onClick={() => { clickAddItem(true) }}>
                             Save And Close
                         </Button>
-                        <Button size='lg' block={true} variant="secondary" onClick={onClickCancelAddItem}>
+                        <Button color="secondary" onClick={onClickCancelAddItem}>
                             Close
                         </Button>
-                    </Modal.Footer>
-                </Modal>
+                    </DialogActions>
+                </Dialog>
                 
             </div>
-    </div>
+        </List>
     );
    
     return (
         
-        <div className='mt-4' key={`${props.wishlistPerson.email}`}>
+        <div>
             {addItems}
         </div>
     )

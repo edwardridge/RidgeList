@@ -65,5 +65,24 @@ namespace RidgeList.Playwright
 
             await page.ClickAsync("td:right-of(:text('New present idea'))");
         }
+        
+        [Test]
+        public async Task NewItemAutoAppearsOnOtherPersonsWishlist()
+        {
+            var rand = Guid.NewGuid().ToString();
+            var nameOfWishlist = "NewItemAutoAppearsOnOtherPersonsWishlist " + rand;
+            await PlaywrightHelpers.CreateWishlist(nameOfWishlist, page);
+            var wishlistPage = new WishlistPageObject(page);
+            await wishlistPage.AddNewPerson("New", "new@new.com");
+
+            var page2 = await browser.NewPageAsync();
+            var loginPage2 = new LoginPageObject(page2);
+            await loginPage2.LoginWithCookie("new@new.com", "New", baseUrl, baseUrl);
+            await page2.GoToAsync(baseUrl);
+            await page2.ClickAsync("text=" + nameOfWishlist);
+            
+            await wishlistPage.AddItem("New present idea");
+            await page2.ClickAsync("td:right-of(:text('New present idea'))");
+        }
     }
 }

@@ -1,6 +1,6 @@
-﻿using NUnit.Framework;
+﻿//using NUnit.Framework;
 
-[assembly: Parallelizable(ParallelScope.Fixtures)]
-#if DEBUG
-[assembly: LevelOfParallelism(4)]
-#endif
+//[assembly: Parallelizable(ParallelScope.Fixtures)]
+//#if DEBUG
+//[assembly: LevelOfParallelism(4)]
+//#endif

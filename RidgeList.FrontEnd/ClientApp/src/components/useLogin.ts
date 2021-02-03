@@ -34,8 +34,9 @@ export const useLogout = () => {
 
 export class LoginDetails{
     private static NotLoggedInEmail = "NOT_LOGGED_IN";
-    
-    constructor(public Email : string, public Name : string) {
+    public Email : string;
+    constructor(emailInput : string, public Name : string) {
+        this.Email = emailInput.toLowerCase();
     }
     
     public get IsLoggedIn() {

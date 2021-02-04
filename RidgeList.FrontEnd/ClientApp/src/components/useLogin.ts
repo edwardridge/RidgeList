@@ -1,11 +1,12 @@
 import Cookie from "js-cookie";
 import { useHistory } from "react-router-dom";
+import { UserClient } from "../nswag/api.generated";
 
 export const useGetLogin = (fromLoginPage : boolean) => {
     let history = useHistory();
     
     let cookieLogin = Cookie.get("login") ?? "";
-    let login : LoginDetails = new LoginDetails("", "");
+    let login : LoginDetails = new LoginDetails("");
     if(cookieLogin === ""){
         login = LoginDetails.NotLoggedInUser();
     }
@@ -18,12 +19,14 @@ export const useGetLogin = (fromLoginPage : boolean) => {
         history.push('/');
         return login;
     }
-    return new LoginDetails(login.Email, login.Name);
+    return new LoginDetails(login.UserId);
 }
 
 export const useSetLogin = () => {
-    return (email: string, name: string) => {
-        const loginDetails = new LoginDetails(email, name);
+    return async (email: string) => {
+        var userClient = new UserClient();
+        let userId = await userClient.login(email);
+        const loginDetails = new LoginDetails(userId);
         Cookie.set('login', loginDetails);
     }
 }
@@ -35,14 +38,14 @@ export const useLogout = () => {
 export class LoginDetails{
     private static NotLoggedInEmail = "NOT_LOGGED_IN";
     
-    constructor(public Email : string, public Name : string) {
+    constructor(public UserId : string) {
     }
     
     public get IsLoggedIn() {
-        return this.Email !== LoginDetails.NotLoggedInEmail;
+        return this.UserId !== LoginDetails.NotLoggedInEmail;
     }
     
     public static NotLoggedInUser = ()  => {
-        return new LoginDetails(LoginDetails.NotLoggedInEmail, "");
+        return new LoginDetails(LoginDetails.NotLoggedInEmail);
     }
 }

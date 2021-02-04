@@ -78,10 +78,10 @@ interface Props extends RouteComponentProps<WishlistProps> {
             setAddingNewPerson(false);
             setNewPersonName("");
         }
-        
-        let loggedInWishlist = wishlist.people?.find(s => s.email === login.Email) ?? {} as WishlistPersonModel;
-        let otherGiftees = wishlist.people?.filter(s => s.email !== login.Email && s.giftee === true);
-        let otherNonGiftees = wishlist.people?.filter(s => s.email !== login.Email && s.giftee === false);
+
+        let loggedInWishlist = wishlist.people?.find(s => s.personId === login.UserId) ?? {} as WishlistPersonModel;
+        let otherGiftees = wishlist.people?.filter(s => s.personId !== login.UserId && s.giftee === true);
+        let otherNonGiftees = wishlist.people?.filter(s => s.personId !== login.UserId && s.giftee === false);
         
         let createNewPerson = (
             <>
@@ -129,7 +129,7 @@ interface Props extends RouteComponentProps<WishlistProps> {
                                 key={s.email} 
                                 wishlistPerson={s} 
                                 wishlistId={wishlist?.id} 
-                                loggedInEmail={login.Email}
+                                loggedInId={login.UserId}
                                 setWishlist={setWishlist}></OtherPersonWishlistRow> )
                     }
                 </div>

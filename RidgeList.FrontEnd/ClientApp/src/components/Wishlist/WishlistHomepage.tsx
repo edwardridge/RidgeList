@@ -21,8 +21,8 @@ export const WishlistHomepage = (props : WishlishHomepageProps) => {
     const classes = useMaterialStyles();
 
     useEffect(() => {
-        loadWishListSummaries(login.Email);
-    }, [wishlistSummaries.length, login.Email]);
+        loadWishListSummaries(login.UserId);
+    }, [wishlistSummaries.length, login.UserId]);
 
     let onClickCancel = () => {
         setNameOfNewWishlist("");
@@ -30,7 +30,7 @@ export const WishlistHomepage = (props : WishlishHomepageProps) => {
     }
     
     let onClickCreate = async () => {
-        let newWishlist = await props.wishlistClient.create(nameOfNewWishlist, login.Email, login.Name, creatorIsGiftee);
+        let newWishlist = await props.wishlistClient.create(nameOfNewWishlist, login.UserId, creatorIsGiftee);
         history.push("/wishlist/" + newWishlist.id);
         setShow(false);
     }

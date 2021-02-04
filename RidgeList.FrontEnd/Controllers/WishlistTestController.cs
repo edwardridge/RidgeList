@@ -13,18 +13,26 @@ namespace RidgeList.FrontEnd.Controllers
         private readonly IWishlistRepository _repository;
         private readonly IWishlistSummaryRepository _wishlistSummaryRepository;
         private string testEmailAccount = "test@testwishlist.com";
+        private Guid testAccountId = Guid.Parse("8eb3fe5c-6965-443b-8828-752c0121f21f");
 
         public WishlistTestController(IWishlistRepository repository, IWishlistSummaryRepository wishlistSummaryRepository)
         {
             _repository = repository;
             _wishlistSummaryRepository = wishlistSummaryRepository;
         }
-        
+
+        [HttpPost]
+        [Route("createTestUser")]
+        public async Task CreateTestUser([FromBody] CreateTestUserModel req)
+        {
+            await _wishlistSummaryRepository.CreatePerson(req.id, "test@test.com");
+        }
+
         [HttpPost]
         [Route("createTestWishlist")]
         public async Task<Guid> CreateTestWishlist([FromBody] CreateWishlistRequestModel req)
         {
-            var wishlist = Wishlist.Create("[Test] " + req.title, testEmailAccount, "Test");
+            var wishlist = Wishlist.Create("[Test] " + req.title, req.creatorId);
            await _repository.Save(wishlist);
            return wishlist.Id;
         }
@@ -33,7 +41,7 @@ namespace RidgeList.FrontEnd.Controllers
         [Route("clearOldTestWishlists")]
         public async Task ClearOldTestWishlists()
         {
-            var summaries = await _wishlistSummaryRepository.GetWishlistSummaries(testEmailAccount);
+            var summaries = await _wishlistSummaryRepository.GetWishlistSummaries(testAccountId);
             foreach (var summary in summaries.ToList())
             {
                 var wishlist = await _repository.Load(summary);
@@ -41,7 +49,7 @@ namespace RidgeList.FrontEnd.Controllers
                 {
                     foreach (var p in wishlist.People)
                     {
-                        await _wishlistSummaryRepository.RemoveWishlistFromPerson(p.Email, wishlist.Id);
+                        await _wishlistSummaryRepository.RemoveWishlistFromPerson(p.PersonId, wishlist.Id);
                     }
                     await _repository.Delete(wishlist.Id);
                 }
@@ -52,5 +60,12 @@ namespace RidgeList.FrontEnd.Controllers
     public class CreateWishlistRequestModel
     {
         public string title { get; set; }
+
+        public Guid creatorId { get; set; }
+    }
+
+    public class CreateTestUserModel
+    {
+        public Guid id { get; set; }
     }
 }

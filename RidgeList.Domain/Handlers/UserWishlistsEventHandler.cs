@@ -5,11 +5,11 @@ using MediatR;
 
 namespace RidgeList.Domain.Handlers
 {
-    public record PersonAddedToWishlist(string Email, Guid wishlistId) : INotification
+    public record PersonAddedToWishlist(Guid PersonId, Guid wishlistId) : INotification
     {
     }
     
-    public record PersonRemovedFromWishlist(string Email, Guid wishlistId) : INotification
+    public record PersonRemovedFromWishlist(Guid PersonId, Guid wishlistId) : INotification
     {
     }
     
@@ -25,12 +25,12 @@ namespace RidgeList.Domain.Handlers
         
         public async Task Handle(PersonAddedToWishlist notification, CancellationToken cancellationToken)
         {
-            await _wishlistSummaryRepository.AddWishlistToPerson(notification.Email, notification.wishlistId);
+            await _wishlistSummaryRepository.AddWishlistToPerson(notification.PersonId, notification.wishlistId);
         }
 
         public async Task Handle(PersonRemovedFromWishlist notification, CancellationToken cancellationToken)
         {
-            await this._wishlistSummaryRepository.RemoveWishlistFromPerson(notification.Email, notification.wishlistId);
+            await this._wishlistSummaryRepository.RemoveWishlistFromPerson(notification.PersonId, notification.wishlistId);
         }
     }
 }

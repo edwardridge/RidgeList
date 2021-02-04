@@ -13,14 +13,14 @@ namespace RidgeList.Playwright
         public async Task LoginWorks()
         {
             await loginPage.LoginUsingFormWithTestAccount();
-
+            
             page.Url.Should().Contain("/wishlists");
         }
         
         [Test]
         public async Task NoCookieRedirectsBackToHomepage()
         {
-            await loginPage.LoginWithCookie("test@testwishlist.com", "Test", baseUrl, baseUrl);
+            await loginPage.LoginWithCookie(Guid.NewGuid(), baseUrl, baseUrl);
         
             await page.Context.ClearCookiesAsync();
             await page.GoToAsync(baseUrl);

@@ -4,7 +4,7 @@ using MediatR;
 
 namespace RidgeList.Domain.Handlers
 {
-    public record RemoveGiftIdeaCommand(Guid WishlistId, string Email, Guid PresentId) : IEditWishlistCommand;
+    public record RemoveGiftIdeaCommand(Guid WishlistId, Guid PersonId, Guid PresentId) : IEditWishlistCommand;
     
     public class RemoveGiftIdeaHandler : EditWishlistHandlerBase<RemoveGiftIdeaCommand>
     {
@@ -14,7 +14,7 @@ namespace RidgeList.Domain.Handlers
 
         public override Task EditWishlist(RemoveGiftIdeaCommand command, Wishlist wishlist)
         {
-            wishlist.RemoveGiftIdea(command.Email, command.PresentId);
+            wishlist.RemoveGiftIdea(command.PersonId, command.PresentId);
             return Task.CompletedTask;
         }
     }

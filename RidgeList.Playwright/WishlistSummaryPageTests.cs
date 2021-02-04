@@ -10,7 +10,7 @@ namespace RidgeList.Playwright
         [SetUp]
         public async Task SetupThis()
         {
-            await loginPage.LoginWithCookie("test@testwishlist.com", "Test", baseUrl, baseUrl);
+            await loginPage.LoginWithCookie(Guid.NewGuid(), baseUrl, baseUrl);
         }
 
         [Test]

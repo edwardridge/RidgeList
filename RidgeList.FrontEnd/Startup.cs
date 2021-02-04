@@ -15,6 +15,7 @@ using System.Linq;
 using Marten;
 using MediatR;
 using RidgeList.FrontEnd.SignalRHubs;
+using RidgeList.Models;
 
 namespace RidgeList.FrontEnd
 {
@@ -57,17 +58,16 @@ namespace RidgeList.FrontEnd
                 {
                     storeOptions.Connection(connectionString);
                     storeOptions.DatabaseSchemaName = aspnetCoreEnvironment;
-            
-                    storeOptions.Schema.For<UserWishlists>().Identity(s => s.Email);
                 });
                 //
             }));
             services.AddScoped<IWishlistRepository, MartenDbRepository>();
             services.AddScoped<IWishlistSummaryRepository, MartenDbSummaryRepository>();
             services.AddScoped<IUpdateWishlistHub, UpdateWishlistHub>();
+            services.AddScoped<WishlistMapper, WishlistMapper>();
 
             // services.AddSingleton<IWishlistRepository>(new Func<IServiceProvider, IWishlistRepository>(s => new InMemoryWishlistRepository()));
-            
+
             services.AddSwaggerDocument();
             
             services.AddMediatR(typeof(Startup), typeof(Wishlist));

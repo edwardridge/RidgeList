@@ -15,7 +15,7 @@ namespace RidgeList.Domain.Tests
         public async Task Saves_WishList_And_Loads_Wishlist()
         {
             var repo = new InMemoryWishlistRepository();
-            var wishlist = Wishlist.Create("Asd", "a@b.com", "Ed");
+            var wishlist = Wishlist.Create("Asd", Guid.NewGuid());
             await repo.Save(wishlist);
 
             var reloadedWishlist = await repo.Load(wishlist.Id);
@@ -55,49 +55,53 @@ namespace RidgeList.Domain.Tests
         [Test]
         public void Creating_A_Wishlist_Adds_An_Id_And_Initial_User()
         {
-            var wishlist = Wishlist.Create("Eds test wishlist", "a@b.com", "Ed");
+            var idOfCreator = Guid.NewGuid();
+            var wishlist = Wishlist.Create("Eds test wishlist", idOfCreator);
             wishlist.Id.Should().NotBeEmpty();
             wishlist.Name.Should().Be("Eds test wishlist");            
-            wishlist.GetPeople().First().Email.Should().Be("a@b.com");             
+            wishlist.GetPeople().First().PersonId.Should().Be(idOfCreator);             
             wishlist.GetPeople().First().Giftee.Should().Be(true);      
-            wishlist.Creator.Should().Be("a@b.com");
+            wishlist.CreatorId.Should().Be(idOfCreator);
         }
 
         [Test]
         public void Can_Add_Person_With_Email_And_Name_To_Wishlist()
         {
-            var wishlist = Wishlist.Create("Eds test wishlist", "a@b.com", "Ed");
-            wishlist.AddPerson("Ed", "edwardridge@gmail.com", true);
+            var idOfCreator = Guid.NewGuid();
+            var newPersonId = Guid.NewGuid();
+            var wishlist = Wishlist.Create("Eds test wishlist", idOfCreator);
+            wishlist.AddPerson(newPersonId, true);
             
             wishlist.GetPeople().Should().BeEquivalentTo(new []
             {
-                new WishlistPerson() { Email = "a@b.com", Name = "Ed", Giftee = true},
-                new WishlistPerson() { Email = "edwardridge@gmail.com", Name = "Ed", Giftee = true}
+                new WishlistPerson() { PersonId = idOfCreator, Giftee = true},
+                new WishlistPerson() { PersonId = newPersonId, Giftee = true}
             });
         }
         
-        [Test]
-        public void Can_Edit_Name()
-        {
-            var wishlist = Wishlist.Create("Eds test wishlist", "a@b.com", "Ed");
-            wishlist.EditPerson("a@b.com", "Ed");
+        //[Test]
+        //public void Can_Edit_Name()
+        //{
+        //    var idOfCreator = Guid.NewGuid();
+        //    var wishlist = Wishlist.Create("Eds test wishlist", idOfCreator);
+        //    wishlist.EditPerson("a@b.com", "Ed");
             
-            wishlist.GetPeople().Should().BeEquivalentTo(new []
-            {
-                new WishlistPerson() { Email = "a@b.com", Name = "Ed", Giftee = true},
+        //    wishlist.GetPeople().Should().BeEquivalentTo(new []
+        //    {
+        //        new WishlistPerson() { Email = "a@b.com", Name = "Ed", Giftee = true},
                 
-            });
-        }
+        //    });
+        //}
 
         [Test]
         public void Can_Add_Item_To_Wishlist()
         {
-            var emailOfCreator = "a@b.com";
+            var idOfCreator = Guid.NewGuid();
             
-            var wishlist = Wishlist.Create("Eds test wishlist", emailOfCreator, "Ed");
-            wishlist.AddGiftIdea(emailOfCreator, "My first present");
+            var wishlist = Wishlist.Create("Eds test wishlist", idOfCreator);
+            wishlist.AddGiftIdea(idOfCreator, "My first present");
 
-            var person = wishlist.GetPerson(emailOfCreator);
+            var person = wishlist.GetPerson(idOfCreator);
 
             person.PresentIdeas.Count.Should().Be(1);
             person.PresentIdeas.Single().Description.Should().Be("My first present");
@@ -106,14 +110,14 @@ namespace RidgeList.Domain.Tests
         [Test]
         public void Can_Remove_Item_From_Wishlist()
         {
-            var emailOfCreator = "a@b.com";
+            var idOfCreator = Guid.NewGuid();
             
-            var wishlist = Wishlist.Create("Eds test wishlist", emailOfCreator, "Ed");
-            wishlist.AddGiftIdea(emailOfCreator, "My first present");
-            var present = wishlist.GetPerson(emailOfCreator).PresentIdeas.Single();
-            wishlist.RemoveGiftIdea(emailOfCreator, present.Id);
+            var wishlist = Wishlist.Create("Eds test wishlist", idOfCreator);
+            wishlist.AddGiftIdea(idOfCreator, "My first present");
+            var present = wishlist.GetPerson(idOfCreator).PresentIdeas.Single();
+            wishlist.RemoveGiftIdea(idOfCreator, present.Id);
             
-            var person = wishlist.GetPerson(emailOfCreator);
+            var person = wishlist.GetPerson(idOfCreator);
 
             person.PresentIdeas.Count.Should().Be(0);
         }
@@ -121,64 +125,79 @@ namespace RidgeList.Domain.Tests
         [Test]
         public void Can_Claim_Present()
         {
-            var emailOfCreator = "a@b.com";
+            var idOfCreator = Guid.NewGuid();
+
+            var secondPersonid = Guid.NewGuid();
             var presentId = Guid.NewGuid();
             var wishlist =
-                new WishlistBuilder()
-                    .AddPerson("Ed", emailOfCreator)
-                    .AddPerson("Second person", "second@email.com")
-                    .AddPresentIdea(emailOfCreator, "asd", presentId)
+                new WishlistBuilder(idOfCreator)
+                    .AddPerson(secondPersonid)
+                    .AddPerson(idOfCreator)
+                    .AddPresentIdea(idOfCreator, "asd", presentId)
                     .Build();
             
-            var presentIdea = wishlist.GetPerson(emailOfCreator).PresentIdeas.Single();
-            wishlist.ClaimGift(presentIdea.Id, emailOfCreator);
+            var presentIdea = wishlist.GetPerson(idOfCreator).PresentIdeas.Single();
+            wishlist.ClaimGift(presentIdea.Id, secondPersonid);
 
-            presentIdea.Claimer.Should().Be(emailOfCreator);
+            presentIdea.ClaimerId.Should().Be(secondPersonid);
         }
         
         [Test]
         public void Can_UnClaim_Present()
         {
-            var emailOfCreator = "a@b.com";
+            var idOfCreator = Guid.NewGuid();
+            var secondPersonId = Guid.NewGuid();
             var presentId = Guid.NewGuid();
             var wishlist =
-                new WishlistBuilder()
-                    .AddPerson("Ed", emailOfCreator)
-                    .AddPerson("Second person", "second@email.com")
-                    .AddPresentIdea(emailOfCreator, "asd", presentId)
-                    .AddClaimer(presentId, "second@email.com")
+                new WishlistBuilder(idOfCreator)
+                    .AddPerson(idOfCreator)
+                    .AddPerson(secondPersonId)
+                    .AddPresentIdea(idOfCreator, "asd", presentId)
+                    .AddClaimer(presentId, secondPersonId)
                     .Build();
 
             wishlist.UnclaimPresent(presentId);
             
-            var presentIdea = wishlist.GetPerson(emailOfCreator).PresentIdeas.Single();
+            var presentIdea = wishlist.GetPerson(idOfCreator).PresentIdeas.Single();
 
-            presentIdea.Claimer.Should().BeNullOrEmpty();
+            presentIdea.ClaimerId.Should().BeNull();
         }
 
         [Test]
-        public void Maps_Name_From_Email_In_Claim()
+        public async Task Maps_Name_From_Email_In_Claim()
         {
             var presentId = Guid.NewGuid();
+            var idOfCreator = Guid.NewGuid();
+            var secondPersonId = Guid.NewGuid();
+            var thirdPersonId = Guid.NewGuid();
+
 
             var wishlist =
-                new WishlistBuilder()
-                    .AddPerson("Ed", "ed@ed.com")
-                    .AddPerson("Second person", "b@b.com")
-                    .AddPresentIdea("ed@ed.com", "desc 1", presentId)
-                    .AddClaimer(presentId, "b@b.com")
+                new WishlistBuilder(idOfCreator)
+                    .AddPerson(secondPersonId)
+                    .AddPerson(thirdPersonId)
+                    .AddPresentIdea(secondPersonId, "desc 1", presentId)
+                    .AddClaimer(presentId, thirdPersonId)
                     .Build();
-            
-            var mapper = new WishlistMapper();
-            var model = mapper.Map(wishlist);
+
+
+            IWishlistSummaryRepository wishlistSummariesRepo = new InMemoryWishlistSummaryRepository();
+            await wishlistSummariesRepo.AddWishlistToPerson(idOfCreator, wishlist.Id);
+            await wishlistSummariesRepo.AddWishlistToPerson(secondPersonId, wishlist.Id);
+            await wishlistSummariesRepo.AddWishlistToPerson(thirdPersonId, wishlist.Id);
+            await wishlistSummariesRepo.SetEmailAndName(secondPersonId, "second@person.com", "Second person");
+            await wishlistSummariesRepo.SetEmailAndName(thirdPersonId, "third@person.com", "Third person");
+
+            var mapper = new WishlistMapper(wishlistSummariesRepo);
+            var model = await mapper.Map(wishlist);
             var presentIdeaModels = model.People
-                .Single(s => s.Email == "ed@ed.com")
+                .Single(s => s.PersonId == secondPersonId)
                 .PresentIdeas;
             var claimer = presentIdeaModels
                 .Single(s => s.Id == presentId);
 
-            claimer.ClaimerName.Should().Be("Second person");            
-            claimer.ClaimerEmail.Should().Be("b@b.com");
+            claimer.ClaimerName.Should().Be("Third person");            
+            claimer.ClaimerEmail.Should().Be("third@person.com");
         }
     }
 
@@ -186,30 +205,29 @@ namespace RidgeList.Domain.Tests
     {
         private Wishlist _wishlist;
 
-        public WishlistBuilder()
+        public WishlistBuilder(Guid creatorId)
         {
             this._wishlist = new Wishlist()
             {
-                Creator = "asd",
+                CreatorId = creatorId,
                 Name = "test"
             };
         }
 
-        public WishlistBuilder AddPerson(string name, string email)
+        public WishlistBuilder AddPerson(Guid personId)
         {
             this._wishlist.People.Add(new WishlistPerson()
             {
-                Email = email,
-                Name = name
+                PersonId = personId
             });
             return this;
         }
 
-        public WishlistBuilder AddPresentIdea(string email, string desc, Guid presentId)
+        public WishlistBuilder AddPresentIdea(Guid personId, string desc, Guid presentId)
         {
             this._wishlist
                 .People
-                .Single(s => s.Email == email)
+                .Single(s => s.PersonId == personId)
                 .PresentIdeas
                 .Add(new PresentIdea()
                 {
@@ -220,13 +238,13 @@ namespace RidgeList.Domain.Tests
             return this;
         }
         
-        public WishlistBuilder AddClaimer(Guid presentId, string email)
+        public WishlistBuilder AddClaimer(Guid presentId, Guid claimerId)
         {
             this._wishlist
                 .People
                 .SelectMany(s => s.PresentIdeas)
                 .Single(s => s.Id == presentId)
-                .Claimer = email;
+                .ClaimerId = claimerId;
             
             return this;
         }

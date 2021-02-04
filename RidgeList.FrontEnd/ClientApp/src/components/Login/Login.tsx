@@ -21,8 +21,8 @@ export const Login : React.FC<any> = (props) => {
         }
     });
     
-    const loginClicked = () => {
-        setLogin(loginEmail, loginName);
+    const loginClicked = async () => {
+        await setLogin(loginEmail);
         history.push('/wishlists');
     }
      
@@ -32,7 +32,7 @@ export const Login : React.FC<any> = (props) => {
                 <Typography component="h1" variant="h5" color="primary">
                     Welcome to RidgeList!
                 </Typography>
-                <form className={classes.form} noValidate>
+                <div className={classes.form}>
                     <TextField
                         autoFocus
                         variant="outlined"
@@ -70,7 +70,7 @@ export const Login : React.FC<any> = (props) => {
                     >
                         Enter
           </Button>
-                </form>
+                </div>
             </div>
         </>)
 }

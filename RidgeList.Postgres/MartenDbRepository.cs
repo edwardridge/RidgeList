@@ -17,27 +17,25 @@ namespace RidgeList.Postgres
             this.documentStore = documentStore;
         }
         
-        public async Task<IEnumerable<Guid>> GetWishlistSummaries(string emailAddress)
+        public async Task<IEnumerable<Guid>> GetWishlistSummaries(Guid personId)
         {
-            var emailLower = emailAddress.ToLower();
             using (var session = documentStore.OpenSession())
             {
-                var userWishlists = await session.LoadAsync<UserWishlists>(emailLower);
+                var userWishlists = await session.LoadAsync<UserWishlists>(personId);
                 return userWishlists?.Wishlists ?? new Guid[0].ToList();
             }
         }
 
-        public async Task AddWishlistToPerson(string email, Guid wishlistId)
+        public async Task AddWishlistToPerson(Guid personId, Guid wishlistId)
         {
-            var emailLower = email.ToLower();
             using (var session = documentStore.OpenSession())
             {
-                var userWishlists = await session.LoadAsync<UserWishlists>(emailLower);
+                var userWishlists = await session.LoadAsync<UserWishlists>(personId);
                 if (userWishlists == null)
                 {
                     userWishlists = new UserWishlists()
                     {
-                        Email = emailLower,
+                        Id = personId,
                         Wishlists = {wishlistId}
                     };
                 }
@@ -51,14 +49,60 @@ namespace RidgeList.Postgres
             }
         }
 
-        public async Task RemoveWishlistFromPerson(string email, Guid wishlistId)
+        public async Task RemoveWishlistFromPerson(Guid personId, Guid wishlistId)
         {
             using (var session = documentStore.OpenSession())
             {
-                var userWishlists = await session.LoadAsync<UserWishlists>(email);
+                var userWishlists = await session.LoadAsync<UserWishlists>(personId);
                 userWishlists.Wishlists.Remove(wishlistId);
                 session.Store(userWishlists);
                 session.SaveChanges();
+            }
+        }
+
+        public async Task<UserWishlists> GetDetails(Guid personId)
+        {
+            using (var session = documentStore.OpenSession())
+            {
+                return await session.LoadAsync<UserWishlists>(personId);
+            }
+        }
+
+        public async Task SetEmailAndName(Guid personId, string email, string name)
+        {
+            using (var session = documentStore.OpenSession())
+            {
+                var userWishlists = await session.LoadAsync<UserWishlists>(personId);
+                userWishlists.Email = email;
+                userWishlists.Name = name;
+                session.Store(userWishlists);
+                session.SaveChanges();
+            }
+        }
+
+        public Task<UserWishlists> GetUserFromEmail(string email)
+        {
+            using (var session = documentStore.OpenSession())
+            {
+                var userWishlists = session.Query<UserWishlists>().SingleOrDefault(s => s.Email.ToLower() == email.ToLower());
+                return Task.FromResult(userWishlists);
+            }
+        }
+
+        public async Task CreatePerson(Guid personId, string email)
+        {
+            using (var session = documentStore.OpenSession())
+            {
+                var userWishlists = session.Load<UserWishlists>(personId);
+                if(userWishlists == null)
+                {
+                    session.Store(new UserWishlists()
+                    {
+                        Id = personId,
+                        Email = email
+                    });
+                }
+                await session.SaveChangesAsync();
             }
         }
     }

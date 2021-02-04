@@ -15,16 +15,19 @@ namespace RidgeList.FrontEnd.Controllers
     [Route("[controller]")]
     public class WishlistController : Controller
     {
+        private readonly WishlistMapper wishlistMapper;
         private readonly IWishlistRepository _repository;
         private readonly IWishlistSummaryRepository _wishlistSummaryRepository;
         private readonly IMediator _mediator;
         private readonly IUpdateWishlistHub _updateWishlistHub;
 
         public WishlistController(
+            WishlistMapper wishlistMapper,
             IWishlistRepository repository, 
             IWishlistSummaryRepository wishlistSummaryRepository, 
             IMediator mediator, IUpdateWishlistHub updateWishlistHub)
         {
+            this.wishlistMapper = wishlistMapper;
             _repository = repository;
             _wishlistSummaryRepository = wishlistSummaryRepository;
             _mediator = mediator;
@@ -33,11 +36,11 @@ namespace RidgeList.FrontEnd.Controllers
 
         [HttpPost]
         [Route("create")]
-        public async Task<WishlistModel> Create(string nameOfWishlist, string emailOfCreator, string nameOfCreator, bool creatorIsGiftee)
+        public async Task<WishlistModel> Create(string nameOfWishlist, Guid creatorId, bool creatorIsGiftee)
         {
-            var wishlist = await this._mediator.Send(new CreateWishlistCommand(nameOfWishlist, nameOfCreator, emailOfCreator, creatorIsGiftee));
+            var wishlist = await this._mediator.Send(new CreateWishlistCommand(nameOfWishlist, creatorId, creatorIsGiftee));
 
-            return MapWishlistToModel(wishlist);
+            return await MapWishlistToModel(wishlist);
         }
 
         [HttpGet]
@@ -45,35 +48,35 @@ namespace RidgeList.FrontEnd.Controllers
         public async Task<WishlistModel> GetWishlist(string name)
         {
             var wishlist = await this._repository.Load(Guid.Parse(name));
-            return new WishlistMapper().Map(wishlist);
+            return await wishlistMapper.Map(wishlist);
         }
 
         [HttpPost]
         [Route("addPerson")]
         public async Task<WishlistModel> AddPerson(Guid wishlistId, string email, string name, bool isGiftee)
         {
-            return await SendCommandAndMapResponse(new AddPersonCommand(wishlistId, name, email, isGiftee));
+            return await SendCommandAndMapResponse(new AddPersonCommand(wishlistId, email, isGiftee));
         }
 
         [HttpPost]
         [Route("addGiftIdea")]
-        public async Task<WishlistModel> AddGiftIdea(Guid wishlistId, string email, string description)
+        public async Task<WishlistModel> AddGiftIdea(Guid wishlistId, Guid personId, string description)
         {
-            return await SendCommandAndMapResponse(new AddGiftIdeaCommand(wishlistId, email, description));
+            return await SendCommandAndMapResponse(new AddGiftIdeaCommand(wishlistId, personId, description));
         }
 
         [HttpPost]
         [Route("removeGiftIdea")]
-        public async Task<WishlistModel> RemoveGiftIdea(Guid wishlistId, string email, Guid presentId)
+        public async Task<WishlistModel> RemoveGiftIdea(Guid wishlistId, Guid personId, Guid presentId)
         {
-            return await SendCommandAndMapResponse(new RemoveGiftIdeaCommand(wishlistId, email, presentId));
+            return await SendCommandAndMapResponse(new RemoveGiftIdeaCommand(wishlistId, personId, presentId));
         }
         
         [HttpPost]
         [Route("claimGift")]
-        public async Task<WishlistModel> ClaimGift(Guid wishlistId, string email, Guid presentId)
+        public async Task<WishlistModel> ClaimGift(Guid wishlistId, Guid personid, Guid presentId)
         {
-            return await SendCommandAndMapResponse(new ClaimGiftIdeaCommand(wishlistId, presentId, email));
+            return await SendCommandAndMapResponse(new ClaimGiftIdeaCommand(wishlistId, presentId, personid));
         }
         
         [HttpPost]
@@ -85,9 +88,9 @@ namespace RidgeList.FrontEnd.Controllers
 
         [HttpGet]
         [Route("summaries")]
-        public async Task<IEnumerable<WishlistSummaryModel>> GetSummaries(string emailAddress)
+        public async Task<IEnumerable<WishlistSummaryModel>> GetSummaries(Guid personId)
         {
-            var ids = await this._wishlistSummaryRepository.GetWishlistSummaries(emailAddress);
+            var ids = await this._wishlistSummaryRepository.GetWishlistSummaries(personId);
             var summaries = new List<WishlistSummary>();
             foreach (var id in ids)
             {
@@ -101,16 +104,16 @@ namespace RidgeList.FrontEnd.Controllers
             return summaries.Select(WishlistSummaryModel.Map);
         }
 
-        private static WishlistModel MapWishlistToModel(Wishlist wishlist)
+        private async Task<WishlistModel> MapWishlistToModel(Wishlist wishlist)
         {
-            return new WishlistMapper().Map(wishlist);
+            return await wishlistMapper.Map(wishlist);
         }
 
         private async Task<WishlistModel> SendCommandAndMapResponse(IEditWishlistCommand command)
         {
             var wishlist = await this._mediator.Send(command);
-            var model = MapWishlistToModel(wishlist);
-            _updateWishlistHub.SendWishlist(model);
+            var model = await MapWishlistToModel(wishlist);
+            await _updateWishlistHub.SendWishlist(model);
             return model;
         }
     }

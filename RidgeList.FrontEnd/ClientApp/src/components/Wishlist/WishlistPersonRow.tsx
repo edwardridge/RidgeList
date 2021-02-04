@@ -20,7 +20,7 @@ export const WishlistPersonRow = (props : WishlistPersonRowProps) => {
     const inputRef = useRef<HTMLTextAreaElement>(null);
     
     let clickAddItem = async (closeAddItem: boolean) => {
-        let wishlist = await wishlistClient.addGiftIdea(props.wishlistId, props.loginDetails.Email, newItemDescription);
+        let wishlist = await wishlistClient.addGiftIdea(props.wishlistId, props.loginDetails.UserId, newItemDescription);
         props.setWishlist(wishlist);
         setNewItemDescription("");
         if (closeAddItem){
@@ -33,7 +33,7 @@ export const WishlistPersonRow = (props : WishlistPersonRowProps) => {
     }
 
     let removePresentIdea = async (id: string) => {
-        let wishlist = await wishlistClient.removeGiftIdea(props.wishlistId, props.loginDetails.Email, id);
+        let wishlist = await wishlistClient.removeGiftIdea(props.wishlistId, props.loginDetails.UserId, id);
         props.setWishlist(wishlist);
     }
 

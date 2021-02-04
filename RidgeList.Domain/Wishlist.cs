@@ -19,21 +19,26 @@ namespace RidgeList.Domain
         {
             this.Wishlists = new List<Guid>();
         }
+
+        public Guid Id { get; set; }
+
         public string Email { get; set; }
 
         public List<Guid> Wishlists { get; set; }
+
+        public string Name { get; set; }
     }
     
     public class Wishlist
     {
-        public static Wishlist Create(string name, string emailOfCreator, string nameOfCreator, bool creatorIsGiftee = true)
+        public static Wishlist Create(string name, Guid idOfCreator, bool creatorIsGiftee = true)
         {
             return new Wishlist()
             {  
                 Id = Guid.NewGuid(),
                 Name =  name,
-                People = new WishlistPeople{ new WishlistPerson() { Email = emailOfCreator, Name = nameOfCreator,Giftee = creatorIsGiftee} },
-                Creator = emailOfCreator
+                People = new WishlistPeople{ new WishlistPerson() { PersonId = idOfCreator, Giftee = creatorIsGiftee} },
+                CreatorId = idOfCreator
             };
         }
 
@@ -48,13 +53,13 @@ namespace RidgeList.Domain
         
         public string Name { get; set; }
         
-        public string Creator { get; set; }
+        public Guid CreatorId { get; set; }
 
-        public void AddPerson(string name, string email, bool isGiftee)
+        public void AddPerson(Guid personId, bool isGiftee)
         {
-            if (this.People.ContainsEmail(email) == false)
+            if (this.People.ContainsPerson(personId) == false)
             {
-                this.People.Add(new WishlistPerson() { Email = email, Name = name, Giftee = isGiftee });
+                this.People.Add(new WishlistPerson() { PersonId = personId, Giftee = isGiftee });
             }
         }
 
@@ -63,43 +68,39 @@ namespace RidgeList.Domain
             return this.People;
         }
 
-        public void EditPerson(string email, string newName)
+        public void AddGiftIdea(Guid personId, string present)
         {
-            this.People.Single(s => s.Email == email).Name = newName;
+            this.GetPerson(personId)?.AddPresentIdea(present);
         }
 
-        public void AddGiftIdea(string email, string present)
+        public WishlistPerson GetPerson(Guid id)
         {
-            this.GetPerson(email)?.AddPresentIdea(present);
+            return this.People.SingleOrDefault(s => s.PersonId == id);
         }
 
-        public WishlistPerson GetPerson(string email)
+        public void ClaimGift(Guid presentId, Guid claimerId)
         {
-            return this.People.SingleOrDefault(s => s.Email == email);
-        }
-
-        public void ClaimGift(Guid presentId, string emailOfClaimer)
-        {
-            this.People.SelectMany(s => s.PresentIdeas).First(s => s.Id == presentId).Claimer = emailOfClaimer;
+            this.People.SelectMany(s => s.PresentIdeas).First(s => s.Id == presentId).ClaimerId = claimerId;
         }
 
         public void UnclaimPresent(Guid presentId)
         {
-            this.People.SelectMany(s => s.PresentIdeas).First(s => s.Id == presentId).Claimer = null;
+            this.People.SelectMany(s => s.PresentIdeas).First(s => s.Id == presentId).ClaimerId = null;
         }
 
-        public void RemoveGiftIdea(string emailOfCreator, Guid presentId)
+        public void RemoveGiftIdea(Guid creatorId, Guid presentId)
         {
-            var present = this.GetPerson(emailOfCreator).PresentIdeas.Single(s => s.Id == presentId);
-            this.GetPerson(emailOfCreator).PresentIdeas.Remove(present);
+            var present = this.GetPerson(creatorId).PresentIdeas.Single(s => s.Id == presentId);
+            this.GetPerson(creatorId).PresentIdeas.Remove(present);
         }
     }
 
     public class WishlistPeople : Collection<WishlistPerson>
     {
-        public bool ContainsEmail(string email)
+
+        public bool ContainsPerson(Guid personId)
         {
-            return this.Any(s => s.Email == email);
+            return this.Any(s => s.PersonId == personId);
         }
     }
 
@@ -110,9 +111,7 @@ namespace RidgeList.Domain
             this.PresentIdeas = new List<PresentIdea>();
         }
         
-        public string Name { get; set; }
-
-        public string Email { get; set; }
+        public Guid PersonId { get; set; }
         
         public List<PresentIdea> PresentIdeas { get; set; }
         
@@ -135,6 +134,6 @@ namespace RidgeList.Domain
         
         public Guid Id { get; set; }
         
-        public string Claimer { get; set; }
+        public Guid? ClaimerId { get; set; }
     }
 }

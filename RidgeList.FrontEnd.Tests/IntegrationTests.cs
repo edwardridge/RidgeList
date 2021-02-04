@@ -62,13 +62,14 @@ namespace RidgeList.FrontEnd.Tests
             var response = await client.PostAsync("/wishlist/create?nameOfWishlist=TestWIshlist&emailOfCreator=ed&nameOfCreator=ed&creatorIsGiftee=true", new StringContent(""));
 
             inMemoryRepository._wishlists.Count.Should().BeGreaterThan(0);
-            inMemoryRepository._wishlists.Single().Value.Creator.Should().Be("ed");
+            inMemoryRepository._wishlists.Single().Value.CreatorId.Should().NotBeEmpty();
         }
         
         [Test]
         public async Task Test_AddPerson_Wishlist()
         {
-            var wishlist = Wishlist.Create("a", "b", "c", true);
+            var idOfCreator = Guid.NewGuid();
+            var wishlist = Wishlist.Create("a", idOfCreator, true);
             await this.inMemoryRepository.Save(wishlist);
             
             var response = await client.PostAsync($"/wishlist/addPerson?wishlistId={wishlist.Id.ToString()}&name=Ed&email=ed&isGiftee=true", new StringContent(""));
@@ -76,7 +77,7 @@ namespace RidgeList.FrontEnd.Tests
             response.EnsureSuccessStatusCode();
             inMemoryRepository._wishlists.Count.Should().BeGreaterThan(0);
             inMemoryRepository._wishlists.Single().Value.People.Count.Should().Be(2);
-            var wishlistSummaries = await inMemorySummaryRepository.GetWishlistSummaries("ed");
+            var wishlistSummaries = await inMemorySummaryRepository.GetWishlistSummaries(idOfCreator);
             wishlistSummaries.Count().Should().Be(1);
         }
     }

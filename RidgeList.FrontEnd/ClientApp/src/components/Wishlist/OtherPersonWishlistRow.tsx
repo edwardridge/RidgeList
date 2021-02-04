@@ -6,7 +6,7 @@ import { List, ListItem, Paper, ListItemText, ListItemIcon, Checkbox, Typography
 
 interface OtherPersonWishlistRowProps{
     wishlistPerson : WishlistPersonModel;
-    loggedInEmail : string;
+    loggedInId : string;
     wishlistId: string;
     setWishlist: (wishlist : WishlistModel) => void;
 }
@@ -16,7 +16,7 @@ export const OtherPersonWishlistRow = (props : OtherPersonWishlistRowProps) => {
     
     let claimPresentClick = async (presentId : string) => {
         let wishlist = await wishlistClient
-            .claimGift(props.wishlistId, props.loggedInEmail, presentId);
+            .claimGift(props.wishlistId, props.loggedInId, presentId);
         props.setWishlist(wishlist);
     }
 
@@ -37,7 +37,7 @@ export const OtherPersonWishlistRow = (props : OtherPersonWishlistRowProps) => {
         }
         return props.wishlistPerson.presentIdeas?.map(s => {
             let claimed = s.claimerEmail !== null && s.claimerEmail !== '';
-            let claimedByYou = s.claimerEmail === props.loggedInEmail;
+            let claimedByYou = s.claimerId === props.loggedInId;
             let claimedBySomeoneElse = claimed === true && claimedByYou === false;
             let claimerText = claimed ? `- claimed by ${claimedByYou ? "you" : s.claimerName}` : '';
             
@@ -61,7 +61,7 @@ export const OtherPersonWishlistRow = (props : OtherPersonWishlistRowProps) => {
     }
     
     return (
-        <Paper key={`${props.wishlistPerson.email}`} className='mt-4'>
+        <Paper key={`${props.wishlistPerson.personId}`} className='mt-4'>
             <Typography component="h6" variant="h6" align="center" id="wishlistTitle">
                 {props.wishlistPerson.name} <span className='lightGrey'> ({props.wishlistPerson.email})</span>
             </Typography>

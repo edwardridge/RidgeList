@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using RidgeList.Domain;
 
 namespace RidgeList.Models
@@ -23,8 +24,22 @@ namespace RidgeList.Models
 
     public class WishlistMapper
     {
-        public WishlistModel Map(Wishlist wishlist)
+        private IWishlistSummaryRepository wishlistSummariesRepo;
+
+        public WishlistMapper(IWishlistSummaryRepository wishlistSummariesRepo)
         {
+            this.wishlistSummariesRepo = wishlistSummariesRepo;
+        }
+
+        public async Task<WishlistModel> Map(Wishlist wishlist)
+        {
+            var userWishlists = new List<UserWishlists>();
+            foreach(var person in wishlist.People)
+            {
+                var userWishlist = await wishlistSummariesRepo.GetDetails(person.PersonId);
+                userWishlists.Add(userWishlist);
+            }
+
             return new WishlistModel()
             {
                 Id = wishlist.Id,
@@ -32,22 +47,26 @@ namespace RidgeList.Models
                 People = wishlist.GetPeople().Select(s => 
                     new WishlistPersonModel()
                     {
-                        Name = s.Name, 
-                        Email = s.Email,
+                        PersonId = s.PersonId, 
                         Giftee = s.Giftee,
+                        Name = userWishlists.Single(g => g.Id == s.PersonId).Name,
+                        Email = userWishlists.Single(g => g.Id == s.PersonId).Email,
                         PresentIdeas = s.PresentIdeas
                             .Select(t => new PresentIdeaModel()
                             {
                                 Id = t.Id,
                                 Description = t.Description,
+                                ClaimerId = t.ClaimerId.HasValue == false ?
+                                        null :
+                                        t.ClaimerId,
                                 ClaimerName = 
-                                    string.IsNullOrEmpty(t.Claimer) ? 
-                                        null : 
-                                        wishlist.GetPeople().Single(g => g.Email == t.Claimer).Name,
-                                ClaimerEmail= 
-                                string.IsNullOrEmpty(t.Claimer) ? 
-                                null : 
-                                wishlist.GetPeople().Single(g => g.Email == t.Claimer).Email
+                                    t.ClaimerId.HasValue == false ? 
+                                        null :
+                                        userWishlists.Single(g => g.Id == t.ClaimerId).Name,
+                                ClaimerEmail=
+                                t.ClaimerId.HasValue == false ?
+                                        null :
+                                userWishlists.Single(g => g.Id == t.ClaimerId).Email
                             }).ToList()
                     }).ToList()
             };
@@ -56,9 +75,11 @@ namespace RidgeList.Models
 
     public class WishlistPersonModel
     {
-        public string Email { get; set; }
-        
+        public Guid PersonId { get; set; }
+
         public string Name { get; set; }
+
+        public string Email { get; set; }
 
         public List<PresentIdeaModel> PresentIdeas { get; set; }
         
@@ -70,7 +91,9 @@ namespace RidgeList.Models
         public Guid Id { get; set; }
 
         public string Description { get; set; }
-        
+
+        public Guid? ClaimerId { get; set; }
+
         public string ClaimerName { get; set; }
         
         public string ClaimerEmail { get; set; }

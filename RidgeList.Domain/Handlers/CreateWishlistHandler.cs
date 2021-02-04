@@ -1,10 +1,11 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 
 namespace RidgeList.Domain.Handlers
 {
-    public record CreateWishlistCommand(string Name, string NameOfCreator, string EmailOfCreator, bool CreatorIsGiftee) : IRequest<Wishlist>
+    public record CreateWishlistCommand(string Name, Guid IdOfCreator, bool CreatorIsGiftee) : IRequest<Wishlist>
     {
     }
     
@@ -21,11 +22,11 @@ namespace RidgeList.Domain.Handlers
         
         public async Task<Wishlist> Handle(CreateWishlistCommand command, CancellationToken cancellationToken)
         {
-            var wishlist = Wishlist.Create(command.Name, command.EmailOfCreator, command.NameOfCreator, command.CreatorIsGiftee);
+            var wishlist = Wishlist.Create(command.Name, command.IdOfCreator, command.CreatorIsGiftee);
 
             await _repository.Save(wishlist);
             
-            await this._mediator.Publish(new PersonAddedToWishlist(command.EmailOfCreator, wishlist.Id));
+            await this._mediator.Publish(new PersonAddedToWishlist(command.IdOfCreator, wishlist.Id));
             
             return wishlist;
         }

@@ -51,6 +51,52 @@ export class HealthcheckClient {
     }
 }
 
+export class UserClient {
+    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        this.http = http ? http : <any>window;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    login(emailAddress: string | null | undefined): Promise<string> {
+        let url_ = this.baseUrl + "/api/User/login?";
+        if (emailAddress !== undefined && emailAddress !== null)
+            url_ += "emailAddress=" + encodeURIComponent("" + emailAddress) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "POST",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processLogin(_response);
+        });
+    }
+
+    protected processLogin(response: Response): Promise<string> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : <string>JSON.parse(_responseText, this.jsonParseReviver);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<string>(<any>null);
+    }
+}
+
 export class WishlistClient {
     private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
     private baseUrl: string;
@@ -61,14 +107,14 @@ export class WishlistClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    create(nameOfWishlist: string | null | undefined, emailOfCreator: string | null | undefined, nameOfCreator: string | null | undefined, creatorIsGiftee: boolean | undefined): Promise<WishlistModel> {
+    create(nameOfWishlist: string | null | undefined, creatorId: string | undefined, creatorIsGiftee: boolean | undefined): Promise<WishlistModel> {
         let url_ = this.baseUrl + "/Wishlist/create?";
         if (nameOfWishlist !== undefined && nameOfWishlist !== null)
             url_ += "nameOfWishlist=" + encodeURIComponent("" + nameOfWishlist) + "&";
-        if (emailOfCreator !== undefined && emailOfCreator !== null)
-            url_ += "emailOfCreator=" + encodeURIComponent("" + emailOfCreator) + "&";
-        if (nameOfCreator !== undefined && nameOfCreator !== null)
-            url_ += "nameOfCreator=" + encodeURIComponent("" + nameOfCreator) + "&";
+        if (creatorId === null)
+            throw new Error("The parameter 'creatorId' cannot be null.");
+        else if (creatorId !== undefined)
+            url_ += "creatorId=" + encodeURIComponent("" + creatorId) + "&";
         if (creatorIsGiftee === null)
             throw new Error("The parameter 'creatorIsGiftee' cannot be null.");
         else if (creatorIsGiftee !== undefined)
@@ -184,14 +230,16 @@ export class WishlistClient {
         return Promise.resolve<WishlistModel>(<any>null);
     }
 
-    addGiftIdea(wishlistId: string | undefined, email: string | null | undefined, description: string | null | undefined): Promise<WishlistModel> {
+    addGiftIdea(wishlistId: string | undefined, personId: string | undefined, description: string | null | undefined): Promise<WishlistModel> {
         let url_ = this.baseUrl + "/Wishlist/addGiftIdea?";
         if (wishlistId === null)
             throw new Error("The parameter 'wishlistId' cannot be null.");
         else if (wishlistId !== undefined)
             url_ += "wishlistId=" + encodeURIComponent("" + wishlistId) + "&";
-        if (email !== undefined && email !== null)
-            url_ += "email=" + encodeURIComponent("" + email) + "&";
+        if (personId === null)
+            throw new Error("The parameter 'personId' cannot be null.");
+        else if (personId !== undefined)
+            url_ += "personId=" + encodeURIComponent("" + personId) + "&";
         if (description !== undefined && description !== null)
             url_ += "description=" + encodeURIComponent("" + description) + "&";
         url_ = url_.replace(/[?&]$/, "");
@@ -225,14 +273,16 @@ export class WishlistClient {
         return Promise.resolve<WishlistModel>(<any>null);
     }
 
-    removeGiftIdea(wishlistId: string | undefined, email: string | null | undefined, presentId: string | undefined): Promise<WishlistModel> {
+    removeGiftIdea(wishlistId: string | undefined, personId: string | undefined, presentId: string | undefined): Promise<WishlistModel> {
         let url_ = this.baseUrl + "/Wishlist/removeGiftIdea?";
         if (wishlistId === null)
             throw new Error("The parameter 'wishlistId' cannot be null.");
         else if (wishlistId !== undefined)
             url_ += "wishlistId=" + encodeURIComponent("" + wishlistId) + "&";
-        if (email !== undefined && email !== null)
-            url_ += "email=" + encodeURIComponent("" + email) + "&";
+        if (personId === null)
+            throw new Error("The parameter 'personId' cannot be null.");
+        else if (personId !== undefined)
+            url_ += "personId=" + encodeURIComponent("" + personId) + "&";
         if (presentId === null)
             throw new Error("The parameter 'presentId' cannot be null.");
         else if (presentId !== undefined)
@@ -268,14 +318,16 @@ export class WishlistClient {
         return Promise.resolve<WishlistModel>(<any>null);
     }
 
-    claimGift(wishlistId: string | undefined, email: string | null | undefined, presentId: string | undefined): Promise<WishlistModel> {
+    claimGift(wishlistId: string | undefined, personid: string | undefined, presentId: string | undefined): Promise<WishlistModel> {
         let url_ = this.baseUrl + "/Wishlist/claimGift?";
         if (wishlistId === null)
             throw new Error("The parameter 'wishlistId' cannot be null.");
         else if (wishlistId !== undefined)
             url_ += "wishlistId=" + encodeURIComponent("" + wishlistId) + "&";
-        if (email !== undefined && email !== null)
-            url_ += "email=" + encodeURIComponent("" + email) + "&";
+        if (personid === null)
+            throw new Error("The parameter 'personid' cannot be null.");
+        else if (personid !== undefined)
+            url_ += "personid=" + encodeURIComponent("" + personid) + "&";
         if (presentId === null)
             throw new Error("The parameter 'presentId' cannot be null.");
         else if (presentId !== undefined)
@@ -352,10 +404,12 @@ export class WishlistClient {
         return Promise.resolve<WishlistModel>(<any>null);
     }
 
-    getSummaries(emailAddress: string | null | undefined): Promise<WishlistSummaryModel[]> {
+    getSummaries(personId: string | undefined): Promise<WishlistSummaryModel[]> {
         let url_ = this.baseUrl + "/Wishlist/summaries?";
-        if (emailAddress !== undefined && emailAddress !== null)
-            url_ += "emailAddress=" + encodeURIComponent("" + emailAddress) + "&";
+        if (personId === null)
+            throw new Error("The parameter 'personId' cannot be null.");
+        else if (personId !== undefined)
+            url_ += "personId=" + encodeURIComponent("" + personId) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ = <RequestInit>{
@@ -396,6 +450,40 @@ export class WishlistTestClient {
     constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
         this.http = http ? http : <any>window;
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    createTestUser(req: CreateTestUserModel): Promise<void> {
+        let url_ = this.baseUrl + "/WishlistTest/createTestUser";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(req);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processCreateTestUser(_response);
+        });
+    }
+
+    protected processCreateTestUser(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(<any>null);
     }
 
     createTestWishlist(req: CreateWishlistRequestModel): Promise<string> {
@@ -473,8 +561,9 @@ export interface WishlistModel {
 }
 
 export interface WishlistPersonModel {
-    email?: string | undefined;
+    personId: string;
     name?: string | undefined;
+    email?: string | undefined;
     presentIdeas?: PresentIdeaModel[] | undefined;
     giftee: boolean;
 }
@@ -482,6 +571,7 @@ export interface WishlistPersonModel {
 export interface PresentIdeaModel {
     id: string;
     description?: string | undefined;
+    claimerId?: string | undefined;
     claimerName?: string | undefined;
     claimerEmail?: string | undefined;
 }
@@ -491,8 +581,13 @@ export interface WishlistSummaryModel {
     id: string;
 }
 
+export interface CreateTestUserModel {
+    id: string;
+}
+
 export interface CreateWishlistRequestModel {
     title?: string | undefined;
+    creatorId: string;
 }
 
 export class ApiException extends Error {

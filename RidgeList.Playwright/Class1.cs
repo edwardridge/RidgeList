@@ -28,8 +28,9 @@ namespace RidgeList.Playwright
         public class CreateTestWishlistModel
         {
             public string title { get; set; }
+            public Guid creatorId { get; set; }
         }
-        public static async Task CreateWishlist(string baseUrl, string title, IPage page)
+        public static async Task CreateWishlist(string baseUrl, string title, Guid creatorId, IPage page)
         {
             var httpClient = new HttpClient()
             {
@@ -37,7 +38,7 @@ namespace RidgeList.Playwright
             };
             var response = await httpClient.PostAsync("/WishlistTest/createTestWishlist", 
                 new StringContent(
-                    JsonConvert.SerializeObject(new CreateTestWishlistModel() { title = title}), Encoding.UTF8, "application/json"
+                    JsonConvert.SerializeObject(new CreateTestWishlistModel() { title = title, creatorId=creatorId }), Encoding.UTF8, "application/json"
                     )
                 );
             var responseBody = (await response.Content.ReadAsStringAsync()).Replace("\"", "");
@@ -109,23 +110,33 @@ namespace RidgeList.Playwright
         
         public Task LoginUsingForm(string email, string name)
         {
-            _page.TypeAsync(Cy.Name("EmailLogin"), email).ConfigureAwait(false).GetAwaiter().GetResult();
-            _page.TypeAsync(Cy.Name("NameLogin"), name).ConfigureAwait(false).GetAwaiter().GetResult();
+            _page.TypeAsync(Cy.InputName("EmailLogin"), email).ConfigureAwait(false).GetAwaiter().GetResult();
+            _page.TypeAsync(Cy.InputName("NameLogin"), name).ConfigureAwait(false).GetAwaiter().GetResult();
             _page.ClickAsync(Cy.Name("LoginButton")).ConfigureAwait(false).GetAwaiter().GetResult();
+            _page.WaitForTimeoutAsync(100).MakeItSync();
             return Task.CompletedTask;
         }
         
-        public Task LoginWithCookie(string email, string name, string baseUrl, string urlToVisit)
+        public async Task LoginWithCookie(Guid id, string baseUrl, string urlToVisit)
         {
+            var httpClient = new HttpClient()
+            {
+                BaseAddress = new Uri(baseUrl)
+            };
+            await httpClient.PostAsync("/WishlistTest/createTestUser",
+                new StringContent(
+                    JsonConvert.SerializeObject(new CreateTestUserModel() { id = id }), Encoding.UTF8, "application/json"
+                    )
+                );
+
             _page.Context.AddCookiesAsync(new SetNetworkCookieParam()
             {
                 Name = "login",
                 Url = baseUrl,
-                Value = Newtonsoft.Json.JsonConvert.SerializeObject(new LoginDetails(){Email = email, Name = name})
+                Value = Newtonsoft.Json.JsonConvert.SerializeObject(new LoginDetails(){ UserId = id.ToString() })
             }).ConfigureAwait(false).GetAwaiter().GetResult();
 
             _page.GoToAsync(urlToVisit).ConfigureAwait(false).GetAwaiter().GetResult();
-            return Task.CompletedTask;
         }
     }
 
@@ -149,8 +160,12 @@ namespace RidgeList.Playwright
 
     public class LoginDetails
     {
-        public string Email { get; set; }
-        public string Name { get; set; }
+        public string UserId { get; set; }
+    }
+
+    public class CreateTestUserModel
+    {
+        public Guid id { get; set; }
     }
 
     public static class TaskExtension

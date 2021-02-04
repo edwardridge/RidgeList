@@ -29,7 +29,7 @@ namespace RidgeList.Domain
         
         public Task<IEnumerable<Guid>> GetWishlistSummaries(Guid personId)
         {
-            return Task.FromResult(_wishlistsSummaries[personId] as IEnumerable<Guid>);
+            return Task.FromResult(_wishlistsSummaries[personId].Wishlists as IEnumerable<Guid>);
         }
 
         public Task AddWishlistToPerson(Guid personId, Guid wishlistId)
@@ -64,7 +64,7 @@ namespace RidgeList.Domain
 
         public Task<UserWishlists> GetUserFromEmail(string email)
         {
-            var userWishlist = this._wishlistsSummaries.Single(s => s.Value.Email == email);
+            var userWishlist = this._wishlistsSummaries.SingleOrDefault(s => s.Value.Email == email);
             return Task.FromResult(userWishlist.Value);
         }
 

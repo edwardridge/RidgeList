@@ -73,7 +73,7 @@ jobs:
           dotnet-version: 5.0.x
       - uses: actions/checkout@v2
       - name: Install dependencies and run tests
-        run: dotnet test RidgeList.Playwright/RidgeList.Playwright.csproj
+        run: dotnet test RidgeList.Playwright/RidgeList.Playwright.csproj -c Release
         env:
             ASPNETCORE_ENVIRONMENT: ci
 

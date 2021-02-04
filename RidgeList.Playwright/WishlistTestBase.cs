@@ -23,7 +23,11 @@ namespace RidgeList.Playwright
         public async Task OneTimeSetup()
         {
             this.playwright = await PlaywrightSharp.Playwright.CreateAsync();
+#if DEBUG
             this.browser = await playwright.Chromium.LaunchAsync(headless: false);
+#else
+            this.browser = await playwright.Chromium.LaunchAsync();
+#endif
 
             var getEnvVarsBuilder = new ConfigurationBuilder().AddEnvironmentVariables().Build();
             var env = getEnvVarsBuilder["ASPNETCORE_ENVIRONMENT"] ?? "Development";

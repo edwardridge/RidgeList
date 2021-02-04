@@ -37,7 +37,9 @@ export const OtherPersonWishlistRow = (props : OtherPersonWishlistRowProps) => {
         }
         return props.wishlistPerson.presentIdeas?.map(s => {
             let claimed = s.claimerEmail !== null && s.claimerEmail !== '';
+
             let claimedByYou = s.claimerId === props.loggedInId;
+
             let claimedBySomeoneElse = claimed === true && claimedByYou === false;
             let claimerText = claimed ? `- claimed by ${claimedByYou ? "you" : s.claimerName}` : '';
             

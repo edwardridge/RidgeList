@@ -13,7 +13,8 @@ namespace RidgeList.Playwright
         public async Task LoginWorks()
         {
             await loginPage.LoginUsingFormWithTestAccount();
-            await page.WaitForNavigationAsync("/wishlists");
+            
+            page.Url.Should().Contain("/wishlists");
         }
         
         [Test]

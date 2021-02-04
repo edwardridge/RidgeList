@@ -113,7 +113,7 @@ namespace RidgeList.Playwright
             _page.TypeAsync(Cy.InputName("EmailLogin"), email).ConfigureAwait(false).GetAwaiter().GetResult();
             _page.TypeAsync(Cy.InputName("NameLogin"), name).ConfigureAwait(false).GetAwaiter().GetResult();
             _page.ClickAsync(Cy.Name("LoginButton")).ConfigureAwait(false).GetAwaiter().GetResult();
-            _page.WaitForTimeoutAsync(100).MakeItSync();
+            _page.WaitForTimeoutAsync(1000).MakeItSync();
             return Task.CompletedTask;
         }
         

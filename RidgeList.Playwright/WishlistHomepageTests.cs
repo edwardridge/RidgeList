@@ -10,6 +10,7 @@ namespace RidgeList.Playwright
     public class WishlistHomepageTests : WishlistTestBase
     {
         [Test]
+        [Retry(2)]
         public async Task LoginWorks()
         {
             await loginPage.LoginUsingFormWithTestAccount();

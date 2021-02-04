@@ -7,6 +7,6 @@ RidgeList.sln.DotSettings.user
 .idea/**/*
 RidgeList.FrontEnd/ClientApp/.eslintcache
 RidgeList.FrontEnd/ClientApp/.eslintcache
-.vs/RidgeList/v16/.suo
+.vs/*
 .vs/RidgeList/config/applicationhost.config
 RidgeList.FrontEnd/ClientApp/.eslintcache

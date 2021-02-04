@@ -21,14 +21,14 @@ namespace RidgeList.FrontEnd.Controllers
 
         [HttpPost]
         [Route("login")]
-        public async Task<Guid> Login(string emailAddress)
+        public async Task<Guid> Login(string emailAddress, string name)
         {
             var user = await this.wishlistSummaryRepository.GetUserFromEmail(emailAddress);
 
             if(user == null)
             {
                 Guid userId = Guid.NewGuid();
-                await this.wishlistSummaryRepository.CreatePerson(userId, emailAddress);
+                await this.wishlistSummaryRepository.CreatePerson(userId, emailAddress, name);
                 return userId;
             }
             else

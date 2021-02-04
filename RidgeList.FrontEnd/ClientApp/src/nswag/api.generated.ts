@@ -61,10 +61,12 @@ export class UserClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    login(emailAddress: string | null | undefined): Promise<string> {
+    login(emailAddress: string | null | undefined, name: string | null | undefined): Promise<string> {
         let url_ = this.baseUrl + "/api/User/login?";
         if (emailAddress !== undefined && emailAddress !== null)
             url_ += "emailAddress=" + encodeURIComponent("" + emailAddress) + "&";
+        if (name !== undefined && name !== null)
+            url_ += "name=" + encodeURIComponent("" + name) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ = <RequestInit>{

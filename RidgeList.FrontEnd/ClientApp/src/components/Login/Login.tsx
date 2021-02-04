@@ -22,7 +22,7 @@ export const Login : React.FC<any> = (props) => {
     });
     
     const loginClicked = async () => {
-        await setLogin(loginEmail);
+        await setLogin(loginEmail, loginName);
         history.push('/wishlists');
     }
      
@@ -39,25 +39,25 @@ export const Login : React.FC<any> = (props) => {
                         margin="normal"
                         required
                         fullWidth
-                        name="EmailLogin"
+                        id="NameLogin"
                         label="Name"
-                        type="text"
-                        id="EmailLogin"
-                        cypress-name="EmailLogin"
-                        autoComplete="email"
+                        name="NameLogin"
                         onChange={(e) => setLoginName(e.target.value)}
+                        cypress-name="NameLogin"
+
                     />
                     <TextField
                         variant="outlined"
                         margin="normal"
                         required
                         fullWidth
-                        id="NameLogin"
-                        label="Email Address"
-                        name="NameLogin"
+                        name="EmailLogin"
+                        label="Email"
+                        type="text"
+                        id="EmailLogin"
+                        cypress-name="EmailLogin"
+                        autoComplete="email"
                         onChange={(e) => setLoginEmail(e.target.value)}
-                        cypress-name="NameLogin"
-                        
                     />
                     <Button
                         type="submit"

@@ -89,7 +89,7 @@ namespace RidgeList.Postgres
             }
         }
 
-        public async Task CreatePerson(Guid personId, string email)
+        public async Task CreatePerson(Guid personId, string email, string name)
         {
             using (var session = documentStore.OpenSession())
             {
@@ -99,7 +99,8 @@ namespace RidgeList.Postgres
                     session.Store(new UserWishlists()
                     {
                         Id = personId,
-                        Email = email
+                        Email = email,
+                        Name = name
                     });
                 }
                 await session.SaveChangesAsync();

@@ -55,7 +55,7 @@ namespace RidgeList.FrontEnd.Controllers
         [Route("addPerson")]
         public async Task<WishlistModel> AddPerson(Guid wishlistId, string email, string name, bool isGiftee)
         {
-            return await SendCommandAndMapResponse(new AddPersonCommand(wishlistId, email, isGiftee));
+            return await SendCommandAndMapResponse(new AddPersonCommand(wishlistId, email, name, isGiftee));
         }
 
         [HttpPost]

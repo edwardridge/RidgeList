@@ -81,6 +81,7 @@ namespace RidgeList.Playwright
 
             var page2 = await browser.NewPageAsync();
             var loginPage2 = new LoginPageObject(page2);
+            await page2.GoToAsync(baseUrl);
             await loginPage2.LoginUsingForm("new@new.com", "New");
             await page2.GoToAsync(baseUrl);
             await page2.ClickAsync("text=" + nameOfWishlist);

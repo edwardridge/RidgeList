@@ -4,7 +4,7 @@ using MediatR;
 
 namespace RidgeList.Domain.Handlers
 {
-    public record AddPersonCommand(Guid WishlistId, string PersonEmail, bool IsGiftee) : IEditWishlistCommand;
+    public record AddPersonCommand(Guid WishlistId, string PersonEmail, string PersonName, bool IsGiftee) : IEditWishlistCommand;
     
     public class AddPersonHandler : EditWishlistHandlerBase<AddPersonCommand>
     {
@@ -22,7 +22,7 @@ namespace RidgeList.Domain.Handlers
             if(person == null)
             {
                 personId = Guid.NewGuid();
-                await this.wishlistSummaryRepository.CreatePerson(personId, command.PersonEmail);
+                await this.wishlistSummaryRepository.CreatePerson(personId, command.PersonEmail, command.PersonName);
             }
             else
             {

@@ -23,9 +23,9 @@ export const useGetLogin = (fromLoginPage : boolean) => {
 }
 
 export const useSetLogin = () => {
-    return async (email: string) => {
+    return async (email: string, name : string) => {
         var userClient = new UserClient();
-        let userId = await userClient.login(email);
+        let userId = await userClient.login(email, name);
         const loginDetails = new LoginDetails(userId);
         Cookie.set('login', loginDetails);
     }

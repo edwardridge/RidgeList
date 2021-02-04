@@ -24,7 +24,7 @@ namespace RidgeList.Domain.Handlers
         public async Task<Wishlist> Handle(T command, CancellationToken cancellationToken)
         {
             var wishlist = await this._repository.Load(command.WishlistId);
-            this.EditWishlist(command, wishlist);
+            await this.EditWishlist(command, wishlist);
             await _repository.Save(wishlist);
             
             return wishlist;

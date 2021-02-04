@@ -25,7 +25,7 @@ namespace RidgeList.FrontEnd.Controllers
         [Route("createTestUser")]
         public async Task CreateTestUser([FromBody] CreateTestUserModel req)
         {
-            await _wishlistSummaryRepository.CreatePerson(req.id, "test@test.com");
+            await _wishlistSummaryRepository.CreatePerson(req.id, "test@test.com", "Test");
         }
 
         [HttpPost]

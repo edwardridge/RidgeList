@@ -14,7 +14,7 @@ namespace RidgeList.Domain
 
         Task AddWishlistToPerson(Guid personId, Guid wishlistId);
 
-        Task CreatePerson(Guid personId, string email);
+        Task CreatePerson(Guid personId, string email, string name);
 
         Task RemoveWishlistFromPerson(Guid personId, Guid wishlistId);
 
@@ -68,9 +68,9 @@ namespace RidgeList.Domain
             return Task.FromResult(userWishlist.Value);
         }
 
-        public Task CreatePerson(Guid personId, string email)
+        public Task CreatePerson(Guid personId, string email, string name)
         {
-            this._wishlistsSummaries.Add(personId, new UserWishlists() { Id = personId, Email = email });
+            this._wishlistsSummaries.Add(personId, new UserWishlists() { Id = personId, Email = email, Name = name });
             return Task.CompletedTask;
         }
     }

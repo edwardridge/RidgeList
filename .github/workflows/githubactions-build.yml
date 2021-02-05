@@ -36,10 +36,11 @@ jobs:
 
     - uses: actions/checkout@v2
     - name: Build the Docker image
-    - run: echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin
-    - run: docker pull docker.pkg.github.com/$GITHUB_REPOSITORY/build-cache-no-buildkit || true
-    - run: docker build . --file RidgeList.FrontEnd/Dockerfile --tag "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" --cache-from=docker.pkg.github.com/$GITHUB_REPOSITORY/build-cache-no-buildkit
-    - run: docker tag "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" docker.pkg.github.com/$GITHUB_REPOSITORY/build-cache-no-buildkit && docker push docker.pkg.github.com/$GITHUB_REPOSITORY/build-cache-no-buildkit || true
+      run: | 
+             echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin
+             docker pull docker.pkg.github.com/$GITHUB_REPOSITORY/build-cache-no-buildkit || true
+             docker build . --file RidgeList.FrontEnd/Dockerfile --tag "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" --cache-from=docker.pkg.github.com/$GITHUB_REPOSITORY/build-cache-no-buildkit
+             docker tag "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" docker.pkg.github.com/$GITHUB_REPOSITORY/build-cache-no-buildkit && docker push docker.pkg.github.com/$GITHUB_REPOSITORY/build-cache-no-buildkit || true
 
     - name: Push the Docker image
       run: docker push "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"

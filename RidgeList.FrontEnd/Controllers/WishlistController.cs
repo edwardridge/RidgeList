@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using RidgeList.ApplicationServices;
 using RidgeList.Domain;
 using RidgeList.Domain.Handlers;
-using RidgeList.FrontEnd.Services;
 using RidgeList.FrontEnd.SignalRHubs;
 using RidgeList.Models;
 

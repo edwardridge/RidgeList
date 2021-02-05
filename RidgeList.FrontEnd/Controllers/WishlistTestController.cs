@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using RidgeList.Domain;
+using RidgeList.Models.Tests;
 
 namespace RidgeList.FrontEnd.Controllers
 {

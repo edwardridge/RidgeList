@@ -25,6 +25,7 @@ COPY ["RidgeList.Domain/RidgeList.Domain.csproj", "RidgeList.Domain/"]
 COPY ["RidgeList.Domain.Tests/RidgeList.Domain.Tests.csproj", "RidgeList.Domain.Tests/"]
 COPY ["RidgeList.Postgres/RidgeList.Postgres.csproj", "RidgeList.Postgres/"]
 COPY ["RidgeList.Models/RidgeList.Models.csproj", "RidgeList.Models/"]
+COPY ["RidgeList.ApplicationServices/RidgeList.ApplicationServices.csproj", "RidgeList.ApplicationServices/"]
 RUN dotnet restore "RidgeList.FrontEnd/RidgeList.FrontEnd.csproj" --configfile=./RidgeList.FrontEnd/nuget.config
 COPY . .
 WORKDIR "/src/RidgeList.FrontEnd"

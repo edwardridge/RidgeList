@@ -12,9 +12,9 @@ namespace RidgeList.FrontEnd.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IWishlistSummaryRepository wishlistSummaryRepository;
+        private readonly IUserRepository wishlistSummaryRepository;
 
-        public UserController(IWishlistSummaryRepository wishlistSummaryRepository)
+        public UserController(IUserRepository wishlistSummaryRepository)
         {
             this.wishlistSummaryRepository = wishlistSummaryRepository;
         }

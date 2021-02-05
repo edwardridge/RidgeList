@@ -36,6 +36,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\RidgeList.ApplicationServices\RidgeList.ApplicationServices.csproj" />
       <ProjectReference Include="..\RidgeList.Domain\RidgeList.Domain.csproj" />
       <ProjectReference Include="..\RidgeList.Models\RidgeList.Models.csproj" />
       <ProjectReference Include="..\RidgeList.Postgres\RidgeList.Postgres.csproj" />

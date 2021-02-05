@@ -30,6 +30,15 @@ jobs:
     - name: GCloud Docker auth
       run: gcloud auth configure-docker
 
+    - uses: whoan/docker-build-with-cache-action@v5
+      with:
+        username: whoan
+        password: "${{ secrets.GITHUB_TOKEN }}"
+        registry: docker.pkg.github.com
+        #or
+        #registry: ghcr.io
+        image_name: hello-world
+
     - uses: actions/checkout@v2
     - name: Build the Docker image
       run: docker build . --file RidgeList.FrontEnd/Dockerfile --tag "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"

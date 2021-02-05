@@ -11,11 +11,11 @@ namespace RidgeList.FrontEnd.Controllers
     public class WishlistTestController : Controller
     {
         private readonly IWishlistRepository _repository;
-        private readonly IWishlistSummaryRepository _wishlistSummaryRepository;
+        private readonly IUserRepository _wishlistSummaryRepository;
         private string testEmailAccount = "test@testwishlist.com";
         private Guid testAccountId = Guid.Parse("8eb3fe5c-6965-443b-8828-752c0121f21f");
 
-        public WishlistTestController(IWishlistRepository repository, IWishlistSummaryRepository wishlistSummaryRepository)
+        public WishlistTestController(IWishlistRepository repository, IUserRepository wishlistSummaryRepository)
         {
             _repository = repository;
             _wishlistSummaryRepository = wishlistSummaryRepository;
@@ -41,8 +41,8 @@ namespace RidgeList.FrontEnd.Controllers
         [Route("clearOldTestWishlists")]
         public async Task ClearOldTestWishlists()
         {
-            var summaries = await _wishlistSummaryRepository.GetWishlistSummaries(testAccountId);
-            foreach (var summary in summaries.ToList())
+            var summaries = await _wishlistSummaryRepository.GetUser(testAccountId);
+            foreach (var summary in summaries.Wishlists)
             {
                 var wishlist = await _repository.Load(summary);
                 if (wishlist.Name.Contains("[Test]"))
@@ -55,17 +55,5 @@ namespace RidgeList.FrontEnd.Controllers
                 }
             }
         }
-    }
-
-    public class CreateWishlistRequestModel
-    {
-        public string title { get; set; }
-
-        public Guid creatorId { get; set; }
-    }
-
-    public class CreateTestUserModel
-    {
-        public Guid id { get; set; }
     }
 }

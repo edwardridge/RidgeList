@@ -12,10 +12,10 @@ namespace RidgeList.Domain
         public string Name { get; set; }
     }
 
-    public class UserWishlists
+    public class User
     {
 
-        public UserWishlists()
+        public User()
         {
             this.Wishlists = new List<Guid>();
         }

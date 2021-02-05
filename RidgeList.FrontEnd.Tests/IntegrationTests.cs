@@ -40,12 +40,12 @@ namespace RidgeList.FrontEnd.Tests
                     {
                         s.RemoveAll(typeof(IDocumentStore));
                         s.RemoveAll(typeof(IWishlistRepository));
-                        s.RemoveAll(typeof(IWishlistSummaryRepository));
+                        s.RemoveAll(typeof(IUserRepository));
 
                         
 
                         s.Add((new ServiceDescriptor(typeof(IWishlistRepository), inMemoryRepository)));
-                        s.Add((new ServiceDescriptor(typeof(IWishlistSummaryRepository), inMemorySummaryRepository)));
+                        s.Add((new ServiceDescriptor(typeof(IUserRepository), inMemorySummaryRepository)));
 
                     });
                 })
@@ -80,8 +80,8 @@ namespace RidgeList.FrontEnd.Tests
             response.EnsureSuccessStatusCode();
             inMemoryRepository._wishlists.Count.Should().BeGreaterThan(0);
             inMemoryRepository._wishlists.Single().Value.People.Count.Should().Be(2);
-            var wishlistSummaries = await inMemorySummaryRepository.GetWishlistSummaries(idOfCreator);
-            wishlistSummaries.Count().Should().Be(1);
+            var creatorDetails = await inMemorySummaryRepository.GetUser(idOfCreator);
+            creatorDetails.Wishlists.Count().Should().Be(1);
         }
     }
 }

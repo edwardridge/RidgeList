@@ -16,6 +16,8 @@ using Marten;
 using MediatR;
 using RidgeList.FrontEnd.SignalRHubs;
 using RidgeList.Models;
+using RidgeList.FrontEnd.Services;
+using RidgeList.ApplicationServices;
 
 namespace RidgeList.FrontEnd
 {
@@ -62,7 +64,7 @@ namespace RidgeList.FrontEnd
                 //
             }));
             services.AddScoped<IWishlistRepository, MartenDbRepository>();
-            services.AddScoped<IWishlistSummaryRepository, MartenDbSummaryRepository>();
+            services.AddScoped<IUserRepository, MartenDbSummaryRepository>();
             services.AddScoped<IUpdateWishlistHub, UpdateWishlistHub>();
             services.AddScoped<WishlistMapper, WishlistMapper>();
 

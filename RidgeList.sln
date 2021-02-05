@@ -1,25 +1,30 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RidgeList.FrontEnd", "RidgeList.FrontEnd\RidgeList.FrontEnd.csproj", "{E65EB2AF-DDB5-4B58-AF93-41A77C3B71A8}"
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30804.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RidgeList.FrontEnd", "RidgeList.FrontEnd\RidgeList.FrontEnd.csproj", "{E65EB2AF-DDB5-4B58-AF93-41A77C3B71A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RidgeList.Domain", "RidgeList.Domain\RidgeList.Domain.csproj", "{D0A0E265-EA24-4D7E-8E11-4D19D8E6B1D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RidgeList.Domain", "RidgeList.Domain\RidgeList.Domain.csproj", "{D0A0E265-EA24-4D7E-8E11-4D19D8E6B1D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RidgeList.Domain.Tests", "RidgeList.Domain.Tests\RidgeList.Domain.Tests.csproj", "{F63564EB-B120-435E-BF98-4CBA606D9DC8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RidgeList.Domain.Tests", "RidgeList.Domain.Tests\RidgeList.Domain.Tests.csproj", "{F63564EB-B120-435E-BF98-4CBA606D9DC8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RidgeList.FrontEnd.Tests", "RidgeList.FrontEnd.Tests\RidgeList.FrontEnd.Tests.csproj", "{B121A336-BEC8-412D-97D5-5E9583F45DC6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RidgeList.FrontEnd.Tests", "RidgeList.FrontEnd.Tests\RidgeList.FrontEnd.Tests.csproj", "{B121A336-BEC8-412D-97D5-5E9583F45DC6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RidgeList.Postgres", "RidgeList.Postgres\RidgeList.Postgres.csproj", "{E8BC260B-2B4B-418A-B8CF-FCF54C51306D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RidgeList.Postgres", "RidgeList.Postgres\RidgeList.Postgres.csproj", "{E8BC260B-2B4B-418A-B8CF-FCF54C51306D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RidgeList.Postgres.Tests", "RidgeList.Postgres.Tests\RidgeList.Postgres.Tests.csproj", "{9145408A-3494-403B-B2CB-248FCF963D8B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RidgeList.Postgres.Tests", "RidgeList.Postgres.Tests\RidgeList.Postgres.Tests.csproj", "{9145408A-3494-403B-B2CB-248FCF963D8B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RidgeList.Models", "RidgeList.Models\RidgeList.Models.csproj", "{CB294339-460E-45BF-9EAD-83E9F2B8A344}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RidgeList.Models", "RidgeList.Models\RidgeList.Models.csproj", "{CB294339-460E-45BF-9EAD-83E9F2B8A344}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GithubActions", "GithubActions", "{8B1E94C9-2953-4DD2-908B-EEF1A642AD64}"
-ProjectSection(SolutionItems) = preProject
-	.github\workflows\githubactions-build.yml = .github\workflows\githubactions-build.yml
-EndProjectSection
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\githubactions-build.yml = .github\workflows\githubactions-build.yml
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RidgeList.Playwright", "RidgeList.Playwright\RidgeList.Playwright.csproj", "{36AB72D2-DCF0-40E9-B4B4-98197643F5D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RidgeList.Playwright", "RidgeList.Playwright\RidgeList.Playwright.csproj", "{36AB72D2-DCF0-40E9-B4B4-98197643F5D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RidgeList.ApplicationServices", "RidgeList.ApplicationServices\RidgeList.ApplicationServices.csproj", "{AD4D5B04-0021-40E6-80D5-C5972975A165}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,5 +64,15 @@ Global
 		{36AB72D2-DCF0-40E9-B4B4-98197643F5D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36AB72D2-DCF0-40E9-B4B4-98197643F5D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36AB72D2-DCF0-40E9-B4B4-98197643F5D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD4D5B04-0021-40E6-80D5-C5972975A165}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD4D5B04-0021-40E6-80D5-C5972975A165}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD4D5B04-0021-40E6-80D5-C5972975A165}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD4D5B04-0021-40E6-80D5-C5972975A165}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3C80045E-8B20-41F7-8575-78C6293533D3}
 	EndGlobalSection
 EndGlobal

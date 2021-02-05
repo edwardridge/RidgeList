@@ -8,9 +8,9 @@ namespace RidgeList.Domain.Handlers
     
     public class AddPersonHandler : EditWishlistHandlerBase<AddPersonCommand>
     {
-        private readonly IWishlistSummaryRepository wishlistSummaryRepository;
+        private readonly IUserRepository wishlistSummaryRepository;
 
-        public AddPersonHandler(IWishlistRepository repository, IMediator mediator, IWishlistSummaryRepository wishlistSummaryRepository) : base(repository, mediator)
+        public AddPersonHandler(IWishlistRepository repository, IMediator mediator, IUserRepository wishlistSummaryRepository) : base(repository, mediator)
         {
             this.wishlistSummaryRepository = wishlistSummaryRepository;
         }

@@ -5,12 +5,11 @@ using System.Threading.Tasks;
 
 namespace RidgeList.Domain
 {
-    public interface IWishlistSummaryRepository
+    public interface IUserRepository
     {
-        //Todo: combine
-        Task<IEnumerable<Guid>> GetWishlistSummaries(Guid personId);
+        Task<User> GetUser(Guid personId);
 
-        Task<UserWishlists> GetDetails(Guid personId);
+        Task<IList<User>> GetUsers(params Guid[] personIds);
 
         Task AddWishlistToPerson(Guid personId, Guid wishlistId);
 
@@ -20,18 +19,13 @@ namespace RidgeList.Domain
 
         Task SetEmailAndName(Guid personId, string email, string name);
 
-        Task<UserWishlists> GetUserFromEmail(string email);
+        Task<User> GetUserFromEmail(string email);
     }
 
-    public class InMemoryWishlistSummaryRepository : IWishlistSummaryRepository
+    public class InMemoryWishlistSummaryRepository : IUserRepository
     {
-        public Dictionary<Guid, UserWishlists> _wishlistsSummaries = new Dictionary<Guid, UserWishlists>();
+        public Dictionary<Guid, User> _wishlistsSummaries = new Dictionary<Guid, User>();
         
-        public Task<IEnumerable<Guid>> GetWishlistSummaries(Guid personId)
-        {
-            return Task.FromResult(_wishlistsSummaries[personId].Wishlists as IEnumerable<Guid>);
-        }
-
         public Task AddWishlistToPerson(Guid personId, Guid wishlistId)
         {
             if (_wishlistsSummaries.ContainsKey(personId))
@@ -40,7 +34,7 @@ namespace RidgeList.Domain
                 return Task.CompletedTask;
             }
 
-            _wishlistsSummaries[personId] = new UserWishlists() { Id = personId, Wishlists = {  wishlistId } };
+            _wishlistsSummaries[personId] = new User() { Id = personId, Wishlists = {  wishlistId } };
             return Task.CompletedTask;
         }
 
@@ -57,12 +51,17 @@ namespace RidgeList.Domain
             return Task.CompletedTask;
         }
 
-        public Task<UserWishlists> GetDetails(Guid personId)
+        public Task<User> GetUser(Guid personId)
         {
             return Task.FromResult(_wishlistsSummaries[personId]);
         }
 
-        public Task<UserWishlists> GetUserFromEmail(string email)
+        public Task<IList<User>> GetUsers(params Guid[] personIds)
+        {
+            return Task.FromResult(personIds.Select(GetUser).ToList() as IList<User>);
+        }
+
+        public Task<User> GetUserFromEmail(string email)
         {
             var userWishlist = this._wishlistsSummaries.SingleOrDefault(s => s.Value.Email == email);
             return Task.FromResult(userWishlist.Value);
@@ -70,7 +69,7 @@ namespace RidgeList.Domain
 
         public Task CreatePerson(Guid personId, string email, string name)
         {
-            this._wishlistsSummaries.Add(personId, new UserWishlists() { Id = personId, Email = email, Name = name });
+            this._wishlistsSummaries.Add(personId, new User() { Id = personId, Email = email, Name = name });
             return Task.CompletedTask;
         }
     }

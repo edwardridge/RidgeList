@@ -8,7 +8,7 @@ using RidgeList.Domain;
 namespace RidgeList.Postgres
 {
 
-    public class MartenDbSummaryRepository : IWishlistSummaryRepository
+    public class MartenDbSummaryRepository : IUserRepository
     {
         private readonly IDocumentStore documentStore;
 
@@ -16,24 +16,15 @@ namespace RidgeList.Postgres
         {
             this.documentStore = documentStore;
         }
-        
-        public async Task<IEnumerable<Guid>> GetWishlistSummaries(Guid personId)
-        {
-            using (var session = documentStore.OpenSession())
-            {
-                var userWishlists = await session.LoadAsync<UserWishlists>(personId);
-                return userWishlists?.Wishlists ?? new Guid[0].ToList();
-            }
-        }
 
         public async Task AddWishlistToPerson(Guid personId, Guid wishlistId)
         {
             using (var session = documentStore.OpenSession())
             {
-                var userWishlists = await session.LoadAsync<UserWishlists>(personId);
+                var userWishlists = await session.LoadAsync<User>(personId);
                 if (userWishlists == null)
                 {
-                    userWishlists = new UserWishlists()
+                    userWishlists = new User()
                     {
                         Id = personId,
                         Wishlists = {wishlistId}
@@ -53,18 +44,26 @@ namespace RidgeList.Postgres
         {
             using (var session = documentStore.OpenSession())
             {
-                var userWishlists = await session.LoadAsync<UserWishlists>(personId);
+                var userWishlists = await session.LoadAsync<User>(personId);
                 userWishlists.Wishlists.Remove(wishlistId);
                 session.Store(userWishlists);
                 session.SaveChanges();
             }
         }
 
-        public async Task<UserWishlists> GetDetails(Guid personId)
+        public async Task<User> GetUser(Guid personId)
         {
             using (var session = documentStore.OpenSession())
             {
-                return await session.LoadAsync<UserWishlists>(personId);
+                return await session.LoadAsync<User>(personId);
+            }
+        }
+
+        public async Task<IList<User>> GetUsers(params Guid[] personIds)
+        {
+            using (var session = documentStore.OpenSession())
+            {
+                return (await session.LoadManyAsync<User>(personIds)).ToList();
             }
         }
 
@@ -72,7 +71,7 @@ namespace RidgeList.Postgres
         {
             using (var session = documentStore.OpenSession())
             {
-                var userWishlists = await session.LoadAsync<UserWishlists>(personId);
+                var userWishlists = await session.LoadAsync<User>(personId);
                 userWishlists.Email = email;
                 userWishlists.Name = name;
                 session.Store(userWishlists);
@@ -80,11 +79,11 @@ namespace RidgeList.Postgres
             }
         }
 
-        public Task<UserWishlists> GetUserFromEmail(string email)
+        public Task<User> GetUserFromEmail(string email)
         {
             using (var session = documentStore.OpenSession())
             {
-                var userWishlists = session.Query<UserWishlists>().SingleOrDefault(s => s.Email.ToLower() == email.ToLower());
+                var userWishlists = session.Query<User>().SingleOrDefault(s => s.Email.ToLower() == email.ToLower());
                 return Task.FromResult(userWishlists);
             }
         }
@@ -93,10 +92,10 @@ namespace RidgeList.Postgres
         {
             using (var session = documentStore.OpenSession())
             {
-                var userWishlists = session.Load<UserWishlists>(personId);
+                var userWishlists = session.Load<User>(personId);
                 if(userWishlists == null)
                 {
-                    session.Store(new UserWishlists()
+                    session.Store(new User()
                     {
                         Id = personId,
                         Email = email,

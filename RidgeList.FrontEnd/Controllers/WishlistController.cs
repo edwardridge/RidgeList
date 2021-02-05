@@ -5,8 +5,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using RidgeList.ApplicationServices;
 using RidgeList.Domain;
 using RidgeList.Domain.Handlers;
+using RidgeList.FrontEnd.Services;
 using RidgeList.FrontEnd.SignalRHubs;
 using RidgeList.Models;
 
@@ -17,14 +19,14 @@ namespace RidgeList.FrontEnd.Controllers
     {
         private readonly WishlistMapper wishlistMapper;
         private readonly IWishlistRepository _repository;
-        private readonly IWishlistSummaryRepository _wishlistSummaryRepository;
+        private readonly IUserRepository _wishlistSummaryRepository;
         private readonly IMediator _mediator;
         private readonly IUpdateWishlistHub _updateWishlistHub;
 
         public WishlistController(
             WishlistMapper wishlistMapper,
             IWishlistRepository repository, 
-            IWishlistSummaryRepository wishlistSummaryRepository, 
+            IUserRepository wishlistSummaryRepository, 
             IMediator mediator, IUpdateWishlistHub updateWishlistHub)
         {
             this.wishlistMapper = wishlistMapper;
@@ -90,14 +92,14 @@ namespace RidgeList.FrontEnd.Controllers
         [Route("summaries")]
         public async Task<IEnumerable<WishlistSummaryModel>> GetSummaries(Guid personId)
         {
-            var ids = await this._wishlistSummaryRepository.GetWishlistSummaries(personId);
+            var person = await this._wishlistSummaryRepository.GetUser(personId);
             var summaries = new List<WishlistSummary>();
-            foreach (var id in ids)
+            foreach (var wishlistId in person.Wishlists)
             {
-                var wishlist = await _repository.Load(id);
+                var wishlist = await _repository.Load(wishlistId);
                 summaries.Add(new WishlistSummary()
                 {
-                    Id = id,
+                    Id = wishlistId,
                     Name = wishlist.Name
                 });
             }

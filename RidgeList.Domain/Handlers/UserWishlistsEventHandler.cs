@@ -16,9 +16,9 @@ namespace RidgeList.Domain.Handlers
     public class UserWishlistsEventHandler 
         : INotificationHandler<PersonAddedToWishlist>, INotificationHandler<PersonRemovedFromWishlist>
     {
-        private readonly IWishlistSummaryRepository _wishlistSummaryRepository;
+        private readonly IUserRepository _wishlistSummaryRepository;
 
-        public UserWishlistsEventHandler(IWishlistSummaryRepository wishlistSummaryRepository)
+        public UserWishlistsEventHandler(IUserRepository wishlistSummaryRepository)
         {
             _wishlistSummaryRepository = wishlistSummaryRepository;
         }

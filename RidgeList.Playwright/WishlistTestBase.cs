@@ -1,8 +1,6 @@
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
 using PlaywrightSharp;
 using PlaywrightSharp.Chromium;
@@ -22,6 +20,7 @@ namespace RidgeList.Playwright
         [OneTimeSetUp]
         public async Task OneTimeSetup()
         {
+            Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "ci");
             this.playwright = await PlaywrightSharp.Playwright.CreateAsync();
 #if DEBUG
             this.browser = await playwright.Chromium.LaunchAsync(headless: false);

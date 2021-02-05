@@ -7,6 +7,7 @@ using Esprima.Ast;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using PlaywrightSharp;
+using RidgeList.Models.Tests;
 
 namespace RidgeList.Playwright
 {
@@ -25,11 +26,6 @@ namespace RidgeList.Playwright
 
     public static class PlaywrightHelpers
     {
-        public class CreateTestWishlistModel
-        {
-            public string title { get; set; }
-            public Guid creatorId { get; set; }
-        }
         public static async Task CreateWishlist(string baseUrl, string title, Guid creatorId, IPage page)
         {
             var httpClient = new HttpClient()
@@ -38,7 +34,7 @@ namespace RidgeList.Playwright
             };
             var response = await httpClient.PostAsync("/WishlistTest/createTestWishlist", 
                 new StringContent(
-                    JsonConvert.SerializeObject(new CreateTestWishlistModel() { title = title, creatorId=creatorId }), Encoding.UTF8, "application/json"
+                    JsonConvert.SerializeObject(new CreateWishlistRequestModel() { title = title, creatorId=creatorId }), Encoding.UTF8, "application/json"
                     )
                 );
             var responseBody = (await response.Content.ReadAsStringAsync()).Replace("\"", "");
@@ -161,11 +157,6 @@ namespace RidgeList.Playwright
     public class LoginDetails
     {
         public string UserId { get; set; }
-    }
-
-    public class CreateTestUserModel
-    {
-        public Guid id { get; set; }
     }
 
     public static class TaskExtension

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
 using NUnit.Framework.Internal.Execution;
+using RidgeList.ApplicationServices;
 using RidgeList.Models;
 
 namespace RidgeList.Domain.Tests
@@ -181,7 +182,7 @@ namespace RidgeList.Domain.Tests
                     .Build();
 
 
-            IWishlistSummaryRepository wishlistSummariesRepo = new InMemoryWishlistSummaryRepository();
+            IUserRepository wishlistSummariesRepo = new InMemoryWishlistSummaryRepository();
             await wishlistSummariesRepo.AddWishlistToPerson(idOfCreator, wishlist.Id);
             await wishlistSummariesRepo.AddWishlistToPerson(secondPersonId, wishlist.Id);
             await wishlistSummariesRepo.AddWishlistToPerson(thirdPersonId, wishlist.Id);

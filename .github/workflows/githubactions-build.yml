@@ -48,8 +48,8 @@ jobs:
 
   unitTests:
     environment: ci
-      runs-on: ubuntu-latest
-      steps:
+    runs-on: ubuntu-latest
+    steps:
         
     - uses: actions/checkout@v2
     - name: Run tests

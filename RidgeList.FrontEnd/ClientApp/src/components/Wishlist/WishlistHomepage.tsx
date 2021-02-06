@@ -13,6 +13,8 @@ interface WishlishHomepageProps{
 export const WishlistHomepage = (props : WishlishHomepageProps) => {
     const [nameOfNewWishlist, setNameOfNewWishlist] = useState("");
     const [creatorIsGiftee, setCreatorIsGiftee] = useState(true);
+    const [loadingSummaries, setLoadingSummaries] = useState(true);
+
     const [wishlistSummaries, setWishlistSummaries] = useState([] as WishlistSummaryModel[]);
     const history = useHistory();
     const login = useGetLogin(false);
@@ -42,6 +44,7 @@ export const WishlistHomepage = (props : WishlishHomepageProps) => {
     let loadWishListSummaries = async (email : string) => {
         var summaries = await props.wishlistClient.getSummaries(email);
         setWishlistSummaries(summaries);
+        setLoadingSummaries(false);
     }
     
     let onClickAddWishlist = () => {
@@ -91,7 +94,7 @@ export const WishlistHomepage = (props : WishlishHomepageProps) => {
                     </Typography>
                 </Grid>
                 <Grid item xs={12}>
-                    { summaries }
+                    { loadingSummaries ? <div>Loading...</div> : summaries }
                 </Grid>
                 <Grid item xs={12}>
                     {createButtons}

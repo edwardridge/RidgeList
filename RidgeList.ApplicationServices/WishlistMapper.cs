@@ -18,13 +18,8 @@ namespace RidgeList.ApplicationServices
 
         public async Task<WishlistModel> Map(Wishlist wishlist)
         {
-            var userWishlists = new List<User>();
-            foreach (var person in wishlist.People)
-            {
-                var userWishlist = await userRepo.GetUser(person.PersonId);
-                userWishlists.Add(userWishlist);
-            }
-
+            var userWishlists = await userRepo.GetUsers(wishlist.GetPeople().Select(s => s.PersonId).ToArray());
+            
             return new WishlistModel()
             {
                 Id = wishlist.Id,

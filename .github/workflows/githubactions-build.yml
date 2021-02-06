@@ -80,7 +80,7 @@ jobs:
   playwright:
     runs-on: ubuntu-latest
     environment: ci
-    needs: build
+    needs: [build, unitTests]
 
     steps:
       - name: setup

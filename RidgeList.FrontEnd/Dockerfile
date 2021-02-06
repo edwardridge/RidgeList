@@ -29,12 +29,9 @@ COPY ["RidgeList.ApplicationServices/RidgeList.ApplicationServices.csproj", "Rid
 RUN dotnet restore "RidgeList.FrontEnd/RidgeList.FrontEnd.csproj" --configfile=./RidgeList.FrontEnd/nuget.config
 COPY . .
 WORKDIR "/src/RidgeList.FrontEnd"
-RUN dotnet build "RidgeList.FrontEnd.csproj" -c Release -o /app/build
-
-FROM build AS publish
-RUN dotnet publish "RidgeList.FrontEnd.csproj" --no-build -c Release -o /app/publish
+RUN dotnet publish "RidgeList.FrontEnd.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=build /app/publish .
 ENTRYPOINT ["dotnet", "RidgeList.FrontEnd.dll"]

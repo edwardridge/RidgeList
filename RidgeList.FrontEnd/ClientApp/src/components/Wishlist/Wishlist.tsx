@@ -41,8 +41,6 @@ interface Props extends RouteComponentProps<WishlistProps> {
              .withUrl("/wishlisthub")
              .build();
 
-         
-
          connection.start().then(s => {
              connection.invoke("Connect", id).then(s => {
                  connection.on("UpdateWishlist", (wishlistModel : WishlistModel) => {

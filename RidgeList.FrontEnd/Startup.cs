@@ -60,7 +60,6 @@ namespace RidgeList.FrontEnd
                     storeOptions.Connection(connectionString);
                     storeOptions.DatabaseSchemaName = aspnetCoreEnvironment;
                 });
-                //
             }));
             services.AddScoped<IWishlistRepository, MartenDbRepository>();
             services.AddScoped<IUserRepository, MartenDbSummaryRepository>();

@@ -6,7 +6,7 @@ import {
     DialogTitle,
     FormControl,
     FormControlLabel, Grid, IconButton,
-    Input
+    Input, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow
 } from "@material-ui/core";
 import React, {ChangeEvent, useRef, useState} from "react";
 import {useWishlistClient} from "./useWishlistClient";
@@ -47,24 +47,33 @@ export const EditWishlist = (props : EditWishlistProps) => {
                     Edit Wishlist
                 </DialogTitle>
                 <DialogContent>
-                    <FormControl fullWidth>
-                        {
-                            props.wishlist?.people?.map(s => 
-                            {
-                                return <Grid container spacing={3}> 
-                                    <Grid item xs={5}>{s.name}</Grid> 
-                                    <Grid item xs={5}>
-                                        <FormControlLabel className={classes.margin} control={<Checkbox checked={s.giftee} id="areTheyGiftee" onChange={(e) => { clickChangeIsGiftee(s.personId, s.giftee) }} color="primary" />}
-                                                          label="Receiving gifts?" />
-                                    </Grid>
-                                    <Grid item xs={1} >
-                                        {s.personId === props.login.UserId ? <></> : <IconButton onClick={() => clickRemovePerson(s.personId)}><DeleteForever color="secondary"></DeleteForever ></IconButton>}
-                                    </Grid>
-                                    
-                                </Grid>
-                            }
-                            )}
-                    </FormControl>
+                    <TableContainer component={Paper}>
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Name</TableCell>
+                                    <TableCell>Receving Gifts?</TableCell>
+                                    <TableCell>Remove</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {
+                                    props.wishlist?.people?.map(s =>
+                                        {
+                                            return <TableRow key={s.personId}>
+                                                <TableCell>{s.name}</TableCell>
+                                                <TableCell>
+                                                    <Checkbox checked={s.giftee} id="areTheyGiftee" onChange={(e) => { clickChangeIsGiftee(s.personId, s.giftee) }} color="primary" />
+                                                </TableCell>
+                                                <TableCell >
+                                                    {s.personId === props.login.UserId ? <></> : <IconButton onClick={() => clickRemovePerson(s.personId)}><DeleteForever color="secondary"></DeleteForever ></IconButton>}
+                                                </TableCell>
+                                            </TableRow>
+                                        })}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                        
                 </DialogContent>
                 <DialogActions>
                     <Button color="secondary" onClick={() => setEditWishlist(false)}>

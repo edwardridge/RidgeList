@@ -34,6 +34,7 @@ export const useMaterialStyles = makeStyles((theme) => ({
     },
     alignLeft: {
         alignItems: 'left',
+        textAlign: 'left',
         color: theme.palette.common.white,
     },
     menuButton: {

@@ -30,7 +30,9 @@ export const App = (props:any) => {
                 <Route path='/wishlist/:id'>
                     <Wishlist login={logiVal} wishlistRepository={new WishlistRepository()} />
                 </Route>
-                <Route path='/logout' component={Logout} />
+                <Route path='/logout' >
+                    <Logout setLoginVal={setLoginVal}></Logout>
+                </Route>
             </Container>
         </Layout>
     );

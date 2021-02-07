@@ -44,6 +44,8 @@
 
     <ItemGroup>
       <TypeScriptCompile Include="ClientApp\src\components\useMaterialStyles.ts" />
+      <TypeScriptCompile Include="ClientApp\src\components\Wishlist\CreateNewPerson.tsx" />
+      <TypeScriptCompile Include="ClientApp\src\components\Wishlist\EditWishlist.tsx" />
     </ItemGroup>
 
     <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

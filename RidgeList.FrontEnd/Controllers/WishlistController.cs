@@ -86,6 +86,20 @@ namespace RidgeList.FrontEnd.Controllers
         {
             return await SendCommandAndMapResponse(new UnclaimGiftIdeaCommand(wishlistId, presentId));
         }
+        
+        [HttpPost]
+        [Route("changeIsGiftee")]
+        public async Task<WishlistModel> ChangeIsGiftee(Guid wishlistId, Guid personId, bool isGiftee)
+        {
+            return await SendCommandAndMapResponse(new ChangeIsGifteeCommand(wishlistId, personId, isGiftee));
+        }
+        
+        [HttpPost]
+        [Route("removePerson")]
+        public async Task<WishlistModel> RemovePerson(Guid wishlistId, Guid personId)
+        {
+            return await SendCommandAndMapResponse(new RemovePersonCommand(wishlistId, personId));
+        }
 
         [HttpGet]
         [Route("summaries")]

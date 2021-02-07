@@ -93,6 +93,16 @@ namespace RidgeList.Domain
             var present = this.GetPerson(creatorId).PresentIdeas.Single(s => s.Id == presentId);
             this.GetPerson(creatorId).PresentIdeas.Remove(present);
         }
+
+        public void ChangeIsGiftee(Guid personId, bool isGiftee)
+        {
+            this.GetPerson(personId).Giftee = isGiftee;
+        }
+
+        public void RemovePerson(Guid personId)
+        {
+            this.People.Remove(this.GetPerson(personId));
+        }
     }
 
     public class WishlistPeople : Collection<WishlistPerson>

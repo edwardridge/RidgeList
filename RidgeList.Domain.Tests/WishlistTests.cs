@@ -163,6 +163,42 @@ namespace RidgeList.Domain.Tests
 
             presentIdea.ClaimerId.Should().BeNull();
         }
+        
+        [Test]
+        public void Can_Change_Is_Claimer()
+        {
+            var idOfCreator = Guid.NewGuid();
+            var secondPersonId = Guid.NewGuid();
+            
+            var wishlist =
+                new WishlistBuilder(idOfCreator)
+                    .AddPerson(idOfCreator)
+                    .AddPerson(secondPersonId, true)
+                    .Build();
+
+            wishlist.ChangeIsGiftee(secondPersonId, false);
+            wishlist.GetPerson(secondPersonId).Giftee.Should().BeFalse();
+            
+            wishlist.ChangeIsGiftee(secondPersonId, true);
+            wishlist.GetPerson(secondPersonId).Giftee.Should().BeTrue();
+        }
+        
+        [Test]
+        public void Can_Remove_Person()
+        {
+            var idOfCreator = Guid.NewGuid();
+            var secondPersonId = Guid.NewGuid();
+            
+            var wishlist =
+                new WishlistBuilder(idOfCreator)
+                    .AddPerson(idOfCreator)
+                    .AddPerson(secondPersonId, true)
+                    .Build();
+
+            wishlist.RemovePerson(secondPersonId);
+
+            wishlist.People.Count.Should().Be(1);
+        }
 
         [Test]
         public async Task Maps_Name_From_Email_In_Claim()
@@ -215,11 +251,12 @@ namespace RidgeList.Domain.Tests
             };
         }
 
-        public WishlistBuilder AddPerson(Guid personId)
+        public WishlistBuilder AddPerson(Guid personId, bool isGiftee = true)
         {
             this._wishlist.People.Add(new WishlistPerson()
             {
-                PersonId = personId
+                PersonId = personId,
+                Giftee =  isGiftee
             });
             return this;
         }

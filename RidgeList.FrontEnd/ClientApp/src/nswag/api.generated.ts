@@ -477,6 +477,92 @@ export class WishlistClient {
         return Promise.resolve<WishlistModel>(<any>null);
     }
 
+    changeIsGiftee(wishlistId: string | undefined, personId: string | undefined, isGiftee: boolean | undefined): Promise<WishlistModel> {
+        let url_ = this.baseUrl + "/Wishlist/changeIsGiftee?";
+        if (wishlistId === null)
+            throw new Error("The parameter 'wishlistId' cannot be null.");
+        else if (wishlistId !== undefined)
+            url_ += "wishlistId=" + encodeURIComponent("" + wishlistId) + "&";
+        if (personId === null)
+            throw new Error("The parameter 'personId' cannot be null.");
+        else if (personId !== undefined)
+            url_ += "personId=" + encodeURIComponent("" + personId) + "&";
+        if (isGiftee === null)
+            throw new Error("The parameter 'isGiftee' cannot be null.");
+        else if (isGiftee !== undefined)
+            url_ += "isGiftee=" + encodeURIComponent("" + isGiftee) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "POST",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processChangeIsGiftee(_response);
+        });
+    }
+
+    protected processChangeIsGiftee(response: Response): Promise<WishlistModel> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : <WishlistModel>JSON.parse(_responseText, this.jsonParseReviver);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<WishlistModel>(<any>null);
+    }
+
+    removePerson(wishlistId: string | undefined, personId: string | undefined): Promise<WishlistModel> {
+        let url_ = this.baseUrl + "/Wishlist/removePerson?";
+        if (wishlistId === null)
+            throw new Error("The parameter 'wishlistId' cannot be null.");
+        else if (wishlistId !== undefined)
+            url_ += "wishlistId=" + encodeURIComponent("" + wishlistId) + "&";
+        if (personId === null)
+            throw new Error("The parameter 'personId' cannot be null.");
+        else if (personId !== undefined)
+            url_ += "personId=" + encodeURIComponent("" + personId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "POST",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processRemovePerson(_response);
+        });
+    }
+
+    protected processRemovePerson(response: Response): Promise<WishlistModel> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : <WishlistModel>JSON.parse(_responseText, this.jsonParseReviver);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<WishlistModel>(<any>null);
+    }
+
     getSummaries(personId: string | undefined): Promise<WishlistSummaryModel[]> {
         let url_ = this.baseUrl + "/Wishlist/summaries?";
         if (personId === null)

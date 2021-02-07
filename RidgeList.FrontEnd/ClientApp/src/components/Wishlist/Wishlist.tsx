@@ -24,6 +24,8 @@ import {
     Typography
 } from "@material-ui/core";
 import { useMaterialStyles } from "../useMaterialStyles";
+import { CreateNewPerson } from "./CreateNewPerson";
+import {EditWishlist} from "./EditWishlist";
 
 interface WishlistProps {
     id: string;
@@ -36,13 +38,7 @@ interface Props extends RouteComponentProps<WishlistProps> {
 
  const Wishlist = (props : Props) => {
      const [wishlist, setWishlist] = useState<WishlistModel|null>(null);
-     const [newPersonName, setNewPersonName] = useState("");
-     const [newPersonEmail, setNewPersonEmail] = useState("");
-     const [newPersonIsGiftee, setNewPersonIsGiftee] = useState(true);    
-     const [addingNewPerson, setAddingNewPerson] = useState(false);
-     let [addingNewPersonButtonDisabled, setAddingNewPersonButtonDisabled] = useState(false);
-     let wishlistClient = useWishlistClient();
-     let nameInputRef = useRef<HTMLInputElement>(null);
+     
      const classes = useMaterialStyles();
     
      useEffect(() => {
@@ -65,68 +61,14 @@ interface Props extends RouteComponentProps<WishlistProps> {
          
      }, [wishlist?.id, props.match.params.id, props.wishlistRepository]);
     
-     let createNewPersonClick = async () => {
-        var newWishlist = await wishlistClient.addPerson(wishlist?.id, newPersonEmail, newPersonName, newPersonIsGiftee);
-        setWishlist(newWishlist);
-        setNewPersonName("");
-        setNewPersonEmail("");
-        setAddingNewPerson(false);
-    }
      
-     let changeNewEmail = (event : ChangeEvent<HTMLInputElement>) => {
-         let npe = event.target.value;
-         setNewPersonEmail(event.target.value);
-         let f = wishlist?.people?.some(s => s.email === npe) ?? false;
-         setAddingNewPersonButtonDisabled(f);
-     }
-     
-     let clickAddNewPerson = () => {
-         setAddingNewPerson(true);
-         setTimeout(() => nameInputRef?.current?.focus(), 0);
-     }
-
     if (wishlist) {
-        let onCLickCancelAddNewPerson = () => {
-            setAddingNewPerson(false);
-            setNewPersonName("");
-        }
 
         let loggedInWishlist = wishlist.people?.find(s => s.personId === props.login.UserId) ?? {} as WishlistPersonModel;
         let otherGiftees = wishlist.people?.filter(s => s.personId !== props.login.UserId && s.giftee === true);
         let otherNonGiftees = wishlist.people?.filter(s => s.personId !== props.login.UserId && s.giftee === false);
         
-        let createNewPerson = (
-            <>
-                <Button type="submit" variant="contained" fullWidth cypress-name='AddNewPerson' onClick={clickAddNewPerson}>
-                Add Someone New
-                </Button>
-
-                <Dialog open={addingNewPerson} fullWidth onClose={onCLickCancelAddNewPerson}>
-                    <DialogTitle>
-                        Add Somone New!
-                    </DialogTitle>
-                    <DialogContent>
-                        <FormControl fullWidth>
-                            <Input type='text' autoFocus className={classes.margin} onChange={(event) => setNewPersonName(event.target.value)}
-                                value={newPersonName} fullWidth placeholder="What's their name?" cypress-name='NewPersonName'></Input>
-                            <Input type='text' className={classes.margin} onChange={changeNewEmail}
-                                value={newPersonEmail} fullWidth placeholder="What's their email?" cypress-name='NewPersonEmail'></Input>
-                       
-                            <FormControlLabel className={classes.margin} control={<Checkbox checked={newPersonIsGiftee} id="areTheyGiftee" onChange={(e) => { setNewPersonIsGiftee(e.target.checked) }} color="primary" />}
-                                label="Are they receiving gifts?" />
-                        </FormControl>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button color="primary" disabled={addingNewPersonButtonDisabled} onClick={createNewPersonClick} cypress-name='CreateNewPerson'>
-                        Add
-                        </Button>
-                        <Button color="secondary" onClick={onCLickCancelAddNewPerson}>
-                            Close
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-            </>
-        )
+      
         
         let listOfOtherPeoplesIdeas = (
             <div className='mt-5'>
@@ -180,8 +122,11 @@ interface Props extends RouteComponentProps<WishlistProps> {
                         {otherNonGiftees && otherNonGiftees.length > 0 ? otherNonGifteeSection : <></>}
                     </Grid>
                 
-                    <Grid item xs={12}>
-                            {createNewPerson}
+                    <Grid item xs={6}>
+                        <CreateNewPerson setWishlist={setWishlist} wishlist={wishlist}></CreateNewPerson>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <EditWishlist setWishlist={setWishlist} wishlist={wishlist} login={props.login}></EditWishlist>
                     </Grid>
                 </Grid>
             </div>

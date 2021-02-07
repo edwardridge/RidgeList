@@ -93,7 +93,7 @@ namespace RidgeList.FrontEnd.Controllers
         {
             var person = await this._wishlistSummaryRepository.GetUser(personId);
             var summaries = new List<WishlistSummary>();
-            foreach (var wishlistId in person.Wishlists)
+            foreach (var wishlistId in person?.Wishlists)
             {
                 var wishlist = await _repository.Load(wishlistId);
                 summaries.Add(new WishlistSummary()

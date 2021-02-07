@@ -26,4 +26,13 @@ export const useMaterialStyles = makeStyles((theme) => ({
     margin: {
         margin: theme.spacing(1),
     },
+    flexGrow1: {
+        flexGrow: 1,
+    },
+    alignCenter: {
+        alignItems: 'center',
+    },
+    menuButton: {
+        marginRight: theme.spacing(2),
+    },
 }));

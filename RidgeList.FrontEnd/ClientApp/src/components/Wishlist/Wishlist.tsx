@@ -8,7 +8,21 @@ import {WishlistPersonRow} from "./WishlistPersonRow";
 import {OtherPersonWishlistRow} from "./OtherPersonWishlistRow";
 import {useWishlistClient} from "./useWishlistClient";
 import * as signalR from "@microsoft/signalr";
-import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, FormControlLabel, Grid, Input, Paper, Typography } from "@material-ui/core";
+import {
+    Button,
+    Checkbox,
+    CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    FormControl,
+    FormControlLabel,
+    Grid,
+    Input,
+    Paper,
+    Typography
+} from "@material-ui/core";
 import { useMaterialStyles } from "../useMaterialStyles";
 
 interface WishlistProps {
@@ -175,7 +189,7 @@ interface Props extends RouteComponentProps<WishlistProps> {
     }
 
     return (
-        <div>Loading...</div>
+        <CircularProgress />
     );
 }
 

@@ -4,7 +4,23 @@ import {WishlistClient, WishlistSummaryModel} from "../../nswag/api.generated";
 import './WishlistSummary.css';
 import { useGetLogin } from "../useLogin";
 import { useMaterialStyles } from "../useMaterialStyles";
-import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, Grid, List, ListItem, ListItemText, Paper, TextField, Typography } from "@material-ui/core";
+import {
+    Button,
+    Checkbox,
+    CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    FormControlLabel,
+    Grid,
+    List,
+    ListItem,
+    ListItemText,
+    Paper,
+    TextField,
+    Typography
+} from "@material-ui/core";
 
 interface WishlishHomepageProps{
     wishlistClient: WishlistClient;
@@ -74,7 +90,6 @@ export const WishlistHomepage = (props : WishlishHomepageProps) => {
             </DialogActions>
         </Dialog>
     </>
-
     let summaries =
         <Paper >
             <List component="nav">
@@ -85,6 +100,8 @@ export const WishlistHomepage = (props : WishlishHomepageProps) => {
             </List>
         </Paper>
 
+    let summarySection = wishlistSummaries?.length > 0 ? summaries : <></>
+    
     return (
         <div className={classes.paper}>
             <Grid container spacing={3}>
@@ -94,7 +111,7 @@ export const WishlistHomepage = (props : WishlishHomepageProps) => {
                     </Typography>
                 </Grid>
                 <Grid item xs={12}>
-                    { loadingSummaries ? <div>Loading...</div> : summaries }
+                    { loadingSummaries ? <CircularProgress /> : summarySection }
                 </Grid>
                 <Grid item xs={12}>
                     {createButtons}

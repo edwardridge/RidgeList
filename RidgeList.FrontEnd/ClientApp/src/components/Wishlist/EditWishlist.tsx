@@ -27,8 +27,11 @@ export const EditWishlist = (props : EditWishlistProps) => {
     const classes = useMaterialStyles();
     
     let clickRemovePerson = async (personId : string) => {
-        let newWishlist = await wishlistClient.removePerson(props.wishlist.id, personId);
-        props.setWishlist(newWishlist);
+        let areYouSure = window.confirm('Are you sure?');
+        if(areYouSure === true){
+            let newWishlist = await wishlistClient.removePerson(props.wishlist.id, personId);
+            props.setWishlist(newWishlist);
+        }
     }
 
     let clickChangeIsGiftee = async (personId : string, isGiftee : boolean) => {

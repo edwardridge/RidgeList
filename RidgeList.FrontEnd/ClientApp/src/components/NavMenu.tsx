@@ -9,7 +9,7 @@ import {
     Grid,
     IconButton, Input,
     Menu,
-    MenuItem,
+    MenuItem, TextField,
     Toolbar,
     Typography
 } from "@material-ui/core";
@@ -66,8 +66,8 @@ export const NavMenu = (props : NavMenuProps) => {
             </DialogTitle>
             <DialogContent>
                 <FormControl fullWidth>
-                    <Input type='text' autoFocus className={styles.margin} onChange={editUserName}
-                           value={newName} fullWidth placeholder="Your name" cypress-name='NewName'></Input>
+                    <TextField autoFocus className={styles.margin} onChange={editUserName}
+                           label="Name" value={newName} fullWidth cypress-name='NewName'></TextField>
                     
                 </FormControl>
             </DialogContent>

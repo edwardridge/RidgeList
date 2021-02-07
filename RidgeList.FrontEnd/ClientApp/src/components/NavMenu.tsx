@@ -1,37 +1,26 @@
-import React, {ChangeEvent, Component, useEffect, useState} from 'react';
-import {Link, useHistory} from 'react-router-dom';
+import React, {ChangeEvent,  useState} from 'react';
+import { useHistory} from 'react-router-dom';
 import './NavMenu.css';
 import {
     AppBar,
-    Button, Checkbox, Dialog, DialogActions, DialogContent,
+    Button,  Dialog, DialogActions, DialogContent,
     DialogTitle,
-    Fab, FormControl, FormControlLabel,
-    Grid,
-    IconButton, Input,
-    Menu,
-    MenuItem, TextField,
+    FormControl,
+    TextField,
     Toolbar,
     Typography
 } from "@material-ui/core";
 import { useMaterialStyles } from './useMaterialStyles';
 import { ExitToApp, Person } from '@material-ui/icons';
-import {green} from "@material-ui/core/colors";
-import {LoginDetails, useGetLogin} from "./useLogin";
+import {LoginDetails} from "./useLogin";
 import {UserClient, UserModel} from "../nswag/api.generated";
 
 interface NavMenuProps{
   login : LoginDetails;
 }
 
-interface NavMenuState{
-  collapsed: boolean;
-}
-
-
 export const NavMenu = (props : NavMenuProps) => {
-    let displayName = NavMenu.name;
     let history = useHistory();
-    const [anchorEl, setAnchorEl] = React.useState(null);
     const styles = useMaterialStyles()
     let [editingDetails, setEditingDetails] = useState(false);
     let [userDetails, setUserDetails] = useState({} as UserModel);

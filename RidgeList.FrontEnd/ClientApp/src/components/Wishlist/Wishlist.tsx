@@ -1,25 +1,15 @@
-import React, {useState, useEffect, ChangeEvent, useRef} from "react";
+import React, {useState, useEffect} from "react";
 import {RouteComponentProps, withRouter} from "react-router-dom";
 import {WishlistModel, WishlistPersonModel} from "../../nswag/api.generated";
 import {IWishlistRepository} from "./IWishlistRepository";
 import "./WishlistSummary.css";
-import {LoginDetails, useGetLogin} from "../useLogin";
+import {LoginDetails} from "../useLogin";
 import {WishlistPersonRow} from "./WishlistPersonRow";
 import {OtherPersonWishlistRow} from "./OtherPersonWishlistRow";
-import {useWishlistClient} from "./useWishlistClient";
 import * as signalR from "@microsoft/signalr";
 import {
-    Button,
-    Checkbox,
     CircularProgress,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    FormControl,
-    FormControlLabel,
     Grid,
-    Input,
     Paper,
     Typography
 } from "@material-ui/core";

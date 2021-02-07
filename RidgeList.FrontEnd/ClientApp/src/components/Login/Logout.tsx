@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import {LoginDetails, useLogout, useSetLogin} from "../useLogin";
+import {LoginDetails, useLogout} from "../useLogin";
 
 interface LogoutProps{
     setLoginVal : (loginVal : LoginDetails) => void;

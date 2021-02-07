@@ -4,14 +4,12 @@ import {
     Dialog, DialogActions,
     DialogContent,
     DialogTitle,
-    FormControl,
-    FormControlLabel, Grid, IconButton,
-    Input, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow
+    IconButton,
+    Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow
 } from "@material-ui/core";
-import React, {ChangeEvent, useRef, useState} from "react";
+import React, {useState} from "react";
 import {useWishlistClient} from "./useWishlistClient";
-import {useMaterialStyles} from "../useMaterialStyles";
-import {WishlistClient, WishlistModel} from "../../nswag/api.generated";
+import {WishlistModel} from "../../nswag/api.generated";
 import {DeleteForever} from "@material-ui/icons";
 import {LoginDetails} from "../useLogin";
 
@@ -24,7 +22,6 @@ interface EditWishlistProps{
 export const EditWishlist = (props : EditWishlistProps) => {
     let wishlistClient = useWishlistClient();
     let [editWishlist, setEditWishlist] = useState(false);
-    const classes = useMaterialStyles();
     
     let clickRemovePerson = async (personId : string) => {
         let areYouSure = window.confirm('Are you sure?');

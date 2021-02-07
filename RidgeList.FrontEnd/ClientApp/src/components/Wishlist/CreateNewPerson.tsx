@@ -11,7 +11,7 @@ import {
 import React, {ChangeEvent, useRef, useState} from "react";
 import {useWishlistClient} from "./useWishlistClient";
 import {useMaterialStyles} from "../useMaterialStyles";
-import {WishlistClient, WishlistModel} from "../../nswag/api.generated";
+import {WishlistModel} from "../../nswag/api.generated";
 
 interface CreateNewPersonProps{
     setWishlist: (wishlistModel: WishlistModel) => void;

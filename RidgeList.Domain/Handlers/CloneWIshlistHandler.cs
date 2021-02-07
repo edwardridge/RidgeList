@@ -23,7 +23,7 @@ namespace RidgeList.Domain.Handlers
             var newWishlist = await this._cloner.Clone(command.WishlistId, command.NewName);
             foreach (var person in newWishlist.People)
             {
-                _mediator.Publish(new PersonAddedToWishlist(person.PersonId, newWishlist.Id));
+                await _mediator.Publish(new PersonAddedToWishlist(person.PersonId, newWishlist.Id));
             }
             return new Unit();
         }

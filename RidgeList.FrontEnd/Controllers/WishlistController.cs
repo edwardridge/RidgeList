@@ -107,6 +107,13 @@ namespace RidgeList.FrontEnd.Controllers
         {
             await _mediator.Send(new CloneWishlistCommand(wishlistId, newName));
         }
+        
+        [HttpPost]
+        [Route("removeWishlist")]
+        public async Task RemoveWishlist(Guid wishlistId)
+        {
+            await _mediator.Send(new RemoveWishlistCommand(wishlistId));
+        }
 
         [HttpGet]
         [Route("summaries")]

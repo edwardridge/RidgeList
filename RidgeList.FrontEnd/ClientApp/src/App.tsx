@@ -1,4 +1,4 @@
-import React, {Component, useState} from 'react';
+import React, {useState} from 'react';
 import { Route } from 'react-router';
 import { Layout } from './components/Layout';
 

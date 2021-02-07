@@ -2,7 +2,7 @@ import React, {ChangeEvent, useState, useEffect, useRef} from "react";
 import { useHistory } from "react-router-dom";
 import {WishlistClient, WishlistSummaryModel} from "../../nswag/api.generated";
 import './WishlistSummary.css';
-import {LoginDetails, useGetLogin} from "../useLogin";
+import {LoginDetails} from "../useLogin";
 import { useMaterialStyles } from "../useMaterialStyles";
 import {
     Button,
@@ -13,15 +13,13 @@ import {
     DialogContent,
     DialogTitle,
     FormControlLabel,
-    Grid, IconButton,
+    Grid,
     List,
-    ListItem, ListItemSecondaryAction,
-    ListItemText, Menu, MenuItem,
     Paper,
     TextField,
     Typography
 } from "@material-ui/core";
-import {Menu as MenuIcon} from "@material-ui/icons"
+import {WishlistSummaryItem} from "./WishlistSummaryItem";
 
 interface WishlishHomepageProps{
     wishlistClient: WishlistClient;
@@ -36,14 +34,12 @@ export const WishlistHomepage = (props : WishlishHomepageProps) => {
     const [wishlistSummaries, setWishlistSummaries] = useState([] as WishlistSummaryModel[]);
     const history = useHistory();
     const [show, setShow] = useState(false);
-    const [showClone, setShowClone] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
     const classes = useMaterialStyles();
-    const [menuAnchorEl, setMenuAnchorEl] = useState(null);
-
+    
     useEffect(() => {
         loadWishListSummaries();
-    }, [wishlistSummaries.length, props.login.UserId]);
+    });
 
     let onClickCancel = () => {
         setNameOfNewWishlist("");
@@ -93,67 +89,12 @@ export const WishlistHomepage = (props : WishlishHomepageProps) => {
             </DialogActions>
         </Dialog>
     </>
-
-    const handleOpenMenuClick = (event : any) => {
-        setMenuAnchorEl(event.currentTarget);
-    };
-
-    const handleCloseMenu = () => {
-        setMenuAnchorEl(null);
-    };
-    
-    const handleCloneWishlist = async (wishlistId : string, newWishlistName : string) => {
-        await props.wishlistClient.cloneWishlist(wishlistId, newWishlistName);
-        await loadWishListSummaries();
-        setShowClone(false);
-    }
-    
-    const clickCloneAdd = () => {
-        setShowClone(true);
-        setMenuAnchorEl(null);
-    }
-    
-    const onClickCancelClone = () => {
-        setShowClone(false);
-        setNameOfNewWishlist("");
-    }
     
     let summaries =
         <Paper >
             <List component="nav">
                 {
-                    wishlistSummaries.map(s => { return <ListItem divider key={s.name} button>
-                            <ListItemText primary={s.name} onClick={() => history.push(`/wishlist/${s.id}`)} />
-                            <ListItemSecondaryAction onClick={handleOpenMenuClick}>
-                                <IconButton edge="end" aria-label="delete">
-                                    <MenuIcon />
-                                </IconButton>
-                            </ListItemSecondaryAction>
-                        <Menu
-                            id="simple-menu"
-                            anchorEl={menuAnchorEl}
-                            keepMounted
-                            open={Boolean(menuAnchorEl)}
-                            onClose={handleCloseMenu}
-                        >
-                            <MenuItem onClick={clickCloneAdd}>Clone</MenuItem>
-                        </Menu>
-                        <Dialog open={showClone} onClose={onClickCancelClone}>
-
-                            <DialogTitle>Clone Wishlist</DialogTitle>
-                            <DialogContent>
-                                <TextField autoFocus margin="dense" value={nameOfNewWishlist} onChange={handleInputChange} label='Name of wishlist...' cypress-name='NameOfClonedWishlist' fullWidth></TextField>
-                            </DialogContent>
-                            <DialogActions>
-                                <Button color="primary" cypress-name='Create' onClick={() => handleCloneWishlist(s.id, nameOfNewWishlist)}>
-                                    Clone
-                                </Button>
-                                <Button color="secondary" onClick={onClickCancelClone}>
-                                    Close
-                                </Button>
-                            </DialogActions>
-                        </Dialog>
-                        </ListItem>
+                    wishlistSummaries.map(summary => { return <WishlistSummaryItem key={summary.id} loadWishListSummaries={loadWishListSummaries} summary={summary}></WishlistSummaryItem> 
                     })}
             </List>
         </Paper>

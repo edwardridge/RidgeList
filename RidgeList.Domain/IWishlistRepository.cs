@@ -58,7 +58,8 @@ namespace RidgeList.Domain
 
         public Task<IList<User>> GetUsers(params Guid[] personIds)
         {
-            return Task.FromResult(personIds.Select(GetUser).ToList() as IList<User>);
+            var users = personIds.Select(s => _wishlistsSummaries[s]).ToList();
+            return Task.FromResult(users as IList<User>);
         }
 
         public Task<User> GetUserFromEmail(string email)

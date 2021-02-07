@@ -32,6 +32,10 @@ export const useMaterialStyles = makeStyles((theme) => ({
     alignCenter: {
         alignItems: 'center',
     },
+    alignLeft: {
+        alignItems: 'left',
+        color: theme.palette.common.white,
+    },
     menuButton: {
         marginRight: theme.spacing(2),
     },

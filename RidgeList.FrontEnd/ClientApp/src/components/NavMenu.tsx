@@ -38,9 +38,11 @@ export const NavMenu = (props : NavMenuProps) => {
         <div className={styles.flexGrow1}>
                 <AppBar position="static">
                     <Toolbar>
-                        <Typography variant="h4" className={styles.flexGrow1}>
-                            RidgeList
-                        </Typography>
+                        <Button className={`${styles.flexGrow1} ${styles.alignLeft}`} onClick={() => history.push('/')}>
+                            <Typography variant="h4" className={styles.flexGrow1}>
+                                RidgeList
+                            </Typography>
+                        </Button>
                         { props.isLoggedIn ? navItems : null }
                     </Toolbar>
                 </AppBar>

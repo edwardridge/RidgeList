@@ -13,7 +13,7 @@ namespace RidgeList.FrontEnd.Controllers
     {
         private readonly IWishlistRepository _repository;
         private readonly IUserRepository _wishlistSummaryRepository;
-        private string testEmailAccount = "test@testwishlist.com";
+        // private string testEmailAccount = "test@testwishlist.com";
         private Guid testAccountId = Guid.Parse("8eb3fe5c-6965-443b-8828-752c0121f21f");
 
         public WishlistTestController(IWishlistRepository repository, IUserRepository wishlistSummaryRepository)

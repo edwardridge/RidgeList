@@ -7,9 +7,9 @@ namespace RidgeList.Domain
 {
     public interface IUserRepository
     {
-        Task<User> GetUser(Guid personId);
+        Task<User> GetUser(Guid userId);
 
-        Task<IList<User>> GetUsers(params Guid[] personIds);
+        Task<IList<User>> GetUsers(params Guid[] userIds);
 
         Task AddWishlistToPerson(Guid personId, Guid wishlistId);
 
@@ -51,14 +51,14 @@ namespace RidgeList.Domain
             return Task.CompletedTask;
         }
 
-        public Task<User> GetUser(Guid personId)
+        public Task<User> GetUser(Guid userId)
         {
-            return Task.FromResult(_wishlistsSummaries[personId]);
+            return Task.FromResult(_wishlistsSummaries[userId]);
         }
 
-        public Task<IList<User>> GetUsers(params Guid[] personIds)
+        public Task<IList<User>> GetUsers(params Guid[] userIds)
         {
-            var users = personIds.Select(s => _wishlistsSummaries[s]).ToList();
+            var users = userIds.Select(s => _wishlistsSummaries[s]).ToList();
             return Task.FromResult(users as IList<User>);
         }
 

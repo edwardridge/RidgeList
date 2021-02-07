@@ -51,19 +51,19 @@ namespace RidgeList.Postgres
             }
         }
 
-        public async Task<User> GetUser(Guid personId)
+        public async Task<User> GetUser(Guid userId)
         {
             using (var session = documentStore.OpenSession())
             {
-                return await session.LoadAsync<User>(personId);
+                return await session.LoadAsync<User>(userId);
             }
         }
 
-        public async Task<IList<User>> GetUsers(params Guid[] personIds)
+        public async Task<IList<User>> GetUsers(params Guid[] userIds)
         {
             using (var session = documentStore.OpenSession())
             {
-                return (await session.LoadManyAsync<User>(personIds)).ToList();
+                return (await session.LoadManyAsync<User>(userIds)).ToList();
             }
         }
 

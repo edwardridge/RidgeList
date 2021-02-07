@@ -8,7 +8,7 @@ export const Layout = (props : any) => {
     let login = useGetLogin(false);
     return (
       <div>
-        <NavMenu isLoggedIn={login.IsLoggedIn}/>
+        <NavMenu login={login}/>
         <Container>
           {props.children}
         </Container>

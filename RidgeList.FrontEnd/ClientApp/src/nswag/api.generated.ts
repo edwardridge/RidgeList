@@ -97,6 +97,77 @@ export class UserClient {
         }
         return Promise.resolve<string>(<any>null);
     }
+
+    getUserDetails(id: string | undefined): Promise<UserModel> {
+        let url_ = this.baseUrl + "/api/User/getDetails?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetUserDetails(_response);
+        });
+    }
+
+    protected processGetUserDetails(response: Response): Promise<UserModel> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : <UserModel>JSON.parse(_responseText, this.jsonParseReviver);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<UserModel>(<any>null);
+    }
+
+    setUserDetails(userModel: UserModel): Promise<void> {
+        let url_ = this.baseUrl + "/api/User/setDetails";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(userModel);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processSetUserDetails(_response);
+        });
+    }
+
+    protected processSetUserDetails(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(<any>null);
+    }
 }
 
 export class WishlistClient {
@@ -554,6 +625,12 @@ export class WishlistTestClient {
         }
         return Promise.resolve<void>(<any>null);
     }
+}
+
+export interface UserModel {
+    id: string;
+    name?: string | undefined;
+    email?: string | undefined;
 }
 
 export interface WishlistModel {

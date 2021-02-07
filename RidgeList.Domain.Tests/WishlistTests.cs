@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Force.DeepCloner;
 using NUnit.Framework;
 using NUnit.Framework.Internal.Execution;
 using RidgeList.ApplicationServices;
@@ -235,6 +236,38 @@ namespace RidgeList.Domain.Tests
 
             claimer.ClaimerName.Should().Be("Third person");            
             claimer.ClaimerEmail.Should().Be("third@person.com");
+        }
+
+        [Test]
+        public async Task Can_Clone_Wishlist_And_It_Removes_Present_Ideas()
+        {
+            var idOfCreator = Guid.NewGuid();
+            var secondPersonId = Guid.NewGuid();
+            var thirdPersonId = Guid.NewGuid();
+            var presentId = Guid.NewGuid();
+            
+            var wishlist =
+                new WishlistBuilder(idOfCreator)
+                    .AddPerson(idOfCreator)
+                    .AddPerson(secondPersonId)
+                    .AddPerson(thirdPersonId)
+                    .AddPresentIdea(secondPersonId, "desc 1", presentId)
+                    .AddClaimer(presentId, thirdPersonId)
+                    .Build();
+
+            var inMemoryWishlistRepository = new InMemoryWishlistRepository();
+            var wishlistCloner = new WishlistCloner(inMemoryWishlistRepository);
+            
+            await inMemoryWishlistRepository.Save(wishlist);
+            await wishlistCloner.Clone(wishlist.Id, "New name");
+
+            inMemoryWishlistRepository._wishlists.Count.Should().Be(2);
+            var newWishlist = inMemoryWishlistRepository._wishlists.Single(s => s.Key != wishlist.Id).Value;
+            var newPeople = newWishlist.People.Select(s => s.PersonId);
+            newPeople.Should().BeEquivalentTo(new [] {idOfCreator, secondPersonId, thirdPersonId});
+
+            newWishlist.People.SelectMany(s => s.PresentIdeas).Should().BeEmpty();
+            newWishlist.Name.Should().Be("New name");
         }
     }
 

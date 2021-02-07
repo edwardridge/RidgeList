@@ -13,14 +13,15 @@ import {
     DialogContent,
     DialogTitle,
     FormControlLabel,
-    Grid,
+    Grid, IconButton,
     List,
-    ListItem,
-    ListItemText,
+    ListItem, ListItemSecondaryAction,
+    ListItemText, Menu, MenuItem,
     Paper,
     TextField,
     Typography
 } from "@material-ui/core";
+import {Menu as MenuIcon} from "@material-ui/icons"
 
 interface WishlishHomepageProps{
     wishlistClient: WishlistClient;
@@ -35,11 +36,13 @@ export const WishlistHomepage = (props : WishlishHomepageProps) => {
     const [wishlistSummaries, setWishlistSummaries] = useState([] as WishlistSummaryModel[]);
     const history = useHistory();
     const [show, setShow] = useState(false);
+    const [showClone, setShowClone] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
     const classes = useMaterialStyles();
+    const [menuAnchorEl, setMenuAnchorEl] = useState(null);
 
     useEffect(() => {
-        loadWishListSummaries(props.login.UserId);
+        loadWishListSummaries();
     }, [wishlistSummaries.length, props.login.UserId]);
 
     let onClickCancel = () => {
@@ -57,8 +60,8 @@ export const WishlistHomepage = (props : WishlishHomepageProps) => {
         setNameOfNewWishlist(event.target.value);
     }
     
-    let loadWishListSummaries = async (email : string) => {
-        var summaries = await props.wishlistClient.getSummaries(email);
+    let loadWishListSummaries = async () => {
+        var summaries = await props.wishlistClient.getSummaries(props.login.UserId);
         setWishlistSummaries(summaries);
         setLoadingSummaries(false);
     }
@@ -90,13 +93,68 @@ export const WishlistHomepage = (props : WishlishHomepageProps) => {
             </DialogActions>
         </Dialog>
     </>
+
+    const handleOpenMenuClick = (event : any) => {
+        setMenuAnchorEl(event.currentTarget);
+    };
+
+    const handleCloseMenu = () => {
+        setMenuAnchorEl(null);
+    };
+    
+    const handleCloneWishlist = async (wishlistId : string, newWishlistName : string) => {
+        await props.wishlistClient.cloneWishlist(wishlistId, newWishlistName);
+        await loadWishListSummaries();
+        setShowClone(false);
+    }
+    
+    const clickCloneAdd = () => {
+        setShowClone(true);
+        setMenuAnchorEl(null);
+    }
+    
+    const onClickCancelClone = () => {
+        setShowClone(false);
+        setNameOfNewWishlist("");
+    }
+    
     let summaries =
         <Paper >
             <List component="nav">
                 {
-                    wishlistSummaries.map(s =>
-                        <ListItem divider key={s.name} onClick={() => history.push(`/wishlist/${s.id}`)} button><ListItemText primary={s.name} /></ListItem>)
-                }
+                    wishlistSummaries.map(s => { return <ListItem divider key={s.name} button>
+                            <ListItemText primary={s.name} onClick={() => history.push(`/wishlist/${s.id}`)} />
+                            <ListItemSecondaryAction onClick={handleOpenMenuClick}>
+                                <IconButton edge="end" aria-label="delete">
+                                    <MenuIcon />
+                                </IconButton>
+                            </ListItemSecondaryAction>
+                        <Menu
+                            id="simple-menu"
+                            anchorEl={menuAnchorEl}
+                            keepMounted
+                            open={Boolean(menuAnchorEl)}
+                            onClose={handleCloseMenu}
+                        >
+                            <MenuItem onClick={clickCloneAdd}>Clone</MenuItem>
+                        </Menu>
+                        <Dialog open={showClone} onClose={onClickCancelClone}>
+
+                            <DialogTitle>Clone Wishlist</DialogTitle>
+                            <DialogContent>
+                                <TextField autoFocus margin="dense" value={nameOfNewWishlist} onChange={handleInputChange} label='Name of wishlist...' cypress-name='NameOfClonedWishlist' fullWidth></TextField>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button color="primary" cypress-name='Create' onClick={() => handleCloneWishlist(s.id, nameOfNewWishlist)}>
+                                    Clone
+                                </Button>
+                                <Button color="secondary" onClick={onClickCancelClone}>
+                                    Close
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+                        </ListItem>
+                    })}
             </List>
         </Paper>
 

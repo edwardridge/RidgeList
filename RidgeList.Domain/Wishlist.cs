@@ -47,7 +47,7 @@ namespace RidgeList.Domain
             this.People = new WishlistPeople();
         }
 
-        public Guid Id { get; init; }
+        public Guid Id { get; set; }
 
         public WishlistPeople People { get; set; }
         

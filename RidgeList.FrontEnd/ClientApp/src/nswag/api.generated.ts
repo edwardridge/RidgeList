@@ -563,6 +563,42 @@ export class WishlistClient {
         return Promise.resolve<WishlistModel>(<any>null);
     }
 
+    cloneWishlist(wishlistId: string | undefined, newName: string | null | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/Wishlist/cloneWishlist?";
+        if (wishlistId === null)
+            throw new Error("The parameter 'wishlistId' cannot be null.");
+        else if (wishlistId !== undefined)
+            url_ += "wishlistId=" + encodeURIComponent("" + wishlistId) + "&";
+        if (newName !== undefined && newName !== null)
+            url_ += "newName=" + encodeURIComponent("" + newName) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "POST",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processCloneWishlist(_response);
+        });
+    }
+
+    protected processCloneWishlist(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(<any>null);
+    }
+
     getSummaries(personId: string | undefined): Promise<WishlistSummaryModel[]> {
         let url_ = this.baseUrl + "/Wishlist/summaries?";
         if (personId === null)

@@ -65,6 +65,7 @@ namespace RidgeList.FrontEnd
             services.AddScoped<IUserRepository, MartenDbSummaryRepository>();
             services.AddScoped<IUpdateWishlistHub, UpdateWishlistHub>();
             services.AddScoped<WishlistMapper, WishlistMapper>();
+            services.AddScoped<WishlistCloner, WishlistCloner>();
 
             // services.AddSingleton<IWishlistRepository>(new Func<IServiceProvider, IWishlistRepository>(s => new InMemoryWishlistRepository()));
 

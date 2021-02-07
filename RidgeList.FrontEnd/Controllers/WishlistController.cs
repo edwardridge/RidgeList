@@ -100,6 +100,13 @@ namespace RidgeList.FrontEnd.Controllers
         {
             return await SendCommandAndMapResponse(new RemovePersonCommand(wishlistId, personId));
         }
+        
+        [HttpPost]
+        [Route("cloneWishlist")]
+        public async Task CloneWishlist(Guid wishlistId, string newName)
+        {
+            await _mediator.Send(new CloneWishlistCommand(wishlistId, newName));
+        }
 
         [HttpGet]
         [Route("summaries")]

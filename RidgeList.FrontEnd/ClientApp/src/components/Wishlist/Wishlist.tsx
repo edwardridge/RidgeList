@@ -3,7 +3,7 @@ import {RouteComponentProps, withRouter} from "react-router-dom";
 import {WishlistModel, WishlistPersonModel} from "../../nswag/api.generated";
 import {IWishlistRepository} from "./IWishlistRepository";
 import "./WishlistSummary.css";
-import { useGetLogin } from "../useLogin";
+import {LoginDetails, useGetLogin} from "../useLogin";
 import {WishlistPersonRow} from "./WishlistPersonRow";
 import {OtherPersonWishlistRow} from "./OtherPersonWishlistRow";
 import {useWishlistClient} from "./useWishlistClient";
@@ -31,6 +31,7 @@ interface WishlistProps {
 
 interface Props extends RouteComponentProps<WishlistProps> {
     wishlistRepository : IWishlistRepository;
+    login: LoginDetails;
 }
 
  const Wishlist = (props : Props) => {
@@ -39,7 +40,6 @@ interface Props extends RouteComponentProps<WishlistProps> {
      const [newPersonEmail, setNewPersonEmail] = useState("");
      const [newPersonIsGiftee, setNewPersonIsGiftee] = useState(true);    
      const [addingNewPerson, setAddingNewPerson] = useState(false);
-     const login = useGetLogin(false);
      let [addingNewPersonButtonDisabled, setAddingNewPersonButtonDisabled] = useState(false);
      let wishlistClient = useWishlistClient();
      let nameInputRef = useRef<HTMLInputElement>(null);
@@ -91,9 +91,9 @@ interface Props extends RouteComponentProps<WishlistProps> {
             setNewPersonName("");
         }
 
-        let loggedInWishlist = wishlist.people?.find(s => s.personId === login.UserId) ?? {} as WishlistPersonModel;
-        let otherGiftees = wishlist.people?.filter(s => s.personId !== login.UserId && s.giftee === true);
-        let otherNonGiftees = wishlist.people?.filter(s => s.personId !== login.UserId && s.giftee === false);
+        let loggedInWishlist = wishlist.people?.find(s => s.personId === props.login.UserId) ?? {} as WishlistPersonModel;
+        let otherGiftees = wishlist.people?.filter(s => s.personId !== props.login.UserId && s.giftee === true);
+        let otherNonGiftees = wishlist.people?.filter(s => s.personId !== props.login.UserId && s.giftee === false);
         
         let createNewPerson = (
             <>
@@ -141,7 +141,7 @@ interface Props extends RouteComponentProps<WishlistProps> {
                                 key={s.email} 
                                 wishlistPerson={s} 
                                 wishlistId={wishlist?.id} 
-                                loggedInId={login.UserId}
+                                loggedInId={props.login.UserId}
                                 setWishlist={setWishlist}></OtherPersonWishlistRow> )
                     }
                 </div>
@@ -163,7 +163,7 @@ interface Props extends RouteComponentProps<WishlistProps> {
             <Typography className='mt-4' component="h5" variant="h5" align="center" id="wishlistTitle">
                 What would you like?
             </Typography>
-            <Paper className='mt-2'><WishlistPersonRow cypress-name='WishlistPerson' wishlistPerson={loggedInWishlist} wishlistId={wishlist.id} setWishlist={setWishlist} loginDetails={login}></WishlistPersonRow></Paper>
+            <Paper className='mt-2'><WishlistPersonRow cypress-name='WishlistPerson' wishlistPerson={loggedInWishlist} wishlistId={wishlist.id} setWishlist={setWishlist} loginDetails={props.login}></WishlistPersonRow></Paper>
         </>
         
         return (

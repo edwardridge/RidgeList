@@ -2,7 +2,7 @@ import React, {ChangeEvent, useState, useEffect, useRef} from "react";
 import { useHistory } from "react-router-dom";
 import {WishlistClient, WishlistSummaryModel} from "../../nswag/api.generated";
 import './WishlistSummary.css';
-import { useGetLogin } from "../useLogin";
+import {LoginDetails, useGetLogin} from "../useLogin";
 import { useMaterialStyles } from "../useMaterialStyles";
 import {
     Button,
@@ -24,6 +24,7 @@ import {
 
 interface WishlishHomepageProps{
     wishlistClient: WishlistClient;
+    login : LoginDetails;
 }
 
 export const WishlistHomepage = (props : WishlishHomepageProps) => {
@@ -33,14 +34,13 @@ export const WishlistHomepage = (props : WishlishHomepageProps) => {
 
     const [wishlistSummaries, setWishlistSummaries] = useState([] as WishlistSummaryModel[]);
     const history = useHistory();
-    const login = useGetLogin(false);
     const [show, setShow] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
     const classes = useMaterialStyles();
 
     useEffect(() => {
-        loadWishListSummaries(login.UserId);
-    }, [wishlistSummaries.length, login.UserId]);
+        loadWishListSummaries(props.login.UserId);
+    }, [wishlistSummaries.length, props.login.UserId]);
 
     let onClickCancel = () => {
         setNameOfNewWishlist("");
@@ -48,7 +48,7 @@ export const WishlistHomepage = (props : WishlishHomepageProps) => {
     }
     
     let onClickCreate = async () => {
-        let newWishlist = await props.wishlistClient.create(nameOfNewWishlist, login.UserId, creatorIsGiftee);
+        let newWishlist = await props.wishlistClient.create(nameOfNewWishlist, props.login.UserId, creatorIsGiftee);
         history.push("/wishlist/" + newWishlist.id);
         setShow(false);
     }

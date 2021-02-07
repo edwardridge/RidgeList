@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component, useState} from 'react';
 import { Route } from 'react-router';
 import { Layout } from './components/Layout';
 
@@ -10,26 +10,29 @@ import {WishlistRepository} from "./components/Wishlist/IWishlistRepository";
 import {Login} from "./components/Login/Login";
 import {Logout} from "./components/Login/Logout";
 import { Container, CssBaseline } from '@material-ui/core';
+import {useGetLogin} from "./components/useLogin";
 
-export default class App extends Component {
-    static displayName = App.name;
+export const App = (props:any) => {
+    // static displayName = App.name;
+    let login = useGetLogin(false);
 
-    render() {
-
+    const [logiVal, setLoginVal] = useState(login);
     return (
         <Layout>
             <Container component="main" maxWidth="md">
                 <CssBaseline />
-                <Route exact path='/' component={Login}></Route>
+                <Route exact path='/'>
+                    <Login setLoginVal={setLoginVal}></Login>
+                </Route>
                 <Route path='/wishlists' >
-                    <WishlistHomepage wishlistClient={new WishlistClient()}></WishlistHomepage>
+                    <WishlistHomepage login={logiVal} wishlistClient={new WishlistClient()}></WishlistHomepage>
                 </Route>
                 <Route path='/wishlist/:id'>
-                    <Wishlist wishlistRepository={new WishlistRepository()} />
+                    <Wishlist login={logiVal} wishlistRepository={new WishlistRepository()} />
                 </Route>
                 <Route path='/logout' component={Logout} />
             </Container>
         </Layout>
     );
   }
-}
+

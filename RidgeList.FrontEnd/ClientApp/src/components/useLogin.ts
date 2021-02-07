@@ -28,6 +28,7 @@ export const useSetLogin = () => {
         let userId = await userClient.login(email, name);
         const loginDetails = new LoginDetails(userId);
         Cookie.set('login', loginDetails);
+        return loginDetails;
     }
 }
 

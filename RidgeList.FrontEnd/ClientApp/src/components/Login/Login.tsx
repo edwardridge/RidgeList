@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import { useSetLogin, useGetLogin } from "../useLogin";
+import {useSetLogin, useGetLogin, LoginDetails} from "../useLogin";
 import { useMaterialStyles } from "../useMaterialStyles";
 import "./Login.css"
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
-export const Login : React.FC<any> = (props) => {
+interface LoginProps{
+    setLoginVal : (loginVal : LoginDetails) => void
+}
+
+export const Login = (props : LoginProps) => {
     const [loginEmail, setLoginEmail] = useState("");    
     const [loginName, setLoginName] = useState("");
     const history = useHistory();
@@ -22,7 +26,8 @@ export const Login : React.FC<any> = (props) => {
     });
     
     const loginClicked = async () => {
-        await setLogin(loginEmail, loginName);
+        var loginDeets = await setLogin(loginEmail, loginName);
+        props.setLoginVal(loginDeets);
         history.push('/wishlists');
     }
      

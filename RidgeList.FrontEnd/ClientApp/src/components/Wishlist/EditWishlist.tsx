@@ -52,8 +52,8 @@ export const EditWishlist = (props : EditWishlistProps) => {
                             <TableHead>
                                 <TableRow>
                                     <TableCell>Name</TableCell>
-                                    <TableCell>Receving Gifts?</TableCell>
-                                    <TableCell>Remove</TableCell>
+                                    <TableCell align='right' width='small'>Receving Gifts?</TableCell>
+                                    <TableCell ></TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -61,11 +61,11 @@ export const EditWishlist = (props : EditWishlistProps) => {
                                     props.wishlist?.people?.map(s =>
                                         {
                                             return <TableRow key={s.personId}>
-                                                <TableCell>{s.name}</TableCell>
-                                                <TableCell>
+                                                <TableCell component="th" scope="row">{s.name}</TableCell>
+                                                <TableCell align='right' width='small'>
                                                     <Checkbox checked={s.giftee} id="areTheyGiftee" onChange={(e) => { clickChangeIsGiftee(s.personId, s.giftee) }} color="primary" />
                                                 </TableCell>
-                                                <TableCell >
+                                                <TableCell align='right' width='small' size='small'>
                                                     {s.personId === props.login.UserId ? <></> : <IconButton onClick={() => clickRemovePerson(s.personId)}><DeleteForever color="secondary"></DeleteForever ></IconButton>}
                                                 </TableCell>
                                             </TableRow>

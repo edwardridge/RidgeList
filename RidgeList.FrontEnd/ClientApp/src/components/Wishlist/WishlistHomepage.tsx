@@ -39,7 +39,7 @@ export const WishlistHomepage = (props : WishlishHomepageProps) => {
     
     useEffect(() => {
         loadWishListSummaries();
-    });
+    }, [props.login.UserId]);
 
     let onClickCancel = () => {
         setNameOfNewWishlist("");

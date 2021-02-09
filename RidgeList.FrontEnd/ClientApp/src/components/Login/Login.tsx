@@ -11,7 +11,7 @@ interface LoginProps{
     setLoginVal : (loginVal : LoginDetails) => void
 }
 
-export const Login = (props : LoginProps) => {
+const Login = (props : LoginProps) => {
     const [loginEmail, setLoginEmail] = useState("");    
     const [loginName, setLoginName] = useState("");
     const history = useHistory();
@@ -79,3 +79,5 @@ export const Login = (props : LoginProps) => {
             </div>
         </>)
 }
+
+export default Login;

@@ -4,8 +4,6 @@ import {WishlistModel, WishlistPersonModel} from "../../nswag/api.generated";
 import {IWishlistRepository} from "./IWishlistRepository";
 import "./WishlistSummary.css";
 import {LoginDetails} from "../useLogin";
-import {WishlistPersonRow} from "./WishlistPersonRow";
-import {OtherPersonWishlistRow} from "./OtherPersonWishlistRow";
 import * as signalR from "@microsoft/signalr";
 import {
     CircularProgress,
@@ -14,8 +12,11 @@ import {
     Typography
 } from "@material-ui/core";
 import { useMaterialStyles } from "../useMaterialStyles";
-import { CreateNewPerson } from "./CreateNewPerson";
-import {EditWishlist} from "./EditWishlist";
+
+const EditWishlist = React.lazy(() => import('./EditWishlist'));
+const OtherPersonWishlistRow = React.lazy(() => import('./OtherPersonWishlistRow'));
+const WishlistPersonRow = React.lazy(() => import('./WishlistPersonRow'));
+const CreateNewPerson = React.lazy(() => import('./CreateNewPerson'));
 
 interface WishlistProps {
     id: string;

@@ -5,7 +5,7 @@ interface LogoutProps{
     setLoginVal : (loginVal : LoginDetails) => void;
 }
 
-export const Logout = (props : LogoutProps) => {
+const Logout = (props : LogoutProps) => {
     const logout = useLogout();
 
     useEffect(() => {
@@ -15,3 +15,5 @@ export const Logout = (props : LogoutProps) => {
 
     return <div>You have been logged out.</div>
 }
+
+export default Logout;

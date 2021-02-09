@@ -13,7 +13,7 @@ interface WishlistPersonRowProps{
     setWishlist: (wishlist : WishlistModel) => void;
 }
 
-export const WishlistPersonRow = (props : WishlistPersonRowProps) => {
+const WishlistPersonRow = (props : WishlistPersonRowProps) => {
     const [newItemDescription, setNewItemDescription] = useState("");
     const [showAddItem, setShowAddItem] = useState(false);
     const wishlistClient = useWishlistClient();
@@ -92,3 +92,5 @@ export const WishlistPersonRow = (props : WishlistPersonRowProps) => {
         </div>
     )
 }
+
+export default WishlistPersonRow;

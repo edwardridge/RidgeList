@@ -19,7 +19,7 @@ interface WishlistSummaryItemProps{
     loadWishListSummaries : () => void;
 }
 
-export const WishlistSummaryItem = (props : WishlistSummaryItemProps) => {
+const WishlistSummaryItem = (props : WishlistSummaryItemProps) => {
     let history = useHistory();
     let wishlistClient = useWishlistClient();
     const [nameOfNewWishlist, setNameOfNewWishlist] = useState("");
@@ -97,3 +97,5 @@ export const WishlistSummaryItem = (props : WishlistSummaryItemProps) => {
     </ListItem></>
     );
 }
+
+export default WishlistSummaryItem;

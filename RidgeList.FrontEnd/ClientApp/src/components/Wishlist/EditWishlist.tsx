@@ -19,7 +19,7 @@ interface EditWishlistProps{
     login: LoginDetails;
 }
 
-export const EditWishlist = (props : EditWishlistProps) => {
+const EditWishlist = (props : EditWishlistProps) => {
     let wishlistClient = useWishlistClient();
     let [editWishlist, setEditWishlist] = useState(false);
     
@@ -84,3 +84,5 @@ export const EditWishlist = (props : EditWishlistProps) => {
         </>
     )
 }
+
+export default EditWishlist;

@@ -18,7 +18,7 @@ interface CreateNewPersonProps{
     wishlist: WishlistModel;
 }
 
-export const CreateNewPerson = (props : CreateNewPersonProps) => {
+const CreateNewPerson = (props : CreateNewPersonProps) => {
     const [newPersonName, setNewPersonName] = useState("");
     const [newPersonEmail, setNewPersonEmail] = useState("");
     const [newPersonIsGiftee, setNewPersonIsGiftee] = useState(true);
@@ -87,3 +87,5 @@ export const CreateNewPerson = (props : CreateNewPersonProps) => {
         </>
     )
 }
+
+export default CreateNewPerson;

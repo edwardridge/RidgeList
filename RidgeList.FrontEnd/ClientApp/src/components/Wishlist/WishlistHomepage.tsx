@@ -19,14 +19,15 @@ import {
     TextField,
     Typography
 } from "@material-ui/core";
-import {WishlistSummaryItem} from "./WishlistSummaryItem";
+
+const WishlistSummaryItem = React.lazy(() => import('./WishlistSummaryItem'));
 
 interface WishlishHomepageProps{
     wishlistClient: WishlistClient;
     login : LoginDetails;
 }
 
-export const WishlistHomepage = (props : WishlishHomepageProps) => {
+ const WishlistHomepage = (props : WishlishHomepageProps) => {
     const [nameOfNewWishlist, setNameOfNewWishlist] = useState("");
     const [creatorIsGiftee, setCreatorIsGiftee] = useState(true);
     const [loadingSummaries, setLoadingSummaries] = useState(true);
@@ -119,3 +120,5 @@ export const WishlistHomepage = (props : WishlishHomepageProps) => {
         </div>
     );
 }
+
+export default WishlistHomepage;

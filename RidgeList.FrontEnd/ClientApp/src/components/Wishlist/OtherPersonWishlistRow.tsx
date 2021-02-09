@@ -11,7 +11,7 @@ interface OtherPersonWishlistRowProps{
     setWishlist: (wishlist : WishlistModel) => void;
 }
 
-export const OtherPersonWishlistRow = (props : OtherPersonWishlistRowProps) => {
+const OtherPersonWishlistRow = (props : OtherPersonWishlistRowProps) => {
     let wishlistClient = useWishlistClient();
     
     let claimPresentClick = async (presentId : string) => {
@@ -73,3 +73,5 @@ export const OtherPersonWishlistRow = (props : OtherPersonWishlistRowProps) => {
         </Paper>
     )
 }
+
+export default OtherPersonWishlistRow;

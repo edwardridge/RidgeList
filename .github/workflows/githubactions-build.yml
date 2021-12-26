@@ -33,7 +33,7 @@ jobs:
 #      run: docker build . --file RidgeList.FrontEnd/Dockerfile --tag "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"
 
     - uses: actions/checkout@v2
-    - name: Build the Docker image
+    - name: Build the Docker image 
       run: | 
              echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin
              docker pull docker.pkg.github.com/edwardridge/ridgelist/build-cache-no-buildkit || true

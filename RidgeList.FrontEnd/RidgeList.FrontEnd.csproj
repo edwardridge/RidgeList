@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
         <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
         <IsPackable>false</IsPackable>
@@ -18,8 +18,8 @@
         <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
         <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.1" />
         <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
-        <PackageReference Include="NSwag.AspNetCore" Version="13.9.4" />
-        <PackageReference Include="NSwag.MSBuild" Version="13.9.4">
+        <PackageReference Include="NSwag.AspNetCore" Version="13.15.5" />
+        <PackageReference Include="NSwag.MSBuild" Version="13.15.5">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
@@ -76,7 +76,7 @@
     </Target>
 
     <Target Name="NSwag" AfterTargets="Build" Condition="'$(Configuration)' != 'Release'">
-        <Exec EnvironmentVariables="ASPNETCORE_ENVIRONMENT=Development" Command="$(NSwagExe_Net50) aspnetcore2openapi /assembly:$(TargetDir)RidgeList.FrontEnd.dll /output:$(OutDir)openapi.json" />
-        <Exec Command="$(NSwagExe_Net50) openapi2tsclient /input:$(OutDir)openapi.json /name:API /TypeStyle:Interface /output:ClientApp/src/nswag/api.generated.ts" />
+        <Exec EnvironmentVariables="ASPNETCORE_ENVIRONMENT=Development" Command="$(NSwagExe_Net60) aspnetcore2openapi /assembly:$(TargetDir)RidgeList.FrontEnd.dll /output:$(OutDir)openapi.json" />
+        <Exec Command="$(NSwagExe_Net60) openapi2tsclient /input:$(OutDir)openapi.json /name:API /TypeStyle:Interface /output:ClientApp/src/nswag/api.generated.ts" />
     </Target>
 </Project>

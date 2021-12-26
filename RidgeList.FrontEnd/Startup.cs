@@ -12,8 +12,11 @@ using RidgeList.Domain;
 using RidgeList.Postgres;
 using Google.Cloud.SecretManager.V1;
 using System.Linq;
+using Honeycomb.OpenTelemetry;
 using Marten;
 using MediatR;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using RidgeList.FrontEnd.SignalRHubs;
 using RidgeList.Models;
 using RidgeList.ApplicationServices;
@@ -74,6 +77,20 @@ namespace RidgeList.FrontEnd
             services.AddMediatR(typeof(Startup), typeof(Wishlist));
             
             services.AddSignalR();
+            
+            services.AddOpenTelemetryTracing((builder) => builder
+                    .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("RidgeList"))
+                    .AddSource("RidgeList")
+                    .AddAspNetCoreInstrumentation()
+                    .AddHttpClientInstrumentation()
+                    ///.AddJaegerExporter(options => options.Endpoint = new Uri("http://localhost:14268"))
+                    .AddHoneycomb(new HoneycombOptions() 
+                    {
+                        ServiceName = "ridgelist",
+                        ApiKey = "16764533377b6f87bc5c9c9c740a4c28",
+                        Dataset = "ridgelist"
+                    })
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

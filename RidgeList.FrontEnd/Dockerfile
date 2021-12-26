@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/aspnet:5.0-buster-slim AS base
+FROM mcr.microsoft.com/dotnet/aspnet:6.0-buster-slim AS base
 
 # https://github.com/GoogleCloudPlatform/google-cloud-dotnet-powerpack/issues/22
 RUN apt-get update
@@ -8,7 +8,7 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0-buster-slim AS build
 
 # Install NodeJS 
 RUN apt-get update

@@ -14,7 +14,7 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 RUN apt-get update
 RUN apt-get -y install gnupg2
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
-RUN apt-get install -y nodejs
+RUN apt-get install -y nodejs npm
 
 WORKDIR /src
 COPY ["RidgeList.FrontEnd/RidgeList.FrontEnd.csproj", "RidgeList.FrontEnd/"]

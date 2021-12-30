@@ -12,14 +12,45 @@ using RidgeList.Domain;
 using RidgeList.Postgres;
 using Google.Cloud.SecretManager.V1;
 using System.Linq;
+using System.Threading.Tasks;
+using Honeycomb.OpenTelemetry;
 using Marten;
 using MediatR;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
+using Npgsql;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using RidgeList.FrontEnd.SignalRHubs;
 using RidgeList.Models;
 using RidgeList.ApplicationServices;
 
 namespace RidgeList.FrontEnd
 {
+    public class AddToActivityMiddleware
+    {
+        private readonly RequestDelegate _next;
+        private readonly IConfiguration _configuration;
+
+        public AddToActivityMiddleware(RequestDelegate next, IConfiguration configuration)
+        {
+            _next = next;
+            _configuration = configuration;
+        }
+        public async Task InvokeAsync(HttpContext context)
+        {
+            var activity = context.Features.Get<IHttpActivityFeature>()?.Activity;
+            activity?.SetTag("Environment", _configuration["ASPNETCORE_ENVIRONMENT"]);
+
+            foreach (var x in context.Request.Query)
+            {
+                activity?.SetTag(x.Key, x.Value);
+            }
+            
+            await _next(context);
+        }
+    }
+    
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -74,6 +105,21 @@ namespace RidgeList.FrontEnd
             services.AddMediatR(typeof(Startup), typeof(Wishlist));
             
             services.AddSignalR();
+            
+            services.AddOpenTelemetryTracing((builder) => builder
+                    .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("RidgeList"))
+                    .AddSource("RidgeList", "RidgeList.Postgres")
+                    .AddAspNetCoreInstrumentation()
+                    .AddHttpClientInstrumentation()
+                    .AddNpgsql()
+                    ///.AddJaegerExporter(options => options.Endpoint = new Uri("http://localhost:14268"))
+                    .AddHoneycomb(new HoneycombOptions() 
+                    {
+                        ServiceName = "ridgelist",
+                        ApiKey = "16764533377b6f87bc5c9c9c740a4c28",
+                        Dataset = "ridgelist"
+                    })
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -100,6 +146,8 @@ namespace RidgeList.FrontEnd
             app.UseSwaggerUi3(); 
             // app.UseReDoc(); 
             
+            app.UseMiddleware<AddToActivityMiddleware>();
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
@@ -118,7 +166,8 @@ namespace RidgeList.FrontEnd
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
-            
+
+
         }
     }
 }
